@@ -33,7 +33,8 @@ int main(void)
     {
         cout << "OpenNN. Airfoil Self-Noise Application." << endl;
 
-        srand(static_cast<unsigned>(time(nullptr)));
+        // srand(static_cast<unsigned>(time(nullptr)));
+        srand(1);
 
         // Data set
 
