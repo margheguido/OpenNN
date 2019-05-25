@@ -126,12 +126,56 @@ int main(void)
 
         TrainingStrategy training_strategy(&neural_network, &data_set);
 
-        QuasiNewtonMethod* quasi_Newton_method_pointer = training_strategy.get_quasi_Newton_method_pointer();
+        if(0)
+        {
+          // QUASI_NEWTON built as default, no need of set_training_method
+          QuasiNewtonMethod* quasi_Newton_method_pointer = training_strategy.get_quasi_Newton_method_pointer();
 
-        quasi_Newton_method_pointer->set_maximum_epochs_number(1000);
-        quasi_Newton_method_pointer->set_display_period(10);
+          quasi_Newton_method_pointer->set_maximum_epochs_number(100);
+          quasi_Newton_method_pointer->set_display_period(10);
 
-        quasi_Newton_method_pointer->set_minimum_loss_decrease(1.0e-6);
+          quasi_Newton_method_pointer->set_minimum_loss_decrease(1.0e-6);
+        }
+
+        if(0)
+        {
+          training_strategy.set_training_method( "GRADIENT_DESCENT" );
+          GradientDescent* gradient_descent_method_pointer = training_strategy.get_gradient_descent_pointer();
+
+          gradient_descent_method_pointer->set_maximum_epochs_number(100);
+          gradient_descent_method_pointer->set_display_period(10);
+
+          gradient_descent_method_pointer->set_minimum_loss_decrease(1.0e-6);
+        }
+
+        if(0)
+        {
+          training_strategy.set_training_method( "STOCHASTIC_GRADIENT_DESCENT" );
+          StochasticGradientDescent* stochastic_gradient_descent_method_pointer = training_strategy.get_stochastic_gradient_descent_pointer();
+
+          stochastic_gradient_descent_method_pointer->set_maximum_epochs_number(100);
+          stochastic_gradient_descent_method_pointer->set_display_period(10);
+        }
+
+        if(0)
+        {
+          training_strategy.set_training_method( "LEVENBERG_MARQUARDT_ALGORITHM" );
+          LevenbergMarquardtAlgorithm* Levenberg_Marquardt_algorithm_pointer = training_strategy.get_Levenberg_Marquardt_algorithm_pointer();
+
+          Levenberg_Marquardt_algorithm_pointer->set_maximum_epochs_number(100);
+          Levenberg_Marquardt_algorithm_pointer->set_display_period(10);
+
+          Levenberg_Marquardt_algorithm_pointer->set_minimum_loss_decrease(1.0e-6);
+        }
+
+        if(1)
+        {
+          training_strategy.set_training_method( "ADAPTIVE_MOMENT_ESTIMATION" );
+          AdaptiveMomentEstimation* adaptive_moment_estimation_pointer = training_strategy.get_adaptive_moment_estimation_pointer();
+
+          adaptive_moment_estimation_pointer->set_maximum_epochs_number(100);
+          adaptive_moment_estimation_pointer->set_display_period(10);
+        }
 
 //        quasi_Newton_method_pointer->set_reserve_loss_history(true);
 
@@ -151,7 +195,9 @@ int main(void)
         neural_network.save_expression("data/expression.txt");
 
         training_strategy.save("data/training_strategy.xml");
+        std::cout << "TrainingStrategy saved" << '\n';
         training_strategy_results.save("data/training_strategy_results.dat");
+        std::cout << "TrainingStrategyResults saved" << '\n';
 
 //        linear_regression_results.save("../data/linear_regression_analysis_results.dat");
 
