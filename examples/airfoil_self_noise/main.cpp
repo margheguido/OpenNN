@@ -33,24 +33,36 @@ int main(void)
     {
         cout << "OpenNN. Airfoil Self-Noise Application." << endl;
 
-        // srand(static_cast<unsigned>(time(nullptr)));
+      //   srand(static_cast<unsigned>(time(nullptr)));
         srand(1);
 
         // Data set
 
         DataSet data_set;
 
-        data_set.set_data_file_name("data/airfoil_self_noise.dat");
-
+        data_set.set_data_file_name("data/Text_tab_delimited_2_columns.txt");
+        data_set.set_file_type("txt");
         data_set.set_separator("Tab");
 
         data_set.load_data();
+        data_set.print_data();
+/*
+        DataSet data_set_out;
+        data_set_out.set_file_type("csv");
+        data_set_out.set_data_file_name("data/out.csv");
 
+        data_set_out.set_separator("Comma");
+        data_set_out.load_data();
+        data_set_out.print_data();
+
+*/
         // Variables
 
         Variables* variables_pointer = data_set.get_variables_pointer();
+    //    Variables* variables_pointer_out= data_set_out.get_variables_pointer();
 
-        Vector< Variables::Item > variables_items(6);
+        Vector< Variables::Item > variables_items(7);
+        //Vector< Variables::Item > variables_items_out(2);
 
         variables_items[0].name = "frequency";
         variables_items[0].units = "hertzs";
@@ -76,10 +88,19 @@ int main(void)
         variables_items[5].units = "decibels";
         variables_items[5].use = Variables::Target;
 
+        variables_items[6].name = "scaled_sound_pressure_level_2";
+        variables_items[6].units = "decibels";
+        variables_items[6].use = Variables::Target;
+
         variables_pointer->set_items(variables_items);
+
 
         const Matrix<string> inputs_information = variables_pointer->get_inputs_information();
         const Matrix<string> targets_information = variables_pointer->get_targets_information();
+        /* Matrix<string> my_out_information(1,3);
+        my_out_information(0,0)= "scaled_sound_pressure_level";
+        my_out_information(0,1)="decibels";
+        my_out_information(0,2)="pressure";*/
 
         // Instances
 
@@ -94,9 +115,9 @@ int main(void)
 
         const size_t inputs_number = variables_pointer->get_inputs_number();
         const size_t hidden_perceptrons_number = 9;
-        const size_t outputs_number = variables_pointer->get_targets_number();
+        const size_t outputs_number = 1;
 
-        NeuralNetwork neural_network(inputs_number, hidden_perceptrons_number, outputs_number);
+        NeuralNetwork neural_network(inputs_number, hidden_perceptrons_number, 1);
 
         Inputs* inputs = neural_network.get_inputs_pointer();
 
@@ -108,9 +129,9 @@ int main(void)
 
         neural_network.construct_scaling_layer();
 
-        ScalingLayer* scaling_layer_pointer = neural_network.get_scaling_layer_pointer();
+       ScalingLayer* scaling_layer_pointer = neural_network.get_scaling_layer_pointer();
 
-        scaling_layer_pointer->set_statistics(inputs_statistics);
+       scaling_layer_pointer->set_statistics(inputs_statistics);
 
         scaling_layer_pointer->set_scaling_methods(ScalingLayer::NoScaling);
 
@@ -118,9 +139,9 @@ int main(void)
 
         UnscalingLayer* unscaling_layer_pointer = neural_network.get_unscaling_layer_pointer();
 
-        unscaling_layer_pointer->set_statistics(targets_statistics);
+       unscaling_layer_pointer->set_statistics(targets_statistics);
 
-        unscaling_layer_pointer->set_unscaling_method(UnscalingLayer::NoUnscaling);
+     unscaling_layer_pointer->set_unscaling_method(UnscalingLayer::NoUnscaling);
 
         // Training strategy object
 
@@ -199,9 +220,19 @@ int main(void)
         training_strategy_results.save("data/training_strategy_results.dat");
         std::cout << "TrainingStrategyResults saved" << '\n';
 
-//        linear_regression_results.save("../data/linear_regression_analysis_results.dat");
+        TestingAnalysis test_analysis(&neural_network,&data_set);
+        Vector<double> err=test_analysis.calculate_testing_errors();
+        cout<<"errors"<<endl;
+        for (auto &i:err)
+        cout<<i<<endl;
+        //linear_regression_results.save("data/linear_regression_analysis_results.dat");
+        Vector< Matrix<double> > out_targ=test_analysis.calculate_target_outputs();
 
-        return(0);
+    //    cout<<"targ/out"<<endl;
+      //  for (auto &i: out_targ){
+      //    cout<<"t"<<endl;
+      //  i.print();}
+        return 0 ;
     }
     catch(exception& e)
     {
