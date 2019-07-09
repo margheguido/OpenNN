@@ -10366,7 +10366,7 @@ void Matrix<T>::scale_columns_minimum_maximum(const Vector< Statistics<T> >& sta
       size_t column_index;
 
       // Rescale data
-cout<<"maxx"<<max_statistics <<"minn" <<min_statistics <<endl;
+
       for(size_t j = 0; j < column_indices_size; j++)
       {
          column_index = column_indices[j];
@@ -10394,7 +10394,7 @@ cout<<"maxx"<<max_statistics <<"minn" <<min_statistics <<endl;
       for(size_t j = 0; j < column_indices_size; j++)
       {
          column_index = column_indices[j];
-         cout<<"max"<<statistics[j].maximum <<"min"<< statistics[j].minimum <<endl;
+
          if(statistics[j].maximum - statistics[j].minimum > 0.0)
          {
   //#pragma omp parallel for

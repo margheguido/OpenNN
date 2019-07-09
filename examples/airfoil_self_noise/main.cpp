@@ -119,7 +119,7 @@ int main(void)
         // che corrispondono ad input e per farlo ne calcola le statistiche (min, max, mean...)
         // che poi restituisce in modo da averle a disposizione senza ricalcolarle
         const Vector< Statistics<double> > inputs_statistics = data_set.scale_inputs_minimum_maximum();
-        const Vector< Statistics<double> > targets_statistics = data_set.scale_targets_minimum_maximum(1);
+        const Vector< Statistics<double> > targets_statistics = data_set.scale_targets_minimum_maximum();
         Matrix<double> targ=data_set.get_targets();
         targ.print();
 
@@ -236,10 +236,10 @@ int main(void)
       //  Vector< Statistics<double> > statistics_to_scale_target_and_output{ targets_statistics[0], targets_statistics[0] };
       //  results[0].unscale_columns_minimum_maximum( statistics_to_scale_target_and_output, columns_to_be_scaled );
       std::cout << "targets, outputs (scaled):" << '\n';
-      //std::cout << "first" << '\n';
-      //results[0].print();
-      //std::cout << "second" << '\n';
-      //results[1].print();
+      std::cout << "first" << '\n';
+      results[0].print();
+      std::cout << "second" << '\n';
+      results[1].print();
       //  TestingAnalysis::LinearRegressionAnalysis linear_regression_results = testing_analysis.perform_linear_regression_analysis()[0];
 
         // Save results

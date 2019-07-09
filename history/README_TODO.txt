@@ -14,6 +14,9 @@ Non ho capito come funzionano scaling e unsealing layer. Non facciamo lo scaling
 
 PROBLEMA: ho due targets, quando fa lo scaling lo fa in modo indipendente per i due:
 calcola min e max del primo target e scala e poi idem con il secondo
-A noi invece serve che abbiano lo stesso range, dato che calcoleremo il secondo output in funzione del primo 
+A noi invece serve che abbiano lo stesso range, dato che calcoleremo il secondo output in funzione del primo (target2= 2*target1)
 inserisco nella funzione scale_columns_minimum_maximum di matrix.h (che è quella in cui effettivamente viene fatto lo scaling) una variabile bool che di default è 0, che viene settata a uno se vogliamo fare lo scaling in modo uniforme 
 conseguentemente deve essere prima passata alla funzione di data set  scale_targets_minimum_maximum -> Adesso sembra funzionare lo scaling dei target ma la loss è altissima: c'è qualcosa che non va
+-> così non va bene: data la sua trasformazione quando i due target vengono scalati (nello stesso range) non sono più uno il doppio dell'altro, come saranno invece gli output.
+Ma non va bene neanche che siano uguali una volta scalati. Nel nostro caso invece può andare bene? 
+
