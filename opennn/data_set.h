@@ -474,8 +474,8 @@ public:
 
    // Target variables scaling
 
-   void scale_targets_minimum_maximum(const Vector< Statistics<double> >&);
-   Vector< Statistics<double> > scale_targets_minimum_maximum();
+   void scale_targets_minimum_maximum(const Vector< Statistics<double> >&, bool uniform_statistics=0);
+   Vector< Statistics<double> > scale_targets_minimum_maximum(bool uniform_statistics=0);
 
    void scale_targets_mean_standard_deviation(const Vector< Statistics<double> >&);
    Vector< Statistics<double> > scale_targets_mean_standard_deviation();

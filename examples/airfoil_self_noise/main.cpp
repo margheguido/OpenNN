@@ -34,7 +34,7 @@ int main(void)
         cout << "OpenNN. Airfoil Self-Noise Application." << endl;
 
       //   srand(static_cast<unsigned>(time(nullptr)));
-        srand(1);
+        srand(100);
 
         // Data set
 
@@ -59,7 +59,7 @@ int main(void)
         // Variables
 
         Variables* variables_pointer = data_set.get_variables_pointer();
-    //    Variables* variables_pointer_out= data_set_out.get_variables_pointer();
+       //Variables* variables_pointer_out= data_set_out.get_variables_pointer();
 
         Vector< Variables::Item > variables_items(7);
         //Vector< Variables::Item > variables_items_out(2);
@@ -107,9 +107,21 @@ int main(void)
         Instances* instances_pointer = data_set.get_instances_pointer();
 
         instances_pointer->split_random_indices();
+        // // See which indexes have been selected for testing (random selection)
+        // Vector<size_t> testing_indices = instances_pointer->get_testing_indices();
+        // std::cout << "testing_indeces: " << '\n';
+        // for( size_t i = 0; i < testing_indices.size(); i++ )
+        //   std::cout << testing_indices[i] << " " << '\n';
 
+
+        // calls Vector< Statistics<double> > DataSet::scale_inputs_minimum_maximum()
+        // dim(inputs_statistics) = #inputs, la funzione scala tutte le colonne del DataSet
+        // che corrispondono ad input e per farlo ne calcola le statistiche (min, max, mean...)
+        // che poi restituisce in modo da averle a disposizione senza ricalcolarle
         const Vector< Statistics<double> > inputs_statistics = data_set.scale_inputs_minimum_maximum();
-        const Vector< Statistics<double> > targets_statistics = data_set.scale_targets_minimum_maximum();
+        const Vector< Statistics<double> > targets_statistics = data_set.scale_targets_minimum_maximum(1);
+
+
 
         // Neural network
 
@@ -130,22 +142,23 @@ int main(void)
         neural_network.construct_scaling_layer();
 
        ScalingLayer* scaling_layer_pointer = neural_network.get_scaling_layer_pointer();
-
+       // std::cout << "Number of inputs in scaling: " << scaling_layer_pointer->get_scaling_neurons_number() << '\n';
        scaling_layer_pointer->set_statistics(inputs_statistics);
 
         scaling_layer_pointer->set_scaling_methods(ScalingLayer::NoScaling);
-
+        // scaling_layer_pointer->set_scaling_methods(ScalingLayer::MeanStandardDeviation);
         neural_network.construct_unscaling_layer();
 
         UnscalingLayer* unscaling_layer_pointer = neural_network.get_unscaling_layer_pointer();
 
        unscaling_layer_pointer->set_statistics(targets_statistics);
 
-     unscaling_layer_pointer->set_unscaling_method(UnscalingLayer::NoUnscaling);
+       unscaling_layer_pointer->set_unscaling_method(UnscalingLayer::NoUnscaling);
+       // unscaling_layer_pointer->set_unscaling_method(UnscalingLayer::MeanStandardDeviation);
 
-        // Training strategy object
 
-        TrainingStrategy training_strategy(&neural_network, &data_set);
+       // Training strategy object
+       TrainingStrategy training_strategy(&neural_network, &data_set);
 
         if(0)
         {
@@ -158,7 +171,7 @@ int main(void)
           quasi_Newton_method_pointer->set_minimum_loss_decrease(1.0e-6);
         }
 
-        if(0)
+        if(1)
         {
           training_strategy.set_training_method( "GRADIENT_DESCENT" );
           GradientDescent* gradient_descent_method_pointer = training_strategy.get_gradient_descent_pointer();
@@ -189,7 +202,7 @@ int main(void)
           Levenberg_Marquardt_algorithm_pointer->set_minimum_loss_decrease(1.0e-6);
         }
 
-        if(1)
+        if(0)
         {
           training_strategy.set_training_method( "ADAPTIVE_MOMENT_ESTIMATION" );
           AdaptiveMomentEstimation* adaptive_moment_estimation_pointer = training_strategy.get_adaptive_moment_estimation_pointer();
@@ -202,36 +215,50 @@ int main(void)
 
         const TrainingStrategy::Results training_strategy_results = training_strategy.perform_training();
 
+        // Matrix<double> test_input;
+        // Matrix<double> out;
+        // for( size_t i = 1; i < 10; i++ )
+        // {
+        //   test_input.set( 1, 1, i );
+        //   out = neural_network.get_multilayer_perceptron_pointer()->calculate_outputs( test_input );
+        //   std::cout << "Input: " << i << "\tOutput: ";
+        //   out.print();
+        // }
+
         // Testing analysis
 
-        TestingAnalysis testing_analysis(&neural_network, &data_set);
-
-        TestingAnalysis::LinearRegressionAnalysis linear_regression_results = testing_analysis.perform_linear_regression_analysis()[0];
+      TestingAnalysis testing_analysis(&neural_network, &data_set);
+      // calls Vector< Matrix<double> > TestingAnalysis::calculate_target_outputs() const
+      // dim( results ) = (#output) x (#testing_instances) x (2 = output_i + target_i da confrontare)
+      Vector< Matrix<double> > results = testing_analysis.calculate_target_outputs();
+      //  Vector<size_t> columns_to_be_scaled{ 0, 1 }; // scala sia target che output (results[0][:,0] e results[0][:,1])
+      //  Vector< Statistics<double> > statistics_to_scale_target_and_output{ targets_statistics[0], targets_statistics[0] };
+      //  results[0].unscale_columns_minimum_maximum( statistics_to_scale_target_and_output, columns_to_be_scaled );
+      std::cout << "targets, outputs (scaled):" << '\n';
+      std::cout << "first" << '\n';
+      results[0].print();
+      std::cout << "second" << '\n';
+      results[1].print();
+      //  TestingAnalysis::LinearRegressionAnalysis linear_regression_results = testing_analysis.perform_linear_regression_analysis()[0];
 
         // Save results
-
+        /*
         data_set.save("data/data_set.xml");
-
         neural_network.save("data/neural_network.xml");
         neural_network.save_expression("data/expression.txt");
-
         training_strategy.save("data/training_strategy.xml");
         std::cout << "TrainingStrategy saved" << '\n';
         training_strategy_results.save("data/training_strategy_results.dat");
         std::cout << "TrainingStrategyResults saved" << '\n';
+*/
 
-        TestingAnalysis test_analysis(&neural_network,&data_set);
-        Vector<double> err=test_analysis.calculate_testing_errors();
-        cout<<"errors"<<endl;
-        for (auto &i:err)
-        cout<<i<<endl;
-        //linear_regression_results.save("data/linear_regression_analysis_results.dat");
-        Vector< Matrix<double> > out_targ=test_analysis.calculate_target_outputs();
 
-    //    cout<<"targ/out"<<endl;
-      //  for (auto &i: out_targ){
-      //    cout<<"t"<<endl;
-      //  i.print();}
+      //  Vector<double> err=testing_analysis.calculate_testing_errors();
+        //cout<<"errors"<<endl;
+        //for (auto &i:err)
+        //cout<<i<<endl;
+
+
         return 0 ;
     }
     catch(exception& e)

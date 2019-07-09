@@ -277,14 +277,16 @@ Vector< Matrix<double> > TestingAnalysis::calculate_target_outputs() const
 
    const MultilayerPerceptron* multilayer_perceptron_pointer = neural_network_pointer->get_multilayer_perceptron_pointer();
 
-   const size_t outputs_number = multilayer_perceptron_pointer->get_outputs_number();
+   //const size_t outputs_number = multilayer_perceptron_pointer->get_outputs_number();
+   const size_t outputs_number = 2;
 
-   const Matrix<double> testing_outputs = neural_network_pointer->calculate_outputs(testing_inputs);
+   const Matrix<double> outputs = neural_network_pointer->calculate_outputs(testing_inputs);
 
-   cout<<"OUT"<<endl;
-   testing_outputs.print();
-    cout<<"TARG"<<endl;
-  testing_targets.print();
+   //calcolo del secondo output
+   Matrix<double> testing_outputs(outputs.get_rows_number(),2);
+   testing_outputs.set_column(0,outputs,"old_out");
+   testing_outputs.set_column(1,outputs+outputs,"new_out");
+
    // Approximation testing stuff
 
    Vector< Matrix<double> > target_outputs(outputs_number);

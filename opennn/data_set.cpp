@@ -5018,7 +5018,7 @@ Vector< Statistics<double> > DataSet::scale_targets_mean_standard_deviation()
 /// @param targets_statistics Vector of statistics structures for all the targets in the data set.
 /// The size of that vector must be equal to the number of target variables.
 
-void DataSet::scale_targets_minimum_maximum(const Vector< Statistics<double> >& targets_statistics)
+void DataSet::scale_targets_minimum_maximum(const Vector< Statistics<double> >& targets_statistics, bool uniform_statistics)
 {
     // Control sentence(if debug)
 
@@ -5039,7 +5039,7 @@ void DataSet::scale_targets_minimum_maximum(const Vector< Statistics<double> >& 
 
     const Vector<size_t> targets_indices = variables.get_targets_indices();
 
-    data.scale_columns_minimum_maximum(targets_statistics, targets_indices);
+    data.scale_columns_minimum_maximum(targets_statistics, targets_indices,uniform_statistics);
 }
 
 
@@ -5047,11 +5047,11 @@ void DataSet::scale_targets_minimum_maximum(const Vector< Statistics<double> >& 
 /// It updates the target variables of the data matrix.
 /// It also returns a vector of vectors with the statistics of the input target variables.
 
-Vector< Statistics<double> > DataSet::scale_targets_minimum_maximum()
+Vector< Statistics<double> > DataSet::scale_targets_minimum_maximum(bool uniform_statistics)
 {
    const Vector< Statistics<double> > targets_statistics = calculate_targets_statistics();
 
-   scale_targets_minimum_maximum(targets_statistics);
+   scale_targets_minimum_maximum(targets_statistics, uniform_statistics);
 
    return(targets_statistics);
 }
@@ -5263,7 +5263,7 @@ void DataSet::unscale_inputs_minimum_maximum(const Vector< Statistics<double> >&
 /// The size of that vector must be equal to the number of variables.
 
 void DataSet::unscale_targets_mean_standard_deviation(const Vector< Statistics<double> >& targets_statistics)
-{    
+{
     const Vector<size_t> targets_indices = variables.get_targets_indices();
 
     data.unscale_columns_mean_standard_deviation(targets_statistics, targets_indices);

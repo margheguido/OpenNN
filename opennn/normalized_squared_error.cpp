@@ -314,9 +314,13 @@ check();
         const Matrix<double> inputs = data_set_pointer->get_inputs(training_batches[static_cast<unsigned>(i)]);
         const Matrix<double> targets = data_set_pointer->get_targets(training_batches[static_cast<unsigned>(i)]);
 
-        const Matrix<double> outputs = multilayer_perceptron_pointer->calculate_outputs(inputs);
 
-        const double batch_error = outputs.calculate_sum_squared_error(targets);
+        const Matrix<double> outputs = multilayer_perceptron_pointer->calculate_outputs(inputs);
+        Matrix<double> our_outputs=calculate_our_outputs(outputs);
+
+
+
+        double batch_error = our_outputs.calculate_sum_squared_error(targets);
 
         training_error += batch_error;
     }
@@ -538,8 +542,9 @@ check();
         const Matrix<double> targets = data_set_pointer->get_targets(selection_batches[static_cast<unsigned>(i)]);
 
         const Matrix<double> outputs = multilayer_perceptron_pointer->calculate_outputs(inputs);
+        Matrix<double> our_outputs=calculate_our_outputs(outputs);
 
-        const double batch_error = outputs.calculate_sum_squared_error(targets);
+        const double batch_error = our_outputs.calculate_sum_squared_error(targets);
 
         selection_error += batch_error;
     }
@@ -671,8 +676,9 @@ check();
         const Matrix<double> targets = data_set_pointer->get_targets(training_batches[static_cast<unsigned>(i)]);
 
         const Matrix<double> outputs = multilayer_perceptron_pointer->calculate_outputs(inputs, parameters);
+        Matrix<double> our_outputs=calculate_our_outputs(outputs);
 
-        const double batch_error = outputs.calculate_sum_squared_error(targets);
+        const double batch_error = our_outputs.calculate_sum_squared_error(targets);
 
         training_error += batch_error;
     }
@@ -699,8 +705,8 @@ check();
     const Matrix<double> targets = data_set_pointer->get_targets(batch_indices);
 
     const Matrix<double> outputs = multilayer_perceptron_pointer->calculate_outputs(inputs);
-
-    const double batch_error = outputs.calculate_sum_squared_error(targets);
+    Matrix<double> our_outputs=calculate_our_outputs(outputs);
+    const double batch_error = our_outputs.calculate_sum_squared_error(targets);
 
     return batch_error / normalization_coefficient;
 }
@@ -992,8 +998,7 @@ check();
     Matrix<double> gradient_our_outputs=calculate_gradient_our_outputs(outputs,our_outputs);
     Matrix<double> deriv_loss=our_outputs-targets;
 
-    cout<<"TARGETS"<<endl;
-    targets.print();
+
     Matrix<double> result;
     result.set(deriv_loss.get_rows_number(),1);
 
@@ -1013,28 +1018,28 @@ Matrix<double> NormalizedSquaredError::calculate_gradient_our_outputs (const Mat
 {
    NumericalDifferentiation num_diff;
    Matrix<double> grad_our_outputs(our_outputs.get_columns_number(),outputs.get_rows_number());
+
    for (int i=0; i< outputs.get_rows_number(); i++)
-   { double out_value=outputs(i,0);
-    //  Vector<double> i_derivative=num_diff.calculate_forward_differences_derivatives(*this, &NormalizedSquaredError::calculate_our_outputs,out_value );
+   {
+     double out_value=outputs(i,0);
+     //  Vector<double> i_derivative=num_diff.calculate_forward_differences_derivatives(*this, &NormalizedSquaredError::calculate_our_outputs,out_value );
+     double h=0.0001;
+     Vector<double> y = calculate_our_outputs(out_value);
+     double x_forward = out_value + h;
+     Vector<double> y_forward = calculate_our_outputs(x_forward);
+     Vector<double> d = (y_forward - y)/h;
 
+     grad_our_outputs.set_column(i,d);
+    }
 
-    double h=0.000001;
-    Vector<double> y = calculate_our_outputs(out_value);
-    double x_forward = out_value + h;
-    Vector<double> y_forward = calculate_our_outputs(x_forward);
-   Vector<double> d = (y_forward - y)/h;
-
-      grad_our_outputs.set_column(i,d);
-   }
-
-   return grad_our_outputs;
+    return grad_our_outputs;
  }
 
  Matrix<double> NormalizedSquaredError::calculate_our_outputs (const Matrix<double>& outputs) const
  {
    Matrix<double> our_outputs(outputs.get_rows_number(),2);
    our_outputs.set_column(0,outputs,"old_out");
-   our_outputs.set_column(0,outputs+outputs,"new_out");
+   our_outputs.set_column(1,outputs+outputs,"new_out");
 
    return our_outputs;
  }
