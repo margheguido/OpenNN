@@ -18,5 +18,7 @@ A noi invece serve che abbiano lo stesso range, dato che calcoleremo il secondo 
 inserisco nella funzione scale_columns_minimum_maximum di matrix.h (che è quella in cui effettivamente viene fatto lo scaling) una variabile bool che di default è 0, che viene settata a uno se vogliamo fare lo scaling in modo uniforme 
 conseguentemente deve essere prima passata alla funzione di data set  scale_targets_minimum_maximum -> Adesso sembra funzionare lo scaling dei target ma la loss è altissima: c'è qualcosa che non va
 -> così non va bene: data la sua trasformazione quando i due target vengono scalati (nello stesso range) non sono più uno il doppio dell'altro, come saranno invece gli output.
-Ma non va bene neanche che siano uguali una volta scalati. Nel nostro caso invece può andare bene? 
+
+
+Ho usato la parte di unscaling dei risultati che avevi inserito alla fine, mi sembra funzionare abbastanza bene. forse mi sono posta dei problemi inutili 
 

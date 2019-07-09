@@ -121,6 +121,7 @@ int main(void)
         const Vector< Statistics<double> > inputs_statistics = data_set.scale_inputs_minimum_maximum();
         const Vector< Statistics<double> > targets_statistics = data_set.scale_targets_minimum_maximum();
         Matrix<double> targ=data_set.get_targets();
+        cout <<"scaled targets"<<endl;
         targ.print();
 
 
@@ -232,15 +233,18 @@ int main(void)
       // calls Vector< Matrix<double> > TestingAnalysis::calculate_target_outputs() const
       // dim( results ) = (#output) x (#testing_instances) x (2 = output_i + target_i da confrontare)
       Vector< Matrix<double> > results = testing_analysis.calculate_target_outputs();
-      //  Vector<size_t> columns_to_be_scaled{ 0, 1 }; // scala sia target che output (results[0][:,0] e results[0][:,1])
-      //  Vector< Statistics<double> > statistics_to_scale_target_and_output{ targets_statistics[0], targets_statistics[0] };
-      //  results[0].unscale_columns_minimum_maximum( statistics_to_scale_target_and_output, columns_to_be_scaled );
+      Vector<size_t> columns_to_be_scaled{ 0, 1 }; // scala sia target che output (results[0][:,0] e results[0][:,1])
+      Vector< Statistics<double> > statistics1_to_scale_target_and_output{ targets_statistics[0], targets_statistics[0] };
+      Vector< Statistics<double> > statistics2_to_scale_target_and_output{ targets_statistics[1], targets_statistics[1] };
+      results[1].unscale_columns_minimum_maximum( statistics1_to_scale_target_and_output, columns_to_be_scaled );
+      results[0].unscale_columns_minimum_maximum( statistics2_to_scale_target_and_output, columns_to_be_scaled );
+
       std::cout << "targets, outputs (scaled):" << '\n';
-      std::cout << "first" << '\n';
+      std::cout << "first " << '\n';
       results[0].print();
       std::cout << "second" << '\n';
       results[1].print();
-      //  TestingAnalysis::LinearRegressionAnalysis linear_regression_results = testing_analysis.perform_linear_regression_analysis()[0];
+        TestingAnalysis::LinearRegressionAnalysis linear_regression_results = testing_analysis.perform_linear_regression_analysis()[0];
 
         // Save results
         /*
@@ -254,10 +258,10 @@ int main(void)
 */
 
 
-      //  Vector<double> err=testing_analysis.calculate_testing_errors();
-        //cout<<"errors"<<endl;
-        //for (auto &i:err)
-        //cout<<i<<endl;
+       Vector<double> err=testing_analysis.calculate_testing_errors();
+        cout<<"errors (testing analysis)"<<endl;
+        for (auto &i:err)
+        cout<<i<<endl;
 
 
         return 0 ;
