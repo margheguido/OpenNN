@@ -16,4 +16,4 @@ PROBLEMA: ho due targets, quando fa lo scaling lo fa in modo indipendente per i 
 calcola min e max del primo target e scala e poi idem con il secondo
 A noi invece serve che abbiano lo stesso range, dato che calcoleremo il secondo output in funzione del primo 
 inserisco nella funzione scale_columns_minimum_maximum di matrix.h (che è quella in cui effettivamente viene fatto lo scaling) una variabile bool che di default è 0, che viene settata a uno se vogliamo fare lo scaling in modo uniforme 
-conseguentemente deve essere prima passata alla funzione di data set  scale_targets_minimum_maximum -> PER ORA NON FUNZIONA 
+conseguentemente deve essere prima passata alla funzione di data set  scale_targets_minimum_maximum -> Adesso sembra funzionare lo scaling dei target ma la loss è altissima: c'è qualcosa che non va

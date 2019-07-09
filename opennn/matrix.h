@@ -10353,8 +10353,8 @@ void Matrix<T>::scale_columns_minimum_maximum(const Vector< Statistics<T> >& sta
     //by default this variable is equal to 0
     if (uniform_statistics)
     {
-      T max_statistics=numeric_limits<double>::infinity();
-      T min_statistics=-numeric_limits<double>::infinity();
+      T max_statistics=-numeric_limits<double>::infinity();
+      T min_statistics=numeric_limits<double>::infinity();
       for(size_t j = 0; j < column_indices_size; j++)
       {
         if(statistics[j].maximum > max_statistics)
@@ -10363,25 +10363,48 @@ void Matrix<T>::scale_columns_minimum_maximum(const Vector< Statistics<T> >& sta
         if(statistics[j].minimum < min_statistics)
          min_statistics = statistics[j].minimum;
       }
+      size_t column_index;
+
+      // Rescale data
+cout<<"maxx"<<max_statistics <<"minn" <<min_statistics <<endl;
+      for(size_t j = 0; j < column_indices_size; j++)
+      {
+         column_index = column_indices[j];
+
+         if(max_statistics - min_statistics> 0.0)
+         {
+  //#pragma omp parallel for
+
+            for(int i = 0; i < static_cast<int>(rows_number); i++)
+            {
+              (*this)(i,column_index) = 2.0*((*this)(i,column_index) - min_statistics)/(max_statistics-min_statistics) - 1.0;
+            }
+         }
+      }
     }
 
-    size_t column_index;
-
-    // Rescale data
-
-    for(size_t j = 0; j < column_indices_size; j++)
+    else
     {
-       column_index = column_indices[j];
 
-       if(statistics[j].maximum - statistics[j].minimum > 0.0)
-       {
-//#pragma omp parallel for
 
-          for(int i = 0; i < static_cast<int>(rows_number); i++)
-          {
-            (*this)(i,column_index) = 2.0*((*this)(i,column_index) - statistics[j].minimum)/(statistics[j].maximum-statistics[j].minimum) - 1.0;
-          }
-       }
+      size_t column_index;
+
+      // Rescale data
+
+      for(size_t j = 0; j < column_indices_size; j++)
+      {
+         column_index = column_indices[j];
+         cout<<"max"<<statistics[j].maximum <<"min"<< statistics[j].minimum <<endl;
+         if(statistics[j].maximum - statistics[j].minimum > 0.0)
+         {
+  //#pragma omp parallel for
+
+            for(int i = 0; i < static_cast<int>(rows_number); i++)
+            {
+              (*this)(i,column_index) = 2.0*((*this)(i,column_index) - statistics[j].minimum)/(statistics[j].maximum-statistics[j].minimum) - 1.0;
+            }
+         }
+      }
     }
 }
 
