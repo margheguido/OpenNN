@@ -14,14 +14,4 @@ TEMPLATE = subdirs
 
 CONFIG += ordered
 
-SUBDIRS += simple_function_regression
-SUBDIRS += simple_pattern_recognition
-SUBDIRS += airfoil_self_noise
-SUBDIRS += breast_cancer
-SUBDIRS += iris_plant
-SUBDIRS += logical_operations
-SUBDIRS += pima_indians_diabetes
-SUBDIRS += urinary_inflammations_diagnosis
-SUBDIRS += yacht_hydrodynamics_design
-SUBDIRS += yacht_hydrodynamics_production
-SUBDIRS += leukemia
+SUBDIRS += 2_outputs
