@@ -109,9 +109,9 @@ int main(void)
         instances_pointer->split_random_indices();
         // // See which indexes have been selected for testing (random selection)
         // Vector<size_t> testing_indices = instances_pointer->get_testing_indices();
-        // std::cout << "testing_indeces: " << '\n';
+        // std::cout << "testing_indeces: " << std::endl;
         // for( size_t i = 0; i < testing_indices.size(); i++ )
-        //   std::cout << testing_indices[i] << " " << '\n';
+        //   std::cout << testing_indices[i] << " " << std::endl;
 
 
         // calls Vector< Statistics<double> > DataSet::scale_inputs_minimum_maximum()
@@ -144,7 +144,7 @@ int main(void)
         neural_network.construct_scaling_layer();
 
        ScalingLayer* scaling_layer_pointer = neural_network.get_scaling_layer_pointer();
-       // std::cout << "Number of inputs in scaling: " << scaling_layer_pointer->get_scaling_neurons_number() << '\n';
+       // std::cout << "Number of inputs in scaling: " << scaling_layer_pointer->get_scaling_neurons_number() << std::endl;
        scaling_layer_pointer->set_statistics(inputs_statistics);
 
         scaling_layer_pointer->set_scaling_methods(ScalingLayer::NoScaling);
