@@ -57,5 +57,6 @@ tinyxml2.cpp
 training_strategy.cpp
 unscaling_layer.cpp
 variables.cpp
-weighted_squared_error.cpp)
+weighted_squared_error.cpp
+output_function.cpp)
 

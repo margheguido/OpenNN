@@ -28,6 +28,7 @@
 
 #include "loss_index.h"
 #include "data_set.h"
+#include "output_function.h"
 
 // TinyXml includes
 
@@ -116,9 +117,6 @@ public:
    Vector<double> calculate_training_error_gradient_cuda() const;
 
    Matrix<double> calculate_output_gradient(const Matrix<double>&, const Matrix<double>&) const;
-   Matrix<double> calculate_our_outputs (const Matrix<double>&) const;
-    Vector <double> calculate_our_outputs (double ) const;
-   Matrix<double> calculate_gradient_our_outputs (const Matrix<double>&,const Matrix<double>&) const;
 
    LossIndex::FirstOrderLoss calculate_first_order_loss() const;
 

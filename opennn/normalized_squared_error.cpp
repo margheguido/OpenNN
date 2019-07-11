@@ -13,6 +13,7 @@
 // OpenNN includes
 #include "numerical_differentiation.h"
 #include "normalized_squared_error.h"
+#include "output_function.h"
 
 #ifdef __OPENNN_CUDA__
 #include <cuda_runtime.h>
@@ -295,6 +296,8 @@ check();
 
 #endif
 
+    OutputFunction out_function = neural_network_pointer->get_output_function();
+
     // Multilayer perceptron
 
     const MultilayerPerceptron* multilayer_perceptron_pointer = neural_network_pointer->get_multilayer_perceptron_pointer();
@@ -316,7 +319,7 @@ check();
 
 
         const Matrix<double> outputs = multilayer_perceptron_pointer->calculate_outputs(inputs);
-        Matrix<double> our_outputs=calculate_our_outputs(outputs);
+        Matrix<double> our_outputs = out_function.calculate_multiple_outputs(outputs);
 
 
 
@@ -522,6 +525,7 @@ check();
 
 #endif
 
+    OutputFunction out_function = neural_network_pointer->get_output_function();
     // Multilayer perceptron
 
     const MultilayerPerceptron* multilayer_perceptron_pointer = neural_network_pointer->get_multilayer_perceptron_pointer();
@@ -542,7 +546,7 @@ check();
         const Matrix<double> targets = data_set_pointer->get_targets(selection_batches[static_cast<unsigned>(i)]);
 
         const Matrix<double> outputs = multilayer_perceptron_pointer->calculate_outputs(inputs);
-        Matrix<double> our_outputs=calculate_our_outputs(outputs);
+        Matrix<double> our_outputs = out_function.calculate_multiple_outputs(outputs);
 
         const double batch_error = our_outputs.calculate_sum_squared_error(targets);
 
@@ -656,6 +660,7 @@ check();
 
 #endif
 
+    OutputFunction out_function = neural_network_pointer->get_output_function();
     // Multilayer perceptron
 
     const MultilayerPerceptron* multilayer_perceptron_pointer = neural_network_pointer->get_multilayer_perceptron_pointer();
@@ -676,7 +681,7 @@ check();
         const Matrix<double> targets = data_set_pointer->get_targets(training_batches[static_cast<unsigned>(i)]);
 
         const Matrix<double> outputs = multilayer_perceptron_pointer->calculate_outputs(inputs, parameters);
-        Matrix<double> our_outputs=calculate_our_outputs(outputs);
+        Matrix<double> our_outputs=out_function.calculate_multiple_outputs(outputs);
 
         const double batch_error = our_outputs.calculate_sum_squared_error(targets);
 
@@ -695,6 +700,7 @@ check();
 
 #endif
 
+    OutputFunction out_function = neural_network_pointer->get_output_function();
     // Multilayer perceptron
 
     const MultilayerPerceptron* multilayer_perceptron_pointer = neural_network_pointer->get_multilayer_perceptron_pointer();
@@ -705,7 +711,7 @@ check();
     const Matrix<double> targets = data_set_pointer->get_targets(batch_indices);
 
     const Matrix<double> outputs = multilayer_perceptron_pointer->calculate_outputs(inputs);
-    Matrix<double> our_outputs=calculate_our_outputs(outputs);
+    Matrix<double> our_outputs=out_function.calculate_multiple_outputs(outputs);
     const double batch_error = our_outputs.calculate_sum_squared_error(targets);
 
     return batch_error / normalization_coefficient;
@@ -994,9 +1000,11 @@ check();
 
 #endif
 
-    Matrix<double> our_outputs=calculate_our_outputs(outputs);
-    Matrix<double> gradient_our_outputs=calculate_gradient_our_outputs(outputs,our_outputs);
-    Matrix<double> deriv_loss=our_outputs-targets;
+    OutputFunction out_function = neural_network_pointer-> get_output_function();
+
+    Matrix<double> our_outputs = out_function.calculate_multiple_outputs(outputs);
+    Matrix<double> gradient_our_outputs = out_function.gradient_outputs(outputs,our_outputs);
+    Matrix<double> deriv_loss = our_outputs-targets;
 
 
     Matrix<double> result;
@@ -1011,47 +1019,9 @@ check();
 
 
     return result;
-    //deriv_loss.dot(gradient_our_outputs);/**2.0/normalization_coefficient*/;
+
 }
 
-Matrix<double> NormalizedSquaredError::calculate_gradient_our_outputs (const Matrix<double>& outputs,const Matrix<double>& our_outputs) const
-{
-   NumericalDifferentiation num_diff;
-   Matrix<double> grad_our_outputs(our_outputs.get_columns_number(),outputs.get_rows_number());
-
-   for (int i=0; i< outputs.get_rows_number(); i++)
-   {
-     double out_value=outputs(i,0);
-     //  Vector<double> i_derivative=num_diff.calculate_forward_differences_derivatives(*this, &NormalizedSquaredError::calculate_our_outputs,out_value );
-     double h=0.0001;
-     Vector<double> y = calculate_our_outputs(out_value);
-     double x_forward = out_value + h;
-     Vector<double> y_forward = calculate_our_outputs(x_forward);
-     Vector<double> d = (y_forward - y)/h;
-
-     grad_our_outputs.set_column(i,d);
-    }
-
-    return grad_our_outputs;
- }
-
- Matrix<double> NormalizedSquaredError::calculate_our_outputs (const Matrix<double>& outputs) const
- {
-   Matrix<double> our_outputs(outputs.get_rows_number(),2);
-   our_outputs.set_column(0,outputs,"old_out");
-   our_outputs.set_column(1,outputs+outputs,"new_out");
-
-   return our_outputs;
- }
-
- Vector<double> NormalizedSquaredError::calculate_our_outputs (double outputs) const
- {
-   Vector<double> our_outputs(2);
-   our_outputs[0]=outputs;
-   our_outputs[1]=outputs*2;
-
-   return our_outputs;
- }
 
 
 LossIndex::FirstOrderLoss NormalizedSquaredError::calculate_first_order_loss() const

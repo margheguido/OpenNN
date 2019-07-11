@@ -4,7 +4,7 @@
 /*   www.opennn.net                                                                                             */
 /*                                                                                                              */
 /*   O P E N   N E U R A L   N E T W O R K S   L I B R A R Y                                                    */
-/*                                                                                                              */ 
+/*                                                                                                              */
 /*   Artificial Intelligence Techniques SL                                                                      */
 /*   artelnics@artelnics.com                                                                                    */
 /*                                                                                                              */
@@ -33,7 +33,7 @@
 #include "inputs_trending_layer.h"
 #include "outputs_trending_layer.h"
 #include "neural_network.h"
-
+#include "output_function.h"
 // Training strategy
 
 #include "loss_index.h"
