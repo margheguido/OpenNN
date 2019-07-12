@@ -45,5 +45,4 @@ Matrix<double> OutputFunction::gradient_outputs (const Matrix<double>& single_ou
   }
 
 
-
 }

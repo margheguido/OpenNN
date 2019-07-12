@@ -178,7 +178,7 @@ int main(void)
           training_strategy.set_training_method( "GRADIENT_DESCENT" );
           GradientDescent* gradient_descent_method_pointer = training_strategy.get_gradient_descent_pointer();
 
-          gradient_descent_method_pointer->set_maximum_epochs_number(100);
+          gradient_descent_method_pointer->set_maximum_epochs_number(200);
           gradient_descent_method_pointer->set_display_period(10);
 
           gradient_descent_method_pointer->set_minimum_loss_decrease(1.0e-6);

@@ -34,7 +34,6 @@ public:
 
    // DEFAULT CONSTRUCTOR
 
-   
 
    //it calculates the derivative of the multiple outputs wrt neural network one
    //#columns: number of outputs
@@ -49,6 +48,7 @@ public:
    //same function but for only one instance
    //size of the vector: number of outputs
    Vector<double> calculate_multiple_outputs (double single_output) const;
+
 
 
 

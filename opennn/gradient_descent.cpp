@@ -341,7 +341,7 @@ void GradientDescent::set_default()
    reserve_error_history = true;
    reserve_gradient_history = false;
    reserve_gradient_norm_history = false;
-   reserve_selection_error_history = false;
+   reserve_selection_error_history = true;
 
    reserve_training_direction_history = false;
    reserve_training_rate_history = false;
@@ -1187,7 +1187,6 @@ GradientDescent::GradientDescentResults* GradientDescent::perform_training()
    const Vector<size_t> selection_indices = instances.get_selection_indices();
 
    const size_t selection_instances_number = instances.get_selection_instances_number();
-
    // Neural network stuff
 
    NeuralNetwork* neural_network_pointer = loss_index_pointer->get_neural_network_pointer();

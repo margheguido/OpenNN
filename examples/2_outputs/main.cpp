@@ -128,7 +128,7 @@ int main(void)
         // Neural network
 
         const size_t inputs_number = variables_pointer->get_inputs_number();
-        const size_t hidden_perceptrons_number = 9;
+        const size_t hidden_perceptrons_number = 12;
         const size_t outputs_number = 1;
 
         NeuralNetwork neural_network(inputs_number, hidden_perceptrons_number, 1);
@@ -217,6 +217,18 @@ int main(void)
 
         const TrainingStrategy::Results training_strategy_results = training_strategy.perform_training();
 
+        Vector<double> loss_history =training_strategy_results.gradient_descent_results_pointer->loss_history;
+        Vector<double> selection_history=training_strategy_results.gradient_descent_results_pointer->selection_error_history;
+
+    /*    cout<<"training loss history"<<endl;
+        for (auto &i:loss_history)
+        cout<<i<<endl;
+
+        cout<<"selection history"<<endl;
+        for (auto &i:selection_history)
+        cout<<i<<endl;
+    */
+
         // Matrix<double> test_input;
         // Matrix<double> out;
         // for( size_t i = 1; i < 10; i++ )
@@ -239,15 +251,18 @@ int main(void)
       results[1].unscale_columns_minimum_maximum( statistics1_to_scale_target_and_output, columns_to_be_scaled );
       results[0].unscale_columns_minimum_maximum( statistics2_to_scale_target_and_output, columns_to_be_scaled );
 
-      std::cout << "targets, outputs (scaled):" << '\n';
+    std::cout << "targets, outputs (scaled):" << '\n';
       std::cout << "first " << '\n';
       results[0].print();
       std::cout << "second" << '\n';
       results[1].print();
-        TestingAnalysis::LinearRegressionAnalysis linear_regression_results = testing_analysis.perform_linear_regression_analysis()[0];
 
+      Vector<TestingAnalysis::LinearRegressionAnalysis> linear_regression_results = testing_analysis.perform_linear_regression_analysis();
+       cout<<linear_regression_results[0].intercept<<
+       linear_regression_results[0].slope<<
+       linear_regression_results[0].correlation<<endl;
         // Save results
-        /*
+    /*
         data_set.save("data/data_set.xml");
         neural_network.save("data/neural_network.xml");
         neural_network.save_expression("data/expression.txt");
@@ -258,11 +273,11 @@ int main(void)
 */
 
 
-       Vector<double> err=testing_analysis.calculate_testing_errors();
+  /*     Vector<double> err=testing_analysis.calculate_testing_errors();
         cout<<"errors (testing analysis)"<<endl;
         for (auto &i:err)
         cout<<i<<endl;
-
+*/
 
         return 0 ;
     }
