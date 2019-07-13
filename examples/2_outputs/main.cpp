@@ -262,7 +262,7 @@ int main(void)
        linear_regression_results[0].slope<<
        linear_regression_results[0].correlation<<endl;
         // Save results
-    /*
+/*
         data_set.save("data/data_set.xml");
         neural_network.save("data/neural_network.xml");
         neural_network.save_expression("data/expression.txt");
@@ -273,11 +273,11 @@ int main(void)
 */
 
 
-  /*     Vector<double> err=testing_analysis.calculate_testing_errors();
+   Vector<double> err=testing_analysis.calculate_testing_errors();
         cout<<"errors (testing analysis)"<<endl;
         for (auto &i:err)
         cout<<i<<endl;
-*/
+
 
         return 0 ;
     }
