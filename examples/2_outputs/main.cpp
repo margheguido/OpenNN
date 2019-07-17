@@ -257,12 +257,12 @@ int main(void)
       std::cout << "second" << '\n';
       results[1].print();
 
-      Vector<TestingAnalysis::LinearRegressionAnalysis> linear_regression_results = testing_analysis.perform_linear_regression_analysis();
+/*      Vector<TestingAnalysis::LinearRegressionAnalysis> linear_regression_results = testing_analysis.perform_linear_regression_analysis();
        cout<<linear_regression_results[0].intercept<<
        linear_regression_results[0].slope<<
        linear_regression_results[0].correlation<<endl;
         // Save results
-/*
+
         data_set.save("data/data_set.xml");
         neural_network.save("data/neural_network.xml");
         neural_network.save_expression("data/expression.txt");
@@ -270,7 +270,7 @@ int main(void)
         std::cout << "TrainingStrategy saved" << '\n';
         training_strategy_results.save("data/training_strategy_results.dat");
         std::cout << "TrainingStrategyResults saved" << '\n';
-*/
+
 
 
    Vector<double> err=testing_analysis.calculate_testing_errors();
@@ -278,6 +278,14 @@ int main(void)
         for (auto &i:err)
         cout<<i<<endl;
 
+*/
+  OutputFunction out_fun;
+
+
+  out_fun.load_solution_binary("data/binary.dat");
+  cout<<"read from binary"<<endl;
+
+  out_fun.print_solution();
 
         return 0 ;
     }

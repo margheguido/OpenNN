@@ -32,23 +32,30 @@ class OutputFunction
 
 public:
 
-   // DEFAULT CONSTRUCTOR
+  // DEFAULT CONSTRUCTOR
 
+  //it calculates the derivative of the multiple outputs wrt neural network one
+  //#columns: number of outputs
+  //#rows: number of instances
+  Matrix<double> gradient_outputs (const Matrix<double>& single_output,const Matrix<double>& multiple_outputs) const;
 
-   //it calculates the derivative of the multiple outputs wrt neural network one
-   //#columns: number of outputs
-   //#rows: number of instances
-   Matrix<double> gradient_outputs (const Matrix<double>& single_output,const Matrix<double>& multiple_outputs) const;
+  //  this function calculate multiple outputs given the neural network one
+  // #rows: number of instances (tipacally batch size)
+  // #columns :number of outputs
+  Matrix<double> calculate_multiple_outputs (const Matrix<double>& single_output) const;
 
-   //  this function calculate multiple outputs given the neural network one
-   // #rows: number of instances (tipacally batch size)
-   // #columns :number of outputs
-   Matrix<double> calculate_multiple_outputs (const Matrix<double>& single_output) const;
+  //same function but for only one instance
+  //size of the vector: number of outputs
+  Vector<double> calculate_multiple_outputs (double single_output) const;
 
-   //same function but for only one instance
-   //size of the vector: number of outputs
-   Vector<double> calculate_multiple_outputs (double single_output) const;
+  //reads from a binary file the pde solution
+  void load_solution_binary(string data_file_name);
 
+  void print_solution() const;
+
+private:
+
+  Matrix<double> solution_stab;
 
 
 

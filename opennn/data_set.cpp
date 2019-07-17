@@ -7044,16 +7044,16 @@ void DataSet::load_data_binary()
     size_t variables_number;
     size_t instances_number;
 
-    file.read(reinterpret_cast<char*>(&variables_number), size);
-    file.read(reinterpret_cast<char*>(&instances_number), size);
+//  file.read(reinterpret_cast<char*>(&variables_number), size);
+//  file.read(reinterpret_cast<char*>(&instances_number), size);
 
     size = sizeof(double);
 
     double value;
 
-    data.set(instances_number, variables_number);
+    data.set(50, 1);
 
-    for(size_t i = 0; i < variables_number*instances_number; i++)
+    for(size_t i = 0; i < 50; i++)
     {
         file.read(reinterpret_cast<char*>(&value), size);
 
@@ -7072,6 +7072,7 @@ void DataSet::load_time_series_data_binary()
 
     file.open(data_file_name.c_str(), ios::binary);
 
+
     if(!file.is_open())
     {
         ostringstream buffer;
@@ -7088,16 +7089,16 @@ void DataSet::load_time_series_data_binary()
     size_t variables_number;
     size_t instances_number;
 
-    file.read(reinterpret_cast<char*>(&variables_number), size);
-    file.read(reinterpret_cast<char*>(&instances_number), size);
+  //  file.read(reinterpret_cast<char*>(&variables_number), size);
+    //file.read(reinterpret_cast<char*>(&instances_number), size);
 
     size = sizeof(double);
 
     double value;
 
     data.set(instances_number, variables_number);
-
-    for(size_t i = 0; i < variables_number*instances_number; i++)
+    //variables_number*instances_number
+    for(size_t i = 0; i < 5; i++)
     {
         file.read(reinterpret_cast<char*>(&value), size);
 

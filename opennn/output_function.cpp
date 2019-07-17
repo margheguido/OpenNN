@@ -44,5 +44,42 @@ Matrix<double> OutputFunction::gradient_outputs (const Matrix<double>& single_ou
    return multiple_outputs;
   }
 
+  void OutputFunction::load_solution_binary(string data_file_name)
+  {
+      ifstream file;
+      file.open(data_file_name.c_str(), ios::binary);
 
+      if(!file.is_open())
+      {
+          ostringstream buffer;
+
+          buffer << "OpenNN Exception: OutputFunction class.\n"
+                 << "void load_solution_binary() method.\n"
+                 << "Cannot open data file: " << data_file_name << "\n";
+
+          throw logic_error(buffer.str());
+      }
+
+      streamsize size = sizeof(size_t);
+      size = sizeof(double);
+
+      double value;
+
+      size_t nDof= 25; //numero di punti in cui c'è la soluzione
+      solution_stab.set(nDof, 1); //vector of the solution
+
+      for(size_t i = 0; i < nDof; i++)
+      {
+          file.read(reinterpret_cast<char*>(&value), size);
+
+          solution_stab[i] = value;
+      }
+
+      file.close();
+  }
+
+  void OutputFunction::print_solution() const
+  {
+    solution_stab.print();
+  }
 }
