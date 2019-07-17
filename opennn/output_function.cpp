@@ -65,7 +65,8 @@ Matrix<double> OutputFunction::gradient_outputs (const Matrix<double>& single_ou
 
       double value;
 
-      size_t nDof= 25; //numero di punti in cui c'è la soluzione
+      size_t nDof= 81; //numero di punti in cui c'è la soluzione
+      //ref3 81, ref2 25
       solution_stab.set(nDof, 1); //vector of the solution
 
       for(size_t i = 0; i < nDof; i++)

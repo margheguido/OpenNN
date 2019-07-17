@@ -281,8 +281,8 @@ int main(void)
 */
   OutputFunction out_fun;
 
-
-  out_fun.load_solution_binary("data/binary.dat");
+  //binary_ref3 o binary_ref2
+  out_fun.load_solution_binary("data/binary_ref3.dat");
   cout<<"read from binary"<<endl;
 
   out_fun.print_solution();
