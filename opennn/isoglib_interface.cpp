@@ -16,19 +16,25 @@ namespace OpenNN
         problem->getSolverParams().solverType = DIRECT;
     };
 
-    // solve the cases and compute the errors
+
     g_meshFlags = FLAGS_DEFAULT | DO_NOT_USE_BASIS_CACHES;
 
-    //qui dovremmo riempire data
+    //qui chiamare la funzione che legge la mesh e crea il problema
   }
 
 
   void IsoglibInterface::call_isoglib(tau)
   {
+    //creare la matrice con questo tau e risolvere
     // local matrix
     supg_local_matrix localMatrix;
 
-    TestCase::solveSteadyAndComputeErrors( dir_name, ARRAY_SIZE( dir_name ), &localMatrix, &data, setupProblem );
+  //  TestCase::solveSteadyAndComputeErrors( dir_name, ARRAY_SIZE( dir_name ), &localMatrix, &data, setupProblem );
+
+    //creare due nuove funzioni in TestCase che si dividono ciò che fa solveSteadyAndComputeErrors
+    //la prima crea il problema e la mesh (e andrebbe chiamata da set solution data)
+    //la seconda chiamata da call_isoglib assembla la matrice e risolve
+    //inoltre eliminiamo la parte in cui si calcolano gli errori e il salvataggio vtk
   }
 
 
