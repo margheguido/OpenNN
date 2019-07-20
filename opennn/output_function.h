@@ -58,13 +58,6 @@ private:
   Matrix<double> solution_stab;
 
 
-
- private:
-
-    // MEMBERS
-
-    ///qui ci sarà l oggetto che chiamerà isoglib
-
  };
 
  }
