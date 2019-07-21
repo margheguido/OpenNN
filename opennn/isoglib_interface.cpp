@@ -2,40 +2,73 @@
 
 namespace OpenNN
 {
-  Matrix<double> IsoglibInterface::calculate_solution(tau)
-  {
-    call_isoglib(tau);
-    return load_solution_binary();
-  }
+  IsoglibInterface::IsoglibInterface(const char * d_name, string sol_name):
+  dir_name(d_name), solution_file_name(sol_name)
+  {};
 
-
-  void IsoglibInterface::set_solution_data()
+  void IsoglibInterface::set_problem_resolution()
   {
     // function to setup the problem
     auto setupProblem = [&]( Problem *problem ) {
         problem->getSolverParams().solverType = DIRECT;
     };
 
-
     g_meshFlags = FLAGS_DEFAULT | DO_NOT_USE_BASIS_CACHES;
 
-    //qui chiamare la funzione che legge la mesh e crea il problema
+    setProblem( dir_name, &localMatrix, &data, setupProblem);
   }
 
 
-  void IsoglibInterface::call_isoglib(tau)
+  Matrix<double> IsoglibInterface::calculate_solution(tau)
   {
-    //creare la matrice con questo tau e risolvere
-    // local matrix
-    supg_local_matrix localMatrix;
-
-  //  TestCase::solveSteadyAndComputeErrors( dir_name, ARRAY_SIZE( dir_name ), &localMatrix, &data, setupProblem );
-
-    //creare due nuove funzioni in TestCase che si dividono ciò che fa solveSteadyAndComputeErrors
-    //la prima crea il problema e la mesh (e andrebbe chiamata da set solution data)
-    //la seconda chiamata da call_isoglib assembla la matrice e risolve
-    //inoltre eliminiamo la parte in cui si calcolano gli errori e il salvataggio vtk
+    solveSteady(tau);
+    return load_solution_binary();
   }
+
+
+  void IsoglibInterface::setProblem( const char *dirNames[], LocalMatrixBase *localMatrix, data_class_interface *data, TestCase::ProblemFunc setupProblem)
+  {
+
+    // start global clock
+    g_timer.reset();
+
+    // create communicator
+    EpetraCommunicator::create();
+    pout << "=============================================================\n";
+    pout << "=============================================================\n";
+    Communicator::instance2()->printInfo();
+
+    // number of components
+    const int numComps = data->getNumComponents();
+
+    // problem
+
+    // set data
+    pde_prob.setData( data, false );
+
+    // load mesh
+    if ( pde_prob.loadMesh( dirNames[ 0 ], dirNames[ 0 ], new DofMapperBase( numComps ),
+                                g_meshFlags, 0, g_numLagrangeMultipliers ) < 0 )
+        exit( 1 );
+
+
+    // set local matrix
+    pde_prob.setLocalMatrix( localMatrix );
+    // time advancing
+
+    timeAdvancing.setup( &pde_prob, 1, 0 );
+    pde_prob.setTimeAdvancingScheme( &timeAdvancing );
+        // call callback
+    if ( setupProblem )
+        setupProblem( &pde_prob );
+
+  }
+
+  void IsoglibInterface::solveSteady(tau)
+  {
+    pde_prob.computeTimestep( false, tau );
+  }
+
 
 
   //reads from a binary file the pde solution and give it back in matrix form
