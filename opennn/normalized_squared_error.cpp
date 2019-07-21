@@ -319,7 +319,7 @@ check();
 
 
         const Matrix<double> outputs = multilayer_perceptron_pointer->calculate_outputs(inputs);
-        Matrix<double> our_outputs = out_function.calculate_multiple_outputs(outputs);
+        Matrix<double> our_outputs = out_function.calculate_solution_outputs(outputs);
 
 
 
@@ -546,7 +546,7 @@ check();
         const Matrix<double> targets = data_set_pointer->get_targets(selection_batches[static_cast<unsigned>(i)]);
 
         const Matrix<double> outputs = multilayer_perceptron_pointer->calculate_outputs(inputs);
-        Matrix<double> our_outputs = out_function.calculate_multiple_outputs(outputs);
+        Matrix<double> our_outputs = out_function.calculate_solution_outputs(outputs);
 
         const double batch_error = our_outputs.calculate_sum_squared_error(targets);
 
@@ -681,7 +681,7 @@ check();
         const Matrix<double> targets = data_set_pointer->get_targets(training_batches[static_cast<unsigned>(i)]);
 
         const Matrix<double> outputs = multilayer_perceptron_pointer->calculate_outputs(inputs, parameters);
-        Matrix<double> our_outputs=out_function.calculate_multiple_outputs(outputs);
+        Matrix<double> our_outputs=out_function.calculate_solution_outputs(outputs);
 
         const double batch_error = our_outputs.calculate_sum_squared_error(targets);
 
@@ -711,7 +711,7 @@ check();
     const Matrix<double> targets = data_set_pointer->get_targets(batch_indices);
 
     const Matrix<double> outputs = multilayer_perceptron_pointer->calculate_outputs(inputs);
-    Matrix<double> our_outputs=out_function.calculate_multiple_outputs(outputs);
+    Matrix<double> our_outputs=out_function.calculate_solution_outputs(outputs);
     const double batch_error = our_outputs.calculate_sum_squared_error(targets);
 
     return batch_error / normalization_coefficient;
@@ -1002,7 +1002,7 @@ check();
 
     OutputFunction out_function = neural_network_pointer-> get_output_function();
 
-    Matrix<double> our_outputs = out_function.calculate_multiple_outputs(outputs);
+    Matrix<double> our_outputs = out_function.calculate_solution_outputs(outputs);
     Matrix<double> gradient_our_outputs = out_function.gradient_outputs(outputs,our_outputs);
     Matrix<double> deriv_loss = our_outputs-targets;
 

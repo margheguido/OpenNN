@@ -46,8 +46,8 @@ public:
   IsoglibInterface(const char* d_name, string sol_name);
 
   void set_problem_resolution();
-  Matrix<double> calculate_solution(Real tau);
-
+  const Vector <double> calculate_solution(Real tau);
+  size_t get_nDof() {  return nDof };
 
 private:
   //name of the test directory in isoglib
@@ -77,7 +77,7 @@ private:
   void solveSteady(Real tau);
 
   //reads from a binary file the pde solution and give it back in matrix form
-  Matrix<double> load_solution_binary();
+  Vector <double> load_solution_binary();
 
 
  };

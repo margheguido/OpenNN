@@ -58,5 +58,5 @@ training_strategy.cpp
 unscaling_layer.cpp
 variables.cpp
 weighted_squared_error.cpp
-output_function.cpp)
-
+output_function.cpp
+isoglib_interface.cpp)

@@ -4,7 +4,9 @@ namespace OpenNN
 {
   IsoglibInterface::IsoglibInterface(const char * d_name, string sol_name):
   dir_name(d_name), solution_file_name(sol_name)
-  {};
+  {
+    set_problem_resolution();
+  };
 
   void IsoglibInterface::set_problem_resolution()
   {
@@ -19,7 +21,7 @@ namespace OpenNN
   }
 
 
-  Matrix<double> IsoglibInterface::calculate_solution(Real tau)
+  const Vector <double> IsoglibInterface::calculate_solution(Real tau)
   {
     solveSteady(Real tau);
     return load_solution_binary();
@@ -73,7 +75,7 @@ namespace OpenNN
 
 
   //reads from a binary file the pde solution and give it back in matrix form
-  Matrix<double> IsoglibInterface::load_solution_binary()
+  Vector<double> IsoglibInterface::load_solution_binary()
   {
     ifstream file;
     file.open(solution_file_name.c_str(), ios::binary);
@@ -92,8 +94,8 @@ namespace OpenNN
     streamsize size = sizeof(size_t);
     size = sizeof(double);
     double value;
-    Matrix<double> solution_stab;
-    solution_stab.set(nDof, 1); //vector of the solution
+    Vector<double> solution_stab;
+    solution_stab.set(nDof); //vector of the solution
 
     for(size_t i = 0; i < nDof; i++)
     {

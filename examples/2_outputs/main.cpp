@@ -131,7 +131,8 @@ int main(void)
         const size_t hidden_perceptrons_number = 12;
         const size_t outputs_number = 1;
 
-        NeuralNetwork neural_network(inputs_number, hidden_perceptrons_number, 1);
+        NeuralNetwork neural_network(inputs_number, hidden_perceptrons_number,
+           1,"name of the mesh directory", "name of the binary file ");
 
         Inputs* inputs = neural_network.get_inputs_pointer();
 

@@ -85,7 +85,7 @@ public:
 
    // TWO PERCEPTRON LAYERS CONSTRUCTOR
 
-   explicit NeuralNetwork(const size_t&, const size_t&, const size_t&);
+   explicit NeuralNetwork(const size_t&, const size_t&, const size_t&, const char * , string );
 
    // FILE CONSTRUCTOR
 
@@ -136,7 +136,6 @@ public:
    BoundingLayer* get_bounding_layer_pointer() const;
    ProbabilisticLayer* get_probabilistic_layer_pointer() const;
    OutputFunction get_output_function() const;
-
    const bool& get_display() const;
 
    // SET METHODS

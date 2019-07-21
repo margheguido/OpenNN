@@ -46,7 +46,7 @@ NeuralNetwork::NeuralNetwork(const MultilayerPerceptron& new_multilayer_perceptr
 
     inputs_pointer = new Inputs(inputs_number);
     outputs_pointer = new Outputs(outputs_number);
-    
+
     set_default();
 }
 
@@ -122,7 +122,8 @@ NeuralNetwork::NeuralNetwork(const size_t& new_inputs_number, const size_t& new_
 /// @param new_hidden_perceptrons_number Number of neurons in the hidden layer of the multilayer perceptron.
 /// @param new_output_perceptrons_number Number of outputs neurons.
 
-NeuralNetwork::NeuralNetwork(const size_t& new_inputs_number, const size_t& new_hidden_perceptrons_number, const size_t& new_output_perceptrons_number)
+NeuralNetwork::NeuralNetwork(const size_t& new_inputs_number, const size_t& new_hidden_perceptrons_number, const size_t& new_output_perceptrons_number, const char * dir_name, string sol_name):
+out_function(dir_name, sol_name)
 {
     multilayer_perceptron_pointer = new MultilayerPerceptron(new_inputs_number, new_hidden_perceptrons_number, new_output_perceptrons_number);
 
