@@ -19,9 +19,9 @@ namespace OpenNN
   }
 
 
-  Matrix<double> IsoglibInterface::calculate_solution(tau)
+  Matrix<double> IsoglibInterface::calculate_solution(Real tau)
   {
-    solveSteady(tau);
+    solveSteady(Real tau);
     return load_solution_binary();
   }
 
@@ -64,9 +64,10 @@ namespace OpenNN
 
   }
 
-  void IsoglibInterface::solveSteady(tau)
+  void IsoglibInterface::solveSteady(Real tau)
   {
-    pde_prob.computeTimestep( false, tau );
+    localMatrix.set_tau(tau);
+    pde_prob.computeTimestep( false );
   }
 
 

@@ -46,7 +46,7 @@ public:
   IsoglibInterface(const char* d_name, string sol_name);
 
   void set_problem_resolution();
-  Matrix<double> calculate_solution(tau);
+  Matrix<double> calculate_solution(Real tau);
 
 
 private:
@@ -74,7 +74,7 @@ private:
 
   //assembly the local matrix and
   //it creates a binary file with the solution
-  void solveSteady()
+  void solveSteady(Real tau);
 
   //reads from a binary file the pde solution and give it back in matrix form
   Matrix<double> load_solution_binary();
