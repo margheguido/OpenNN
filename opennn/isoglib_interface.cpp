@@ -17,18 +17,18 @@ namespace OpenNN
 
     g_meshFlags = FLAGS_DEFAULT | DO_NOT_USE_BASIS_CACHES;
 
-    setProblem( dir_name, &localMatrix, &data, setupProblem);
+    setProblem( dir_name, &localMatrix, &data, setupProblem );
   }
 
 
-  const Vector <double> IsoglibInterface::calculate_solution(Real tau)
+  Vector <double> IsoglibInterface::calculate_solution(double tau)
   {
-    solveSteady(Real tau);
+    solveSteady(tau);
     return load_solution_binary();
   }
 
 
-  void IsoglibInterface::setProblem( const char *dirNames[], LocalMatrixBase *localMatrix, data_class_interface *data, TestCase::ProblemFunc setupProblem)
+  void IsoglibInterface::setProblem( const char *dirNames, LocalMatrixBase *localMatrix, data_class_interface *data, TestCase::ProblemFunc setupProblem)
   {
 
     // start global clock
@@ -49,7 +49,7 @@ namespace OpenNN
     pde_prob.setData( data, false );
 
     // load mesh
-    if ( pde_prob.loadMesh( dirNames[ 0 ], dirNames[ 0 ], new DofMapperBase( numComps ),
+    if ( pde_prob.loadMesh( dir_name, dir_name, new DofMapperBase( numComps ),
                                 g_meshFlags, 0, g_numLagrangeMultipliers ) < 0 )
         exit( 1 );
 
@@ -66,7 +66,7 @@ namespace OpenNN
 
   }
 
-  void IsoglibInterface::solveSteady(Real tau)
+  void IsoglibInterface::solveSteady(double tau)
   {
     localMatrix.set_tau(tau);
     pde_prob.computeTimestep( false );
@@ -86,7 +86,7 @@ namespace OpenNN
 
         buffer << "OpenNN Exception: IsoglibInterface class.\n"
                << "void load_solution_binary() method.\n"
-               << "Cannot open data file: " << data_file_name << "\n";
+               << "Cannot open data file: " << solution_file_name << "\n";
 
         throw logic_error(buffer.str());
     }

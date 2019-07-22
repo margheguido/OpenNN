@@ -11,22 +11,22 @@ namespace OpenNN
   Matrix<double> OutputFunction::gradient_outputs (const Matrix<double>& single_output,const Matrix<double>& solution_outputs) const
   {
     size_t nIstances = single_output.get_rows_number();
-    size_t nOutputs = isoglib_interface.get_nDof()
+    size_t nOutputs = isoglib_interface.get_nDof();
 
-   Matrix<double> grad_outputs(nOutputs,nIstances);
-   //#columns: number of instances
-   //#rows: number of outputs
+    Matrix<double> grad_outputs(nOutputs,nIstances);
+    //#columns: number of instances
+    //#rows: number of outputs
 
-   for (int i=0; i< nIstances; i++)
-   {
-     double out_value=single_output(i,0);
-     double h=0.0001;
-     Vector<double> y = calculate_solution_outputs(out_value);
-     double x_forward = out_value + h;
-     Vector<double> y_forward = calculate_solution_outputs(x_forward);
-     Vector<double> d = (y_forward - y)/h;
+    for (int i=0; i< nIstances; i++)
+    {
+      double out_value=single_output(i,0);
+      double h=0.0001;
+      Vector<double> y = calculate_solution_outputs(out_value);
+      double x_forward = out_value + h;
+      Vector<double> y_forward = calculate_solution_outputs(x_forward);
+      Vector<double> d = (y_forward - y)/h;
 
-     grad_outputs.set_column(i,d);
+      grad_outputs.set_column(i,d);
     }
 
     return grad_outputs;
@@ -47,7 +47,7 @@ namespace OpenNN
   Matrix<double> OutputFunction::calculate_solution_outputs (const Matrix<double>& single_output) const
   {
     size_t nIstances = single_output.get_rows_number();
-    size_t nOutputs = isoglib_interface.get_nDof()
+    size_t nOutputs = isoglib_interface.get_nDof();
     Matrix<double> sol_outputs(nIstances, nOutputs);
 
     for (size_t i=0; i < nIstances; i++)
@@ -60,8 +60,8 @@ namespace OpenNN
     return sol_outputs;
   }
 
-  void OutputFunction::print_solution() const
-  {
-    solution_stab.print();
-  }
+  // void OutputFunction::print_solution() const
+  // {
+  //   solution_stab.print();
+  // }
 }

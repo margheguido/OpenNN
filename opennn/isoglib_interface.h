@@ -15,17 +15,14 @@
 #include "vector.h"
 #include "matrix.h"
 #include "GuidoVidulisTest.h"
-#include "../../isoglib/isoglib/TestCase/TestCase.hpp"
-#include "../../isoglib/Tests/CommonMatrices/SUPGLocalMatrix.hpp"
-#include "TestCase.hpp"
+// #include "../../isoglib/isoglib/TestCase/TestCase.hpp"
+// #include "../../isoglib/Tests/CommonMatrices/SUPGLocalMatrix.hpp"
+// #include "TestCase.hpp"
 
-#include "Problem.hpp"
-
-#include "epetra_communicator.hpp"
-#include "ExternalSettings.hpp"
-#include "timer.hpp"
-
-
+#include "../../isoglib/Problem/Problem.hpp"
+#include "../../isoglib/Epetra/epetra_communicator.hpp"
+// #include "ExternalSettings.hpp"
+// #include "timer.hpdouble
 namespace OpenNN
 {
   /* This class represents the interface between the libraries Isoglib and OpenNN.
@@ -46,11 +43,11 @@ public:
   IsoglibInterface(const char* d_name, string sol_name);
 
   void set_problem_resolution();
-  const Vector <double> calculate_solution(Real tau);
-  size_t get_nDof() {  return nDof };
+  Vector <double> calculate_solution(double tau) const;
+  size_t get_nDof() const { return nDof; };
 
 private:
-  //name of the test directory in isoglib
+  //name of the test directories in isoglib
   const char *dir_name;
   //Data_GuidoVidulisSUPGExactSol_p1_ref2
 
@@ -70,11 +67,11 @@ private:
   supg_local_matrix localMatrix;
 
   //fill pde_prob and timeAdvancing with the data from the mesh
-  void setProblem( const char *dirNames[], LocalMatrixBase *localMatrix, data_class_interface *data, TestCase::ProblemFunc setupProblem);
+  void setProblem( const char *dirName, LocalMatrixBase *localMatrix, data_class_interface *data, TestCase::ProblemFunc setupProblem );
 
   //assembly the local matrix and
   //it creates a binary file with the solution
-  void solveSteady(Real tau);
+  void solveSteady(double tau);
 
   //reads from a binary file the pde solution and give it back in matrix form
   Vector <double> load_solution_binary();

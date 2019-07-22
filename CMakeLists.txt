@@ -24,9 +24,31 @@ if(__OPENNN_OMP__)
 	else()
 		set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fopenmp")#${OpenMP_C_FLAGS}")
 		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fopenmp")#${OpenMP_CXX_FLAGS}")
-	endif()    
+	endif()
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS}")
 endif()
+
+#######################################################################
+#######                     DA ISOGLIB                        #########
+#######################################################################
+# PRINT ALL VARIABLES
+# get_cmake_property(_variableNames VARIABLES)
+# list (SORT _variableNames)
+# foreach (_variableName ${_variableNames})
+#    message(STATUS "${_variableName}=${${_variableName}}")
+# endforeach()
+
+# configure_file(
+#     "${PROJECT_SOURCE_DIR}/../isoglib/isoglib/isoglib_config.hpp.in"
+#     "${PROJECT_BINARY_DIR}/../../isoglib/BuildRelease/isoglib_config.hpp"
+# )
+
+include_directories(
+    /vagrant/isoglib/BuildRelease
+    /vagrant/isoglib/isoglib
+    /vagrant/isoglib/isoglib/LocalMatrices
+)
+
 
 # Uncomment next line to compile without using C++11
 #add_definitions(-D__Cpp11__)

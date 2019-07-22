@@ -23,7 +23,7 @@ class GuidoVidulisTest: public data_class_interface
 {
 protected:
 public:
-    GuidoVidulisSUPGExactSolData(): data_class_interface( 1 ) { }
+    GuidoVidulisTest(): data_class_interface( 1 ) { }
 
     int updateData( meshload_class &mesh ) override { m_isUpdated = true; return 0; }
 
@@ -69,3 +69,5 @@ public:
         // outValues[ 0 ] = Pi2 * (cos(2.0 * mPi * xx) - cos(2.0 * mPi * (xx - yy)) + cos(2.0 * mPi * yy) - cos(2.0 * mPi * (xx + yy)));
     }
 };
+
+#endif

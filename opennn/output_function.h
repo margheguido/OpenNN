@@ -14,6 +14,7 @@
 
 #include "vector.h"
 #include "matrix.h"
+#include "isoglib_interface.h"
 
 
 
@@ -44,13 +45,13 @@ public:
   //  this function calculate the solution outputs given the neural network one (tau)
   // #rows: number of instances (tipacally batch size)
   // #columns :number of outputs (nodes)
-  Matrix<double> calculate_solution_outputs (const Matrix<double>& single_output) const
+  Matrix<double> calculate_solution_outputs (const Matrix<double>& single_output) const;
 
   //same function but for only one instance
   //size of the vector: number of outputs (nodes)
   Vector<double> calculate_solution_outputs (double tau) const;
 
-  void print_solution() const;
+  // void print_solution() const;
 
 private:
 
