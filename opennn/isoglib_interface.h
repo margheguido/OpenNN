@@ -14,15 +14,9 @@
 
 #include "vector.h"
 #include "matrix.h"
-#include "GuidoVidulisTest.h"
-// #include "../../isoglib/isoglib/TestCase/TestCase.hpp"
-// #include "../../isoglib/Tests/CommonMatrices/SUPGLocalMatrix.hpp"
-// #include "TestCase.hpp"
+#include "../../isoglib/isoglib.h"
 
-#include "Problem.hpp"
-#include "Epetra_communicator.hpp"
-// #include "ExternalSettings.hpp"
-// #include "timer.hpdouble
+
 namespace OpenNN
 {
   /* This class represents the interface between the libraries Isoglib and OpenNN.

@@ -15,6 +15,7 @@
 #include "vector.h"
 #include "matrix.h"
 #include "isoglib_interface.h"
+#include "numerical_differentiation.h"
 
 
 
@@ -28,7 +29,7 @@ namespace OpenNN
 /// the SUPG stabilzation parameter and we will use this class to calculate
 /// the pde solution and compare it with the exact one
 
-class OutputFunction
+class OutputFunction : public NormalizedSquaredError
 {
 
 public:
@@ -53,14 +54,21 @@ public:
   // void print_solution() const;
   void set_names( char * dir_name , string sol_name);
 
+  // --------------------------------------------------------------------------
+  // Overridden methods from NormalizedquaredError
+  // --------------------------------------------------------------------------
+  double calculate_training_error() const override;
+  double calculate_selection_error() const override;
+  double calculate_training_error(const Vector<double>& parameters) const override;
+  double calculate_batch_error(const Vector<size_t>& batch_indices) const override;
+  Matrix<double> calculate_output_gradient(const Matrix<double>& outputs, const Matrix<double>& targets) const override;
+
 private:
 
   IsoglibInterface isoglib_interface;
 
  };
 
- }
+}
 
  #endif
-
- // OpenNN: Open Neural Networks Library.

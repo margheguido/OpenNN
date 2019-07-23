@@ -65,4 +65,198 @@ namespace OpenNN
   // {
   //   solution_stab.print();
   // }
+
+
+  // --------------------------------------------------------------------------
+  // Overridden methods from NormalizedquaredError
+  // --------------------------------------------------------------------------
+  double OutputFunction::calculate_training_error() const
+  {
+  #ifdef __OPENNN_DEBUG__
+
+  check();
+
+  #endif
+
+      OutputFunction* out_function = neural_network_pointer->get_output_function_pointer();
+
+      // Multilayer perceptron
+
+      const MultilayerPerceptron* multilayer_perceptron_pointer = neural_network_pointer->get_multilayer_perceptron_pointer();
+
+      // Data set
+
+      const Vector< Vector<size_t> > training_batches = data_set_pointer->get_instances_pointer()->get_training_batches(batch_size);
+
+      const size_t batches_number = training_batches.size();
+
+      double training_error = 0.0;
+
+      #pragma omp parallel for reduction(+ : training_error)
+
+      for(int i = 0; i < static_cast<int>(batches_number); i++)
+      {
+          const Matrix<double> inputs = data_set_pointer->get_inputs(training_batches[static_cast<unsigned>(i)]);
+          const Matrix<double> targets = data_set_pointer->get_targets(training_batches[static_cast<unsigned>(i)]);
+
+
+          const Matrix<double> outputs = multilayer_perceptron_pointer->calculate_outputs(inputs);
+          Matrix<double> our_outputs = out_function->calculate_solution_outputs(outputs);
+
+
+
+          double batch_error = our_outputs.calculate_sum_squared_error(targets);
+
+          training_error += batch_error;
+      }
+
+      return training_error/normalization_coefficient;
+  }
+
+
+
+  double OutputFunction::calculate_selection_error() const
+  {
+  #ifdef __OPENNN_DEBUG__
+
+  check();
+
+  #endif
+
+      OutputFunction* out_function = neural_network_pointer->get_output_function_pointer();
+      // Multilayer perceptron
+
+      const MultilayerPerceptron* multilayer_perceptron_pointer = neural_network_pointer->get_multilayer_perceptron_pointer();
+
+      // Data set
+
+      const Vector< Vector<size_t> > selection_batches = data_set_pointer->get_instances_pointer()->get_selection_batches(batch_size);
+
+      const size_t batches_number = selection_batches.size();
+
+      double selection_error = 0.0;
+
+      #pragma omp parallel for reduction(+ : selection_error)
+
+      for(int i = 0; i < static_cast<int>(batches_number); i++)
+      {
+          const Matrix<double> inputs = data_set_pointer->get_inputs(selection_batches[static_cast<unsigned>(i)]);
+          const Matrix<double> targets = data_set_pointer->get_targets(selection_batches[static_cast<unsigned>(i)]);
+
+          const Matrix<double> outputs = multilayer_perceptron_pointer->calculate_outputs(inputs);
+          Matrix<double> our_outputs = out_function->calculate_solution_outputs(outputs);
+
+          const double batch_error = our_outputs.calculate_sum_squared_error(targets);
+
+          selection_error += batch_error;
+      }
+
+      return selection_error/selection_normalization_coefficient;
+  }
+
+
+  double OutputFunction::calculate_training_error(const Vector<double>& parameters) const
+  {
+  #ifdef __OPENNN_DEBUG__
+
+  check();
+
+  #endif
+
+  #ifdef __OPENNN_DEBUG__
+
+  check();
+
+  #endif
+
+      OutputFunction* out_function = neural_network_pointer->get_output_function_pointer();
+      // Multilayer perceptron
+
+      const MultilayerPerceptron* multilayer_perceptron_pointer = neural_network_pointer->get_multilayer_perceptron_pointer();
+
+      // Data set
+
+      const Vector< Vector<size_t> > training_batches = data_set_pointer->get_instances_pointer()->get_training_batches(batch_size);
+
+      const size_t batches_number = training_batches.size();
+
+      double training_error = 0.0;
+
+      #pragma omp parallel for reduction(+ : training_error)
+
+      for(int i = 0; i < static_cast<int>(batches_number); i++)
+      {
+          const Matrix<double> inputs = data_set_pointer->get_inputs(training_batches[static_cast<unsigned>(i)]);
+          const Matrix<double> targets = data_set_pointer->get_targets(training_batches[static_cast<unsigned>(i)]);
+
+          const Matrix<double> outputs = multilayer_perceptron_pointer->calculate_outputs(inputs, parameters);
+          Matrix<double> our_outputs=out_function->calculate_solution_outputs(outputs);
+
+          const double batch_error = our_outputs.calculate_sum_squared_error(targets);
+
+          training_error += batch_error;
+      }
+
+      return training_error/normalization_coefficient;
+  }
+
+
+
+  double OutputFunction::calculate_batch_error(const Vector<size_t>& batch_indices) const
+  {
+  #ifdef __OPENNN_DEBUG__
+
+  check();
+
+  #endif
+
+      OutputFunction* out_function = neural_network_pointer->get_output_function_pointer();
+      // Multilayer perceptron
+
+      const MultilayerPerceptron* multilayer_perceptron_pointer = neural_network_pointer->get_multilayer_perceptron_pointer();
+
+      // Data set
+
+      const Matrix<double> inputs = data_set_pointer->get_inputs(batch_indices);
+      const Matrix<double> targets = data_set_pointer->get_targets(batch_indices);
+
+      const Matrix<double> outputs = multilayer_perceptron_pointer->calculate_outputs(inputs);
+      Matrix<double> our_outputs=out_function->calculate_solution_outputs(outputs);
+      const double batch_error = our_outputs.calculate_sum_squared_error(targets);
+
+      return batch_error / normalization_coefficient;
+  }
+
+
+  Matrix<double> OutputFunction::calculate_output_gradient(const Matrix<double>& outputs, const Matrix<double>& targets) const
+  {
+  #ifdef __OPENNN_DEBUG__
+
+  check();
+
+  #endif
+
+      OutputFunction* out_function = neural_network_pointer-> get_output_function_pointer();
+
+      Matrix<double> our_outputs = out_function->calculate_solution_outputs(outputs);
+      Matrix<double> gradient_our_outputs = out_function->gradient_outputs(outputs,our_outputs);
+      Matrix<double> deriv_loss = our_outputs-targets;
+
+
+      Matrix<double> result;
+      result.set(deriv_loss.get_rows_number(),1);
+
+
+      for (int i=0; i< deriv_loss.get_rows_number(); i++)
+      {
+          double temp_res= deriv_loss.get_row(i).dot(gradient_our_outputs.get_column(i));
+          result(i,0)=temp_res;
+      }
+
+
+      return result;
+
+  }
+
+
 }
