@@ -131,8 +131,9 @@ int main(void)
         const size_t hidden_perceptrons_number = 12;
         const size_t outputs_number = 1;
 
-        NeuralNetwork neural_network(inputs_number, hidden_perceptrons_number,
-           1,"name of the mesh directory", "name of the binary file ");
+        NeuralNetwork neural_network(inputs_number, hidden_perceptrons_number,1);
+
+      //  neural_network.set_folder_file_names("name of the mesh directory", "name of the binary file ");
 
         Inputs* inputs = neural_network.get_inputs_pointer();
 
@@ -280,13 +281,6 @@ int main(void)
         cout<<i<<endl;
 
 */
-  OutputFunction out_fun;
-
-  //binary_ref3 o binary_ref2
-  out_fun.load_solution_binary("data/binary_ref3.dat");
-  cout<<"read from binary"<<endl;
-
-  out_fun.print_solution();
 
         return 0 ;
     }

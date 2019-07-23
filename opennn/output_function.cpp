@@ -4,11 +4,7 @@
 namespace OpenNN
 {
 
-  OutputFunction::OutputFunction(const char * dir_name, string sol_name):
-    isoglib_interface(dir_name,sol_name)
-    {};
-
-  Matrix<double> OutputFunction::gradient_outputs (const Matrix<double>& single_output,const Matrix<double>& solution_outputs) const
+  Matrix<double> OutputFunction::gradient_outputs (const Matrix<double>& single_output,const Matrix<double>& solution_outputs)
   {
     size_t nIstances = single_output.get_rows_number();
     size_t nOutputs = isoglib_interface.get_nDof();
@@ -34,7 +30,7 @@ namespace OpenNN
 
 
 
- Vector<double> OutputFunction::calculate_solution_outputs (double tau) const
+ Vector<double> OutputFunction::calculate_solution_outputs (double tau)
   {
    Vector<double> temp_solution = isoglib_interface.calculate_solution(tau);
 
@@ -44,7 +40,7 @@ namespace OpenNN
   //  this function calculate the solution outputs given the neural network one (tau)
   // #rows: number of instances (tipacally batch size)
   // #columns :number of outputs (nodes)
-  Matrix<double> OutputFunction::calculate_solution_outputs (const Matrix<double>& single_output) const
+  Matrix<double> OutputFunction::calculate_solution_outputs (const Matrix<double>& single_output)
   {
     size_t nIstances = single_output.get_rows_number();
     size_t nOutputs = isoglib_interface.get_nDof();
@@ -58,6 +54,11 @@ namespace OpenNN
     }
 
     return sol_outputs;
+  }
+
+  void OutputFunction::set_names( char * dir_name , string sol_name)
+  {
+    isoglib_interface.set_file_names(dir_name,sol_name);
   }
 
   // void OutputFunction::print_solution() const

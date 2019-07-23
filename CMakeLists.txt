@@ -38,17 +38,21 @@ endif()
 #    message(STATUS "${_variableName}=${${_variableName}}")
 # endforeach()
 
-# configure_file(
-#     "${PROJECT_SOURCE_DIR}/../isoglib/isoglib/isoglib_config.hpp.in"
-#     "${PROJECT_BINARY_DIR}/../../isoglib/BuildRelease/isoglib_config.hpp"
-# )
+ configure_file(
+     "${PROJECT_SOURCE_DIR}/../isoglib/isoglib/isoglib_config.hpp.in"
+     "${PROJECT_BINARY_DIR}/../../isoglib/BuildRelease/isoglib_config.hpp"
+)
 
 include_directories(
     /vagrant/isoglib/BuildRelease
     /vagrant/isoglib/isoglib
-    /vagrant/isoglib/isoglib/LocalMatrices
+   /vagrant/isoglib/isoglib/LocalMatrices
+   /vagrant/isoglib/isoglib/Epetra
+   /vagrant/isoglib/isoglib/Problem
+    ${EIGEN_INCLUDE_DIR}
+    /u/sw/pkgs/toolchains/gcc-glibc/7/pkgs/eigen/3.3.3/include/eigen3/
+    /u/sw/pkgs/toolchains/gcc-glibc/7/base/include/
 )
-
 
 # Uncomment next line to compile without using C++11
 #add_definitions(-D__Cpp11__)
@@ -56,12 +60,13 @@ include_directories(
 option(OpenNN_BUILD_EXAMPLES "Build OpenNN examples" ON)
 option(OpenNN_BUILD_TESTS    "Build OpenNN tests"    ON)
 
+
 add_subdirectory(opennn)
 include_directories(opennn)
 
-if(OpenNN_BUILD_TESTS)
-    add_subdirectory(tests)
-endif(OpenNN_BUILD_TESTS)
+#if(OpenNN_BUILD_TESTS)
+ #   add_subdirectory(tests)
+#endif(OpenNN_BUILD_TESTS)
 
 if(OpenNN_BUILD_EXAMPLES)
     add_subdirectory(examples)

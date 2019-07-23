@@ -274,7 +274,7 @@ Vector< Matrix<double> > TestingAnalysis::calculate_target_outputs() const
    const Matrix<double> testing_targets = data_set_pointer->get_testing_targets();
 
    // Neural network stuff
-   OutputFunction out_function = neural_network_pointer->get_output_function();
+   OutputFunction* out_function = neural_network_pointer->get_output_function_pointer();
 
    const MultilayerPerceptron* multilayer_perceptron_pointer = neural_network_pointer->get_multilayer_perceptron_pointer();
 
@@ -284,7 +284,7 @@ Vector< Matrix<double> > TestingAnalysis::calculate_target_outputs() const
    const Matrix<double> outputs = neural_network_pointer->calculate_outputs(testing_inputs);
 
    //calcolo del secondo output
-   Matrix<double> testing_outputs = out_function.calculate_solution_outputs(outputs);
+   Matrix<double> testing_outputs = out_function->calculate_solution_outputs(outputs);
 
    // Approximation testing stuff
 
@@ -378,7 +378,7 @@ Vector< LinearRegressionParameters<double> > TestingAnalysis::calculate_linear_r
    const size_t testing_instances_number = instances.get_testing_instances_number();
 
    // Neural network stuff
-   OutputFunction out_function = neural_network_pointer->get_output_function();
+   OutputFunction* out_function = neural_network_pointer->get_output_function_pointer();
 
    const MultilayerPerceptron* multilayer_perceptron_pointer = neural_network_pointer->get_multilayer_perceptron_pointer();
 
@@ -403,7 +403,7 @@ Vector< LinearRegressionParameters<double> > TestingAnalysis::calculate_linear_r
    const Matrix<double> inputs = data_set_pointer->get_testing_inputs();
    const Matrix<double> targets = data_set_pointer->get_testing_targets();
    const Matrix<double> outputs = neural_network_pointer->get_multilayer_perceptron_pointer()->calculate_outputs(inputs);
-   Matrix<double> our_outputs = out_function.calculate_solution_outputs(outputs);
+   Matrix<double> our_outputs = out_function->calculate_solution_outputs(outputs);
 
    const Vector< LinearRegressionParameters<double> > linear_regression_parameters = calculate_linear_regression_parameters(targets,our_outputs);
 
@@ -549,7 +549,7 @@ Vector< LinearRegressionParameters<double> > TestingAnalysis::calculate_forecast
 Vector<TestingAnalysis::LinearRegressionAnalysis> TestingAnalysis::perform_linear_regression_analysis() const
 {
     check();
-    OutputFunction out_function = neural_network_pointer->get_output_function();
+    OutputFunction* out_function = neural_network_pointer->get_output_function_pointer();
 
     const MultilayerPerceptron* multilayer_perceptron_pointer = neural_network_pointer->get_multilayer_perceptron_pointer();
 
@@ -578,7 +578,7 @@ Vector<TestingAnalysis::LinearRegressionAnalysis> TestingAnalysis::perform_linea
    // Neural network stuff
 
    const Matrix<double> outputs = neural_network_pointer->calculate_outputs(testing_inputs);
-   Matrix<double> testing_outputs = out_function.calculate_solution_outputs(outputs);
+   Matrix<double> testing_outputs = out_function->calculate_solution_outputs(outputs);
    const size_t outputs_number = testing_outputs.get_columns_number();
    // Approximation testing stuff
 

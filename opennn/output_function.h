@@ -34,24 +34,24 @@ class OutputFunction
 public:
 
   // DEFAULT CONSTRUCTOR
-  OutputFunction (const char * dir_name, string sol_name);
 
   //it calculates the derivative of the solution outputs wrt neural network one (tau)
   //#columns: number of instances
   //#rows: number of outputs
-  Matrix<double> gradient_outputs (const Matrix<double>& single_output,const Matrix<double>& solution_outputs) const;
+  Matrix<double> gradient_outputs (const Matrix<double>& single_output,const Matrix<double>& solution_outputs);
 
 
   //  this function calculate the solution outputs given the neural network one (tau)
   // #rows: number of instances (tipacally batch size)
   // #columns :number of outputs (nodes)
-  Matrix<double> calculate_solution_outputs (const Matrix<double>& single_output) const;
+  Matrix<double> calculate_solution_outputs (const Matrix<double>& single_output);
 
   //same function but for only one instance
   //size of the vector: number of outputs (nodes)
-  Vector<double> calculate_solution_outputs (double tau) const;
+  Vector<double> calculate_solution_outputs (double tau);
 
   // void print_solution() const;
+  void set_names( char * dir_name , string sol_name);
 
 private:
 

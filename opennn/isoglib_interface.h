@@ -19,8 +19,8 @@
 // #include "../../isoglib/Tests/CommonMatrices/SUPGLocalMatrix.hpp"
 // #include "TestCase.hpp"
 
-#include "../../isoglib/Problem/Problem.hpp"
-#include "../../isoglib/Epetra/epetra_communicator.hpp"
+#include "Problem.hpp"
+#include "Epetra_communicator.hpp"
 // #include "ExternalSettings.hpp"
 // #include "timer.hpdouble
 namespace OpenNN
@@ -40,15 +40,15 @@ class IsoglibInterface
 
 public:
 
-  IsoglibInterface(const char* d_name, string sol_name);
 
+  void set_file_names(char* dir_name , string sol_name);
   void set_problem_resolution();
-  Vector <double> calculate_solution(double tau) const;
+  Vector <double> calculate_solution(double tau);
   size_t get_nDof() const { return nDof; };
 
 private:
   //name of the test directories in isoglib
-  const char *dir_name;
+   char *directory_name;
   //Data_GuidoVidulisSUPGExactSol_p1_ref2
 
   //name of the binary file

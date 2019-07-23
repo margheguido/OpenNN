@@ -2,11 +2,7 @@
 
 namespace OpenNN
 {
-  IsoglibInterface::IsoglibInterface(const char * d_name, string sol_name):
-  dir_name(d_name), solution_file_name(sol_name)
-  {
-    set_problem_resolution();
-  };
+
 
   void IsoglibInterface::set_problem_resolution()
   {
@@ -17,7 +13,7 @@ namespace OpenNN
 
     g_meshFlags = FLAGS_DEFAULT | DO_NOT_USE_BASIS_CACHES;
 
-    setProblem( dir_name, &localMatrix, &data, setupProblem );
+    setProblem( directory_name, &localMatrix, &data, setupProblem );
   }
 
 
@@ -49,7 +45,7 @@ namespace OpenNN
     pde_prob.setData( data, false );
 
     // load mesh
-    if ( pde_prob.loadMesh( dir_name, dir_name, new DofMapperBase( numComps ),
+    if ( pde_prob.loadMesh( directory_name, directory_name, new DofMapperBase( numComps ),
                                 g_meshFlags, 0, g_numLagrangeMultipliers ) < 0 )
         exit( 1 );
 
@@ -106,6 +102,12 @@ namespace OpenNN
 
     file.close();
     return solution_stab;
+  }
+
+  void IsoglibInterface::set_file_names(char* dir_name , string sol_name)
+  {
+    directory_name = dir_name;
+    solution_file_name = sol_name;
   }
 
 

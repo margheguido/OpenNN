@@ -59,4 +59,10 @@ unscaling_layer.cpp
 variables.cpp
 weighted_squared_error.cpp
 output_function.cpp
-isoglib_interface.cpp)
+isoglib_interface.cpp
+)
+
+
+target_link_libraries(opennn libisoglib.a)
+target_link_libraries(opennn -L/../../isoglib/BuildRelease/)
+target_link_libraries(opennn -L/usr/local/include/eigen3/ )

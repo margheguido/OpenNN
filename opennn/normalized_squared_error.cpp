@@ -296,7 +296,7 @@ check();
 
 #endif
 
-    OutputFunction out_function = neural_network_pointer->get_output_function();
+    OutputFunction* out_function = neural_network_pointer->get_output_function_pointer();
 
     // Multilayer perceptron
 
@@ -319,7 +319,7 @@ check();
 
 
         const Matrix<double> outputs = multilayer_perceptron_pointer->calculate_outputs(inputs);
-        Matrix<double> our_outputs = out_function.calculate_solution_outputs(outputs);
+        Matrix<double> our_outputs = out_function->calculate_solution_outputs(outputs);
 
 
 
@@ -525,7 +525,7 @@ check();
 
 #endif
 
-    OutputFunction out_function = neural_network_pointer->get_output_function();
+    OutputFunction* out_function = neural_network_pointer->get_output_function_pointer();
     // Multilayer perceptron
 
     const MultilayerPerceptron* multilayer_perceptron_pointer = neural_network_pointer->get_multilayer_perceptron_pointer();
@@ -546,7 +546,7 @@ check();
         const Matrix<double> targets = data_set_pointer->get_targets(selection_batches[static_cast<unsigned>(i)]);
 
         const Matrix<double> outputs = multilayer_perceptron_pointer->calculate_outputs(inputs);
-        Matrix<double> our_outputs = out_function.calculate_solution_outputs(outputs);
+        Matrix<double> our_outputs = out_function->calculate_solution_outputs(outputs);
 
         const double batch_error = our_outputs.calculate_sum_squared_error(targets);
 
@@ -660,7 +660,7 @@ check();
 
 #endif
 
-    OutputFunction out_function = neural_network_pointer->get_output_function();
+    OutputFunction* out_function = neural_network_pointer->get_output_function_pointer();
     // Multilayer perceptron
 
     const MultilayerPerceptron* multilayer_perceptron_pointer = neural_network_pointer->get_multilayer_perceptron_pointer();
@@ -681,7 +681,7 @@ check();
         const Matrix<double> targets = data_set_pointer->get_targets(training_batches[static_cast<unsigned>(i)]);
 
         const Matrix<double> outputs = multilayer_perceptron_pointer->calculate_outputs(inputs, parameters);
-        Matrix<double> our_outputs=out_function.calculate_solution_outputs(outputs);
+        Matrix<double> our_outputs=out_function->calculate_solution_outputs(outputs);
 
         const double batch_error = our_outputs.calculate_sum_squared_error(targets);
 
@@ -700,7 +700,7 @@ check();
 
 #endif
 
-    OutputFunction out_function = neural_network_pointer->get_output_function();
+    OutputFunction* out_function = neural_network_pointer->get_output_function_pointer();
     // Multilayer perceptron
 
     const MultilayerPerceptron* multilayer_perceptron_pointer = neural_network_pointer->get_multilayer_perceptron_pointer();
@@ -711,7 +711,7 @@ check();
     const Matrix<double> targets = data_set_pointer->get_targets(batch_indices);
 
     const Matrix<double> outputs = multilayer_perceptron_pointer->calculate_outputs(inputs);
-    Matrix<double> our_outputs=out_function.calculate_solution_outputs(outputs);
+    Matrix<double> our_outputs=out_function->calculate_solution_outputs(outputs);
     const double batch_error = our_outputs.calculate_sum_squared_error(targets);
 
     return batch_error / normalization_coefficient;
@@ -1000,10 +1000,10 @@ check();
 
 #endif
 
-    OutputFunction out_function = neural_network_pointer-> get_output_function();
+    OutputFunction* out_function = neural_network_pointer-> get_output_function_pointer();
 
-    Matrix<double> our_outputs = out_function.calculate_solution_outputs(outputs);
-    Matrix<double> gradient_our_outputs = out_function.gradient_outputs(outputs,our_outputs);
+    Matrix<double> our_outputs = out_function->calculate_solution_outputs(outputs);
+    Matrix<double> gradient_our_outputs = out_function->gradient_outputs(outputs,our_outputs);
     Matrix<double> deriv_loss = our_outputs-targets;
 
 

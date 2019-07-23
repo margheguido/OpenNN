@@ -85,7 +85,7 @@ public:
 
    // TWO PERCEPTRON LAYERS CONSTRUCTOR
 
-   explicit NeuralNetwork(const size_t&, const size_t&, const size_t&, const char * , string );
+   explicit NeuralNetwork(const size_t&, const size_t&, const size_t&);
 
    // FILE CONSTRUCTOR
 
@@ -135,13 +135,14 @@ public:
    OutputsTrendingLayer* get_outputs_trending_layer_pointer() const;
    BoundingLayer* get_bounding_layer_pointer() const;
    ProbabilisticLayer* get_probabilistic_layer_pointer() const;
-   OutputFunction get_output_function() const;
+   OutputFunction* get_output_function_pointer() const;
    const bool& get_display() const;
 
    // SET METHODS
 
    void set();
 
+   void set_folder_file_names(char * , string);
    void set(const MultilayerPerceptron&);
    void set(const Vector<size_t>&);
    void set(const size_t&, const size_t&);
@@ -363,7 +364,7 @@ protected:
 
    Outputs* outputs_pointer = nullptr;
 
-   OutputFunction out_function;
+   OutputFunction* out_function_pointer=nullptr;
 
    /// Display messages to screen.
 

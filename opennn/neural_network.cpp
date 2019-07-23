@@ -122,8 +122,7 @@ NeuralNetwork::NeuralNetwork(const size_t& new_inputs_number, const size_t& new_
 /// @param new_hidden_perceptrons_number Number of neurons in the hidden layer of the multilayer perceptron.
 /// @param new_output_perceptrons_number Number of outputs neurons.
 
-NeuralNetwork::NeuralNetwork(const size_t& new_inputs_number, const size_t& new_hidden_perceptrons_number, const size_t& new_output_perceptrons_number, const char * dir_name, string sol_name):
-out_function(dir_name, sol_name)
+NeuralNetwork::NeuralNetwork(const size_t& new_inputs_number, const size_t& new_hidden_perceptrons_number, const size_t& new_output_perceptrons_number)
 {
     multilayer_perceptron_pointer = new MultilayerPerceptron(new_inputs_number, new_hidden_perceptrons_number, new_output_perceptrons_number);
 
@@ -132,8 +131,13 @@ out_function(dir_name, sol_name)
 
     inputs_pointer = new Inputs(inputs_number);
     outputs_pointer = new Outputs(outputs_number);
-
+    out_function_pointer = new OutputFunction();
     set_default();
+}
+
+void NeuralNetwork::set_folder_file_names( char * dir_name , string sol_name)
+{
+  out_function_pointer->set_names(dir_name,sol_name);
 }
 
 
@@ -627,9 +631,24 @@ Outputs* NeuralNetwork::get_outputs_pointer() const
     return(outputs_pointer);
 }
 
-OutputFunction NeuralNetwork::get_output_function() const
+OutputFunction* NeuralNetwork::get_output_function_pointer() const
 {
-  return (out_function);
+#ifdef __OPENNN_DEBUG__
+
+      if(!out_function_pointer)
+      {
+          ostringstream buffer;
+
+          buffer << "OpenNN Exception: NeuralNetwork class.\n"
+                 << "Outputs* get_output_function_pointer() const method.\n"
+                 << "Output function pointer is nullptr.\n";
+
+          throw logic_error(buffer.str());
+      }
+
+  #endif
+
+      return(out_function_pointer);
 }
 
 /// Returns true if messages from this class are to be displayed on the screen, or false if messages
