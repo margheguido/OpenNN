@@ -4,7 +4,7 @@
 /*   www.opennn.net                                                                                             */
 /*                                                                                                              */
 /*   T E S T I N G   A N A L Y S I S   C L A S S                                                                */
-/*                                                                                                              */ 
+/*                                                                                                              */
 /*   Artificial Intelligence Techniques SL                                                                      */
 /*   artelnics@artelnics.com                                                                                    */
 /*                                                                                                              */
@@ -34,9 +34,9 @@ TestingAnalysis::TestingAnalysis()
 
 // NEURAL NETWORK CONSTRUCTOR
 
-/// Neural network constructor. 
+/// Neural network constructor.
 /// It creates a testing analysis object associated to a neural network but not to a mathematical model or a data set.
-/// By default, it constructs the function regression testing object. 
+/// By default, it constructs the function regression testing object.
 /// @param new_neural_network_pointer Pointer to a neural network object.
 
 TestingAnalysis::TestingAnalysis(NeuralNetwork* new_neural_network_pointer)
@@ -47,9 +47,9 @@ TestingAnalysis::TestingAnalysis(NeuralNetwork* new_neural_network_pointer)
 }
 
 
-/// Data set constructor. 
-/// It creates a testing analysis object not associated to a neural network, associated to a data set and not associated to a mathematical model. 
-/// By default, it constructs the function regression testing object. 
+/// Data set constructor.
+/// It creates a testing analysis object not associated to a neural network, associated to a data set and not associated to a mathematical model.
+/// By default, it constructs the function regression testing object.
 /// @param new_data_set_pointer Pointer to a data set object.
 
 TestingAnalysis::TestingAnalysis(DataSet* new_data_set_pointer)
@@ -76,8 +76,8 @@ TestingAnalysis::TestingAnalysis(NeuralNetwork* new_neural_network_pointer, Data
 
 // XML CONSTRUCTOR
 
-/// XML constructor. 
-/// It creates a testing analysis object neither associated to a neural network nor to a mathematical model or a data set. 
+/// XML constructor.
+/// It creates a testing analysis object neither associated to a neural network nor to a mathematical model or a data set.
 /// It also loads the members of this object from a TinyXML document.
 /// @param testing_analysis_document XML document containing the member data.
 
@@ -109,8 +109,8 @@ TestingAnalysis::TestingAnalysis(const string& file_name)
 
 // DESTRUCTOR
 
-/// Destructor. 
-/// It deletes the function regression testing, classification testing, time series prediction testing and inverse problem testing objects. 
+/// Destructor.
+/// It deletes the function regression testing, classification testing, time series prediction testing and inverse problem testing objects.
 
 TestingAnalysis::~TestingAnalysis()
 {
@@ -140,13 +140,13 @@ NeuralNetwork* TestingAnalysis::get_neural_network_pointer() const
 
     #endif
 
-   return(neural_network_pointer);   
+   return(neural_network_pointer);
 }
 
 
 // DataSet* get_data_set_pointer() const method
 
-/// Returns a pointer to the data set object on which the neural network is tested. 
+/// Returns a pointer to the data set object on which the neural network is tested.
 
 DataSet* TestingAnalysis::get_data_set_pointer() const
 {
@@ -174,7 +174,7 @@ DataSet* TestingAnalysis::get_data_set_pointer() const
 
 const bool& TestingAnalysis::get_display() const
 {
-   return(display);     
+   return(display);
 }
 
 
@@ -194,7 +194,7 @@ void TestingAnalysis::set_default()
 
 void TestingAnalysis::set_neural_network_pointer(NeuralNetwork* new_neural_network_pointer)
 {
-   neural_network_pointer = new_neural_network_pointer;   
+   neural_network_pointer = new_neural_network_pointer;
 }
 
 
@@ -203,11 +203,11 @@ void TestingAnalysis::set_neural_network_pointer(NeuralNetwork* new_neural_netwo
 
 void TestingAnalysis::set_data_set_pointer(DataSet* new_data_set_pointer)
 {
-   data_set_pointer = new_data_set_pointer;   
+   data_set_pointer = new_data_set_pointer;
 }
 
 
-/// Sets a new display value. 
+/// Sets a new display value.
 /// If it is set to true messages from this class are to be displayed on the screen;
 /// if it is set to false messages from this class are not to be displayed on the screen.
 /// @param new_display Display value.
@@ -274,12 +274,17 @@ Vector< Matrix<double> > TestingAnalysis::calculate_target_outputs() const
    const Matrix<double> testing_targets = data_set_pointer->get_testing_targets();
 
    // Neural network stuff
+   OutputFunction* out_function = neural_network_pointer->get_output_function_pointer();
 
    const MultilayerPerceptron* multilayer_perceptron_pointer = neural_network_pointer->get_multilayer_perceptron_pointer();
 
-   const size_t outputs_number = multilayer_perceptron_pointer->get_outputs_number();
+   //const size_t outputs_number = multilayer_perceptron_pointer->get_outputs_number();
+   const size_t outputs_number = 2;
 
-   const Matrix<double> testing_outputs = neural_network_pointer->calculate_outputs(testing_inputs);
+   const Matrix<double> outputs = neural_network_pointer->calculate_outputs(testing_inputs);
+
+   //calcolo del secondo output
+   Matrix<double> testing_outputs = out_function->calculate_solution_outputs(outputs);
 
    // Approximation testing stuff
 
@@ -373,10 +378,10 @@ Vector< LinearRegressionParameters<double> > TestingAnalysis::calculate_linear_r
    const size_t testing_instances_number = instances.get_testing_instances_number();
 
    // Neural network stuff
+   OutputFunction* out_function = neural_network_pointer->get_output_function_pointer();
 
    const MultilayerPerceptron* multilayer_perceptron_pointer = neural_network_pointer->get_multilayer_perceptron_pointer();
 
-   const size_t outputs_number = multilayer_perceptron_pointer->get_outputs_number();
 
    #ifdef __OPENNN_DEBUG__
 
@@ -398,8 +403,9 @@ Vector< LinearRegressionParameters<double> > TestingAnalysis::calculate_linear_r
    const Matrix<double> inputs = data_set_pointer->get_testing_inputs();
    const Matrix<double> targets = data_set_pointer->get_testing_targets();
    const Matrix<double> outputs = neural_network_pointer->get_multilayer_perceptron_pointer()->calculate_outputs(inputs);
+   Matrix<double> our_outputs = out_function->calculate_solution_outputs(outputs);
 
-   const Vector< LinearRegressionParameters<double> > linear_regression_parameters = calculate_linear_regression_parameters(targets,outputs);
+   const Vector< LinearRegressionParameters<double> > linear_regression_parameters = calculate_linear_regression_parameters(targets,our_outputs);
 
 //   Matrix<double> data({targets, outputs});
 
@@ -543,10 +549,11 @@ Vector< LinearRegressionParameters<double> > TestingAnalysis::calculate_forecast
 Vector<TestingAnalysis::LinearRegressionAnalysis> TestingAnalysis::perform_linear_regression_analysis() const
 {
     check();
+    OutputFunction* out_function = neural_network_pointer->get_output_function_pointer();
 
     const MultilayerPerceptron* multilayer_perceptron_pointer = neural_network_pointer->get_multilayer_perceptron_pointer();
 
-    const size_t outputs_number = multilayer_perceptron_pointer->get_outputs_number();
+  //  const size_t outputs_number = multilayer_perceptron_pointer->get_outputs_number();
 
     const Instances& instances = data_set_pointer->get_instances();
 
@@ -570,8 +577,9 @@ Vector<TestingAnalysis::LinearRegressionAnalysis> TestingAnalysis::perform_linea
 
    // Neural network stuff
 
-   const Matrix<double> testing_outputs = neural_network_pointer->calculate_outputs(testing_inputs);
-
+   const Matrix<double> outputs = neural_network_pointer->calculate_outputs(testing_inputs);
+   Matrix<double> testing_outputs = out_function->calculate_solution_outputs(outputs);
+   const size_t outputs_number = testing_outputs.get_columns_number();
    // Approximation testing stuff
 
    Vector<LinearRegressionAnalysis> linear_regression_results(outputs_number);
@@ -1589,7 +1597,8 @@ Vector<double> TestingAnalysis::calculate_testing_errors() const
 
     const Matrix<double> outputs = neural_network_pointer->calculate_outputs(inputs);
 
-    #ifdef __OPENNN_DEBUG__   
+
+    #ifdef __OPENNN_DEBUG__
 
 //    if(!unscaling_layer_pointer)
 //    {
@@ -1992,7 +2001,7 @@ Matrix<size_t> TestingAnalysis::calculate_confusion_binary_classification(const 
     size_t true_positive = 0;
     size_t false_negative = 0;
     size_t false_positive = 0;
-    size_t true_negative = 0;        
+    size_t true_negative = 0;
 
     for(size_t i = 0; i < rows_number; i++)
     {
@@ -2147,7 +2156,7 @@ Matrix<size_t> TestingAnalysis::calculate_confusion() const
    const Variables& variables = data_set_pointer->get_variables();
 
    if(inputs_number != variables.get_inputs_number())
-   {      
+   {
        ostringstream buffer;
 
        buffer << "OpenNN Exception: TestingAnalysis class." << endl
@@ -2171,7 +2180,7 @@ Matrix<size_t> TestingAnalysis::calculate_confusion() const
    #endif
 
     const Matrix<double> inputs = data_set_pointer->get_testing_inputs();
-    const Matrix<double> targets = data_set_pointer->get_testing_targets();    
+    const Matrix<double> targets = data_set_pointer->get_testing_targets();
 
     const Matrix<double> outputs = neural_network_pointer->calculate_outputs(inputs);
 
@@ -3239,7 +3248,7 @@ Matrix<double> TestingAnalysis::calculate_calibration_plot(const Matrix<double>&
 {
     cout << "Calibration plot" << endl;
 
-    const size_t rows_number = targets.get_rows_number();   
+    const size_t rows_number = targets.get_rows_number();
 
     cout << "Rows number: " << rows_number << endl;
 
@@ -4491,7 +4500,7 @@ double TestingAnalysis::calculate_logloss() const
 
 // string object_to_string() const method
 
-/// Returns a string representation of the testing analysis object. 
+/// Returns a string representation of the testing analysis object.
 
 string TestingAnalysis::object_to_string() const
 {
@@ -4506,7 +4515,7 @@ string TestingAnalysis::object_to_string() const
 
 // void print() const method
 
-/// Prints to the standard output the string representation of this testing analysis object. 
+/// Prints to the standard output the string representation of this testing analysis object.
 
 void TestingAnalysis::print() const
 {
@@ -4516,8 +4525,8 @@ void TestingAnalysis::print() const
 
 // tinyxml2::XMLDocument* to_XML() const method
 
-/// Serializes the testing analysis object into a XML document of the TinyXML library. 
-/// See the OpenNN manual for more information about the format of this element. 
+/// Serializes the testing analysis object into a XML document of the TinyXML library.
+/// See the OpenNN manual for more information about the format of this element.
 
 tinyxml2::XMLDocument* TestingAnalysis::to_XML() const
 {

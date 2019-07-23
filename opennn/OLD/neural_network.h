@@ -45,6 +45,7 @@
 #include "probabilistic_layer.h"
 #include "inputs.h"
 #include "outputs.h"
+#include "output_function.h"
 
 // TinyXml includes
 
@@ -54,9 +55,9 @@ namespace OpenNN
 {
 
 /// This class represents the concept of neural network in the OpenNN library.
-/// A neural network here is defined as a multilayer perceptron extended with a scaling layer, an unscaling layer, 
+/// A neural network here is defined as a multilayer perceptron extended with a scaling layer, an unscaling layer,
 /// a bounding layer and a probabilistic layer.
-/// This neural network is used to span a function space for the variational problem at hand. 
+/// This neural network is used to span a function space for the variational problem at hand.
 
 class NeuralNetwork
 {
@@ -130,17 +131,18 @@ public:
    InputsTrendingLayer* get_inputs_trending_layer_pointer() const;
    ScalingLayer* get_scaling_layer_pointer() const;
    PrincipalComponentsLayer* get_principal_components_layer_pointer() const;
-   UnscalingLayer* get_unscaling_layer_pointer() const;   
+   UnscalingLayer* get_unscaling_layer_pointer() const;
    OutputsTrendingLayer* get_outputs_trending_layer_pointer() const;
    BoundingLayer* get_bounding_layer_pointer() const;
    ProbabilisticLayer* get_probabilistic_layer_pointer() const;
-
+   OutputFunction* get_output_function_pointer() const;
    const bool& get_display() const;
 
    // SET METHODS
 
    void set();
 
+   void set_folder_file_names(char * , string);
    void set(const MultilayerPerceptron&);
    void set(const Vector<size_t>&);
    void set(const size_t&, const size_t&);
@@ -217,7 +219,7 @@ public:
 
    void initialize_random();
 
-   // Layers 
+   // Layers
 
    size_t get_layers_number() const;
 
@@ -261,7 +263,7 @@ public:
 
    Vector<double> calculate_inputs_importance_parameters(const size_t&) const;
 
-   // Output 
+   // Output
 
    Matrix<double> calculate_outputs(const Matrix<double>&) const;
    Matrix<double> calculate_outputs(const Matrix<double>&, const double&) const;
@@ -283,7 +285,7 @@ public:
    // Serialization methods
 
    string object_to_string() const;
- 
+
    virtual tinyxml2::XMLDocument* to_XML() const;
    virtual void from_XML(const tinyxml2::XMLDocument&);
 
@@ -362,7 +364,9 @@ protected:
 
    Outputs* outputs_pointer = nullptr;
 
-   /// Display messages to screen. 
+   OutputFunction* out_function_pointer=nullptr;
+
+   /// Display messages to screen.
 
    bool display;
 };
@@ -389,4 +393,3 @@ protected:
 // License along with this library; if not, write to the Free Software
 
 // Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-

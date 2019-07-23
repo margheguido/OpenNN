@@ -37,7 +37,7 @@ namespace OpenNN
 
 
 /// This template class defines a matrix for general purpose use.
-/// This matrix also implements some mathematical methods which can be useful. 
+/// This matrix also implements some mathematical methods which can be useful.
 
 template <class T>
 class Matrix : public vector<T>
@@ -74,7 +74,7 @@ public:
 
     // REFERENCE OPERATORS
 
-    inline T& operator()(const size_t&, const size_t&);    
+    inline T& operator()(const size_t&, const size_t&);
 
     inline const T& operator()(const size_t&, const size_t&) const;
 
@@ -348,7 +348,7 @@ public:
     Matrix<T> add_columns_first(const size_t&) const;
 
     void split_column(const string&, const Vector<string>&, const char& = ',', const string& = "NA");
-    
+
     void split_column(const string&, const string&, const string&, const size_t&, const size_t&);
 
     void swap_columns(const size_t&, const size_t&);
@@ -651,7 +651,7 @@ public:
 
     void scale_rows_minimum_maximum(const Vector< Statistics<T> >&, const Vector<size_t>&);
 
-    void scale_columns_minimum_maximum(const Vector< Statistics<T> >&, const Vector<size_t>&);
+    void scale_columns_minimum_maximum(const Vector< Statistics<T> >&, const Vector<size_t>&,bool uniform_statistics=0);
 
     void scale_logarithmic(const Vector< Statistics<T> >&);
 
@@ -6645,7 +6645,7 @@ Matrix<T> Matrix<T>::sum_rows(const Vector<T>& vector) const
     for(size_t i = 0; i < rows_number; i++)
     {
         for(size_t j = 0; j < columns_number; j++)
-        {          
+        {
            new_matrix(i,j) = (*this)(i,j) + vector[j];
         }
     }
@@ -10326,7 +10326,7 @@ void Matrix<T>::scale_rows_minimum_maximum(const Vector< Statistics<T> >& statis
 /// The size of that vector must be equal to the number of columns to be scaled.
 
 template <class T>
-void Matrix<T>::scale_columns_minimum_maximum(const Vector< Statistics<T> >& statistics, const Vector<size_t>& column_indices)
+void Matrix<T>::scale_columns_minimum_maximum(const Vector< Statistics<T> >& statistics, const Vector<size_t>& column_indices, bool uniform_statistics)
 {
     // Control sentence(if debug)
 
@@ -10349,23 +10349,62 @@ void Matrix<T>::scale_columns_minimum_maximum(const Vector< Statistics<T> >& sta
 
     #endif
 
-    size_t column_index;
-
-    // Rescale data
-
-    for(size_t j = 0; j < column_indices_size; j++)
+    //uniform_statistics=true if we want to scale all the matrix wrt the same values
+    //by default this variable is equal to 0
+    if (uniform_statistics)
     {
-       column_index = column_indices[j];
+      T max_statistics=-numeric_limits<double>::infinity();
+      T min_statistics=numeric_limits<double>::infinity();
+      for(size_t j = 0; j < column_indices_size; j++)
+      {
+        if(statistics[j].maximum > max_statistics)
+            max_statistics = statistics[j].maximum;
 
-       if(statistics[j].maximum - statistics[j].minimum > 0.0)
-       {
-//#pragma omp parallel for
+        if(statistics[j].minimum < min_statistics)
+         min_statistics = statistics[j].minimum;
+      }
+      size_t column_index;
 
-          for(int i = 0; i < static_cast<int>(rows_number); i++)
-          {
-            (*this)(i,column_index) = 2.0*((*this)(i,column_index) - statistics[j].minimum)/(statistics[j].maximum-statistics[j].minimum) - 1.0;
-          }
-       }
+      // Rescale data
+
+      for(size_t j = 0; j < column_indices_size; j++)
+      {
+         column_index = column_indices[j];
+
+         if(max_statistics - min_statistics> 0.0)
+         {
+  //#pragma omp parallel for
+
+            for(int i = 0; i < static_cast<int>(rows_number); i++)
+            {
+              (*this)(i,column_index) = 2.0*((*this)(i,column_index) - min_statistics)/(max_statistics-min_statistics) - 1.0;
+            }
+         }
+      }
+    }
+
+    else
+    {
+
+
+      size_t column_index;
+
+      // Rescale data
+
+      for(size_t j = 0; j < column_indices_size; j++)
+      {
+         column_index = column_indices[j];
+
+         if(statistics[j].maximum - statistics[j].minimum > 0.0)
+         {
+  //#pragma omp parallel for
+
+            for(int i = 0; i < static_cast<int>(rows_number); i++)
+            {
+              (*this)(i,column_index) = 2.0*((*this)(i,column_index) - statistics[j].minimum)/(statistics[j].maximum-statistics[j].minimum) - 1.0;
+            }
+         }
+      }
     }
 }
 
@@ -11081,7 +11120,7 @@ double Matrix<T>::calculate_sum_squared_error(const Matrix<double>& other_matrix
    double sum_squared_error = 0.0;
 
    for(int i = 0; i < this->size(); i++)
-   {      
+   {
         error = (*this)[i] - other_matrix[i];
 
         sum_squared_error += error*error;
@@ -12648,7 +12687,7 @@ Matrix<double> Matrix<T>::dot(const Matrix<double>& other_matrix) const
 
 template <class T>
 void Matrix<T>::dot(const Matrix<double>& a, const Matrix<double>& b)
-{    
+{
     const size_t a_rows_number = a.get_rows_number();
     const size_t a_columns_number = a.get_columns_number();
 
@@ -13346,7 +13385,7 @@ template <class T>
 size_t Matrix<T>::count_dates(const size_t& column_index,
                               const size_t& start_day, const size_t& start_month, const size_t& start_year,
                               const size_t& end_day, const size_t& end_month, const size_t& end_year) const
-{    
+{
     const time_t start_date = to_time_t(start_day, start_month, start_year);
     const time_t end_date = to_time_t(end_day, end_month, end_year);
 
@@ -13486,7 +13525,7 @@ template <class T>
 Matrix<T> Matrix<T>::filter_dates_string(const size_t& column_index,
                                   const size_t& start_day, const size_t& start_month, const size_t& start_year,
                                   const size_t& end_day, const size_t& end_month, const size_t& end_year) const
-{    
+{
     const size_t count = count_dates_string(column_index, start_day, start_month, start_year, end_day, end_month, end_year);
 
     if(count == 0) throw logic_error("OpenNN Exception: Matrix Template.\n"
@@ -13807,7 +13846,7 @@ Matrix<T> Matrix<T>::filter_column_not_equal_to(const size_t& column_index, cons
 template <class T>
 Matrix<T> Matrix<T>::filter_column_equal_to(const size_t& index_1, const Vector<T>& values_1,
                                              const size_t& index_2, const T& value_2) const
-{    
+{
     const size_t count = count_equal_to(index_1, values_1, index_2, value_2);
 
     const size_t new_rows_number = count;
@@ -13823,7 +13862,7 @@ Matrix<T> Matrix<T>::filter_column_equal_to(const size_t& index_1, const Vector<
     for(size_t i = 0; i < rows_number; i++)
     {
         if((*this)(i, index_2) == value_2)
-        {            
+        {
             for(size_t j = 0; j < values_1_size; j++)
             {
                 if((*this)(i, index_1) == values_1[j])

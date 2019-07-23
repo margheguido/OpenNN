@@ -28,6 +28,7 @@
 
 #include "loss_index.h"
 #include "data_set.h"
+#include "output_function.h"
 
 // TinyXml includes
 
@@ -36,7 +37,7 @@
 namespace OpenNN
 {
 
-/// This class represents the normalized squared error term. 
+/// This class represents the normalized squared error term.
 /// This error term is used in data modeling problems.
 /// If it has a value of unity then the neural network is predicting the data "in the mean",
 /// A value of zero means perfect prediction of data.
@@ -86,7 +87,7 @@ public:
 
     void set_default();
 
-   // Normalization coefficients 
+   // Normalization coefficients
 
    double calculate_normalization_coefficient(const Matrix<double>&, const Vector<double>&) const;
 
@@ -146,7 +147,7 @@ public:
 
    // Serialization methods
 
-   tinyxml2::XMLDocument* to_XML() const;   
+   tinyxml2::XMLDocument* to_XML() const;
    void from_XML(const tinyxml2::XMLDocument&);
 
    void write_XML(tinyxml2::XMLPrinter&) const;
@@ -185,4 +186,3 @@ private:
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-
