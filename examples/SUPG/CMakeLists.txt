@@ -47,4 +47,4 @@ include_directories(
 add_executable(SUPG main.cpp)
 
 target_link_libraries(SUPG ${PROJECT_LINK_LIBS})
-target_link_libraries(SUPG isoglib.a)
+target_link_libraries(SUPG /vagrant/isoglib/BuildRelease/libisoglib.a)

@@ -3,7 +3,6 @@
 cmake_minimum_required(VERSION 2.8.10)
 
 # Project's name
-
 project(opennn)
 
 add_library(opennn
@@ -62,5 +61,4 @@ output_function.cpp
 isoglib_interface.cpp
 )
 
-target_link_libraries(opennn isoglib.a)
-target_link_libraries(opennn -L/../../isoglib/BuildRelease)
+target_link_libraries(opennn /vagrant/isoglib/BuildRelease/libisoglib.a)
