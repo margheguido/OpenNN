@@ -40,14 +40,14 @@ class IsoglibInterface
 public:
 
 
-  void set_file_names(char* dir_name , string sol_name);
+  void set_file_names(const char* dir_name , string sol_name);
   void set_problem_resolution();
   Vector <double> calculate_solution(double tau);
   size_t get_nDof() const { return nDof; };
 
 private:
   //name of the test directories in isoglib
-   char *directory_name;
+   const char *directory_name="binary_solution";
   //Data_GuidoVidulisSUPGExactSol_p1_ref2
 
   //name of the binary file

@@ -56,7 +56,7 @@ namespace OpenNN
     return sol_outputs;
   }
 
-  void OutputFunction::set_names( char * dir_name , string sol_name)
+  void OutputFunction::set_names( const char * dir_name , string sol_name)
   {
     isoglib_interface.set_file_names(dir_name,sol_name);
   }
@@ -70,7 +70,7 @@ namespace OpenNN
   // --------------------------------------------------------------------------
   // Overridden methods from NormalizedquaredError
   // --------------------------------------------------------------------------
-  double OutputFunction::calculate_training_error() 
+  double OutputFunction::calculate_training_error()
   {
   #ifdef __OPENNN_DEBUG__
 
