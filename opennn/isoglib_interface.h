@@ -14,8 +14,8 @@
 
 #include "vector.h"
 #include "matrix.h"
-#include "../../isoglib/isoglib.h"
-
+#include "../../isoglib/isoglib/isoglib.h"
+#include "GuidoVidulisTest.h"
 
 namespace OpenNN
 {

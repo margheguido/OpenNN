@@ -36,7 +36,7 @@
 namespace OpenNN
 {
 
-/// This class represents the normalized squared error term. 
+/// This class represents the normalized squared error term.
 /// This error term is used in data modeling problems.
 /// If it has a value of unity then the neural network is predicting the data "in the mean",
 /// A value of zero means perfect prediction of data.
@@ -86,7 +86,7 @@ public:
 
     void set_default();
 
-   // Normalization coefficients 
+   // Normalization coefficients
 
    double calculate_normalization_coefficient(const Matrix<double>&, const Vector<double>&) const;
 
@@ -104,7 +104,7 @@ public:
 
    double calculate_training_error_cuda(const Vector<double>&) const;
 
-   double calculate_batch_error(const Vector<size_t> &) const;
+    double calculate_batch_error(const Vector<size_t> &) const;
 
    double calculate_error(const Matrix<double>&, const Matrix<double>&) const;
    double calculate_error(const Vector<size_t>&, const Vector<double>&) const;
@@ -115,7 +115,7 @@ public:
 
    Vector<double> calculate_training_error_gradient_cuda() const;
 
-   Matrix<double> calculate_output_gradient(const Matrix<double>&, const Matrix<double>&) const;
+   virtual Matrix<double> calculate_output_gradient(const Matrix<double>&, const Matrix<double>&) const;
 
    LossIndex::FirstOrderLoss calculate_first_order_loss() const;
 
@@ -146,10 +146,15 @@ public:
 
    // Serialization methods
 
-   tinyxml2::XMLDocument* to_XML() const;   
+   tinyxml2::XMLDocument* to_XML() const;
    void from_XML(const tinyxml2::XMLDocument&);
 
    void write_XML(tinyxml2::XMLPrinter&) const;
+
+protected:
+    // Coefficient of normalization for the calculation of the training error.
+    double normalization_coefficient;
+    double selection_normalization_coefficient;
 
 private:
 
@@ -158,10 +163,6 @@ private:
 
    // MEMBERS
 
-   /// Coefficient of normalization for the calculation of the training error.
-
-   double normalization_coefficient;
-   double selection_normalization_coefficient;
 };
 
 }
@@ -185,4 +186,3 @@ private:
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-

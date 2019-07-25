@@ -40,19 +40,17 @@ endif()
 
  configure_file(
      "${PROJECT_SOURCE_DIR}/../isoglib/isoglib/isoglib_config.hpp.in"
-     "${PROJECT_BINARY_DIR}/../../isoglib/BuildRelease/isoglib_config.hpp"
+     "${PROJECT_BINARY_DIR}/../../isoglib/isoglib/isoglib_config.hpp"
 )
 
 include_directories(
-    /vagrant/isoglib/BuildRelease
     /vagrant/isoglib/isoglib
-   /vagrant/isoglib/isoglib/LocalMatrices
-   /vagrant/isoglib/isoglib/Epetra
-   /vagrant/isoglib/isoglib/Problem
-    ${EIGEN_INCLUDE_DIR}
-    /u/sw/pkgs/toolchains/gcc-glibc/7/pkgs/eigen/3.3.3/include/eigen3/
-    /u/sw/pkgs/toolchains/gcc-glibc/7/base/include/
-)
+      /u/sw/pkgs/toolchains/gcc-glibc/7/base/include/
+       /u/sw/pkgs/toolchains/gcc-glibc/7/pkgs/eigen/3.3.3/include/eigen3/
+       /u/sw/pkgs/toolchains/gcc-glibc/7/pkgs/trilinos/12.6.3/include
+       /u/sw/pkgs/toolchains/gcc-glibc/7/pkgs/boost/1.63.0/include/boost/predef/os/
+       /u/sw/pkgs/toolchains/gcc-glibc/7/pkgs/boost/1.63.0/include/
+    )
 
 # Uncomment next line to compile without using C++11
 #add_definitions(-D__Cpp11__)

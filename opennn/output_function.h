@@ -16,7 +16,10 @@
 #include "matrix.h"
 #include "isoglib_interface.h"
 #include "numerical_differentiation.h"
-
+#include "neural_network.h"
+#include "perceptron_layer.h"
+#include "multilayer_perceptron.h"
+#include "normalized_squared_error.h"
 
 
 namespace OpenNN
@@ -57,11 +60,11 @@ public:
   // --------------------------------------------------------------------------
   // Overridden methods from NormalizedquaredError
   // --------------------------------------------------------------------------
-  double calculate_training_error() const override;
-  double calculate_selection_error() const override;
-  double calculate_training_error(const Vector<double>& parameters) const override;
-  double calculate_batch_error(const Vector<size_t>& batch_indices) const override;
-  Matrix<double> calculate_output_gradient(const Matrix<double>& outputs, const Matrix<double>& targets) const override;
+  double calculate_training_error();
+  double calculate_selection_error();
+  double calculate_training_error(const Vector<double>& parameters);
+  double calculate_batch_error(const Vector<size_t>& batch_indices);
+  Matrix<double> calculate_output_gradient(const Matrix<double>& outputs, const Matrix<double>& targets);
 
 private:
 

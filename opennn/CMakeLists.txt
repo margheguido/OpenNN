@@ -57,5 +57,10 @@ tinyxml2.cpp
 training_strategy.cpp
 unscaling_layer.cpp
 variables.cpp
-weighted_squared_error.cpp)
+weighted_squared_error.cpp
+output_function.cpp
+isoglib_interface.cpp
+)
 
+target_link_libraries(opennn isoglib.a)
+target_link_libraries(opennn -L/../../isoglib/BuildRelease)

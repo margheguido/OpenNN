@@ -70,7 +70,7 @@ namespace OpenNN
   // --------------------------------------------------------------------------
   // Overridden methods from NormalizedquaredError
   // --------------------------------------------------------------------------
-  double OutputFunction::calculate_training_error() const
+  double OutputFunction::calculate_training_error() 
   {
   #ifdef __OPENNN_DEBUG__
 
@@ -78,7 +78,6 @@ namespace OpenNN
 
   #endif
 
-      OutputFunction* out_function = neural_network_pointer->get_output_function_pointer();
 
       // Multilayer perceptron
 
@@ -101,7 +100,7 @@ namespace OpenNN
 
 
           const Matrix<double> outputs = multilayer_perceptron_pointer->calculate_outputs(inputs);
-          Matrix<double> our_outputs = out_function->calculate_solution_outputs(outputs);
+          Matrix<double> our_outputs = calculate_solution_outputs(outputs);
 
 
 
@@ -115,7 +114,7 @@ namespace OpenNN
 
 
 
-  double OutputFunction::calculate_selection_error() const
+  double OutputFunction::calculate_selection_error()
   {
   #ifdef __OPENNN_DEBUG__
 
@@ -123,7 +122,6 @@ namespace OpenNN
 
   #endif
 
-      OutputFunction* out_function = neural_network_pointer->get_output_function_pointer();
       // Multilayer perceptron
 
       const MultilayerPerceptron* multilayer_perceptron_pointer = neural_network_pointer->get_multilayer_perceptron_pointer();
@@ -144,7 +142,7 @@ namespace OpenNN
           const Matrix<double> targets = data_set_pointer->get_targets(selection_batches[static_cast<unsigned>(i)]);
 
           const Matrix<double> outputs = multilayer_perceptron_pointer->calculate_outputs(inputs);
-          Matrix<double> our_outputs = out_function->calculate_solution_outputs(outputs);
+          Matrix<double> our_outputs = calculate_solution_outputs(outputs);
 
           const double batch_error = our_outputs.calculate_sum_squared_error(targets);
 
@@ -155,7 +153,7 @@ namespace OpenNN
   }
 
 
-  double OutputFunction::calculate_training_error(const Vector<double>& parameters) const
+  double OutputFunction::calculate_training_error(const Vector<double>& parameters)
   {
   #ifdef __OPENNN_DEBUG__
 
@@ -169,7 +167,7 @@ namespace OpenNN
 
   #endif
 
-      OutputFunction* out_function = neural_network_pointer->get_output_function_pointer();
+
       // Multilayer perceptron
 
       const MultilayerPerceptron* multilayer_perceptron_pointer = neural_network_pointer->get_multilayer_perceptron_pointer();
@@ -190,7 +188,7 @@ namespace OpenNN
           const Matrix<double> targets = data_set_pointer->get_targets(training_batches[static_cast<unsigned>(i)]);
 
           const Matrix<double> outputs = multilayer_perceptron_pointer->calculate_outputs(inputs, parameters);
-          Matrix<double> our_outputs=out_function->calculate_solution_outputs(outputs);
+          Matrix<double> our_outputs = calculate_solution_outputs(outputs);
 
           const double batch_error = our_outputs.calculate_sum_squared_error(targets);
 
@@ -202,7 +200,7 @@ namespace OpenNN
 
 
 
-  double OutputFunction::calculate_batch_error(const Vector<size_t>& batch_indices) const
+  double OutputFunction::calculate_batch_error(const Vector<size_t>& batch_indices)
   {
   #ifdef __OPENNN_DEBUG__
 
@@ -210,7 +208,7 @@ namespace OpenNN
 
   #endif
 
-      OutputFunction* out_function = neural_network_pointer->get_output_function_pointer();
+
       // Multilayer perceptron
 
       const MultilayerPerceptron* multilayer_perceptron_pointer = neural_network_pointer->get_multilayer_perceptron_pointer();
@@ -221,14 +219,14 @@ namespace OpenNN
       const Matrix<double> targets = data_set_pointer->get_targets(batch_indices);
 
       const Matrix<double> outputs = multilayer_perceptron_pointer->calculate_outputs(inputs);
-      Matrix<double> our_outputs=out_function->calculate_solution_outputs(outputs);
+      Matrix<double> our_outputs=calculate_solution_outputs(outputs);
       const double batch_error = our_outputs.calculate_sum_squared_error(targets);
 
       return batch_error / normalization_coefficient;
   }
 
 
-  Matrix<double> OutputFunction::calculate_output_gradient(const Matrix<double>& outputs, const Matrix<double>& targets) const
+  Matrix<double> OutputFunction::calculate_output_gradient(const Matrix<double>& outputs, const Matrix<double>& targets)
   {
   #ifdef __OPENNN_DEBUG__
 
@@ -236,10 +234,10 @@ namespace OpenNN
 
   #endif
 
-      OutputFunction* out_function = neural_network_pointer-> get_output_function_pointer();
 
-      Matrix<double> our_outputs = out_function->calculate_solution_outputs(outputs);
-      Matrix<double> gradient_our_outputs = out_function->gradient_outputs(outputs,our_outputs);
+
+      Matrix<double> our_outputs = calculate_solution_outputs(outputs);
+      Matrix<double> gradient_our_outputs = gradient_outputs(outputs,our_outputs);
       Matrix<double> deriv_loss = our_outputs-targets;
 
 
