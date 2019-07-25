@@ -14,7 +14,12 @@
 
 #include "vector.h"
 #include "matrix.h"
-#include "../../isoglib/isoglib/isoglib.h"
+#include "Problem.hpp"
+#include "TimeAdvancing.hpp"
+#include "TestCase.hpp"
+#include "local_matrix.hpp"
+#include "SUPGLocalMatrix.hpp"
+#include "epetra_communicator.hpp"
 #include "GuidoVidulisTest.h"
 
 namespace OpenNN

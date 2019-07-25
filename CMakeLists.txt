@@ -44,12 +44,17 @@ endif()
 )
 
 include_directories(
-    /vagrant/isoglib/isoglib
+      /vagrant/isoglib/isoglib
+      /vagrant/isoglib/isoglib/Core
+      /vagrant/isoglib/isoglib/Problem
+      /vagrant/isoglib/isoglib/TestCase
+      /vagrant/isoglib/isoglib/LocalMatrices
+      /vagrant/isoglib/isoglib/Epetra
       /u/sw/pkgs/toolchains/gcc-glibc/7/base/include/
-       /u/sw/pkgs/toolchains/gcc-glibc/7/pkgs/eigen/3.3.3/include/eigen3/
-       /u/sw/pkgs/toolchains/gcc-glibc/7/pkgs/trilinos/12.6.3/include
-       /u/sw/pkgs/toolchains/gcc-glibc/7/pkgs/boost/1.63.0/include/boost/predef/os/
-       /u/sw/pkgs/toolchains/gcc-glibc/7/pkgs/boost/1.63.0/include/
+      /u/sw/pkgs/toolchains/gcc-glibc/7/pkgs/eigen/3.3.3/include/eigen3/
+      /u/sw/pkgs/toolchains/gcc-glibc/7/pkgs/trilinos/12.6.3/include
+      /u/sw/pkgs/toolchains/gcc-glibc/7/pkgs/boost/1.63.0/include/boost/predef/os/
+      /u/sw/pkgs/toolchains/gcc-glibc/7/pkgs/boost/1.63.0/include/
     )
 
 # Uncomment next line to compile without using C++11
