@@ -55,7 +55,10 @@ include_directories(
       /u/sw/pkgs/toolchains/gcc-glibc/7/pkgs/trilinos/12.6.3/include
       /u/sw/pkgs/toolchains/gcc-glibc/7/pkgs/boost/1.63.0/include/boost/predef/os/
       /u/sw/pkgs/toolchains/gcc-glibc/7/pkgs/boost/1.63.0/include/
+      /u/sw/pkgs/toolchains/gcc-glibc/7/base/include/
     )
+
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 # Uncomment next line to compile without using C++11
 #add_definitions(-D__Cpp11__)
@@ -72,7 +75,7 @@ include_directories(opennn)
 #endif(OpenNN_BUILD_TESTS)
 
 if(OpenNN_BUILD_EXAMPLES)
-    add_subdirectory(examples)
+   add_subdirectory(examples)
 endif(OpenNN_BUILD_EXAMPLES)
 
 include(CPack)
