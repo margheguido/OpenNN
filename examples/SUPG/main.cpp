@@ -29,7 +29,7 @@ int main(void)
 
         DataSet data_set;
 
-        data_set.set_data_file_name("data/EDP_solution_loss.txt");
+        data_set.set_data_file_name("data/SUPG.txt");
         data_set.set_file_type("txt");
         data_set.set_separator("Tab");
 

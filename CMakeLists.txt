@@ -29,7 +29,7 @@ if(__OPENNN_OMP__)
 endif()
 
 #######################################################################
-#######                     DA ISOGLIB                        #########
+#######                 ISOGLIB INTERFACE                     #########
 #######################################################################
 # PRINT ALL VARIABLES
 # get_cmake_property(_variableNames VARIABLES)
