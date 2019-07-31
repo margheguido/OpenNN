@@ -32,11 +32,11 @@ endif()
 #######                 ISOGLIB INTERFACE                     #########
 #######################################################################
 # PRINT ALL VARIABLES
-# get_cmake_property(_variableNames VARIABLES)
-# list (SORT _variableNames)
-# foreach (_variableName ${_variableNames})
-#    message(STATUS "${_variableName}=${${_variableName}}")
-# endforeach()
+ get_cmake_property(_variableNames VARIABLES)
+ list (SORT _variableNames)
+ foreach (_variableName ${_variableNames})
+    message(STATUS "${_variableName}=${${_variableName}}")
+endforeach()
 
  configure_file(
      "${PROJECT_SOURCE_DIR}/../isoglib/isoglib/isoglib_config.hpp.in"
@@ -56,6 +56,7 @@ include_directories(
       /u/sw/pkgs/toolchains/gcc-glibc/7/pkgs/boost/1.63.0/include/boost/predef/os/
       /u/sw/pkgs/toolchains/gcc-glibc/7/pkgs/boost/1.63.0/include/
       /u/sw/pkgs/toolchains/gcc-glibc/7/base/include/
+      /u/sw/pkgs/toolchains/gcc-glibc/7/base/share/openmpi/
     )
 
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)

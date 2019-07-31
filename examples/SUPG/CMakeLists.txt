@@ -49,13 +49,23 @@ add_executable(SUPG main.cpp)
 target_link_libraries(SUPG ${PROJECT_LINK_LIBS})
 
 target_link_libraries(SUPG /vagrant/isoglib/BuildRelease/libisoglib.so)
+target_link_libraries(SUPG /vagrant/isoglib/BuildRelease/isoglib/Epetra/libisogib_epetra.so)
 
-target_link_libraries(SUPG /u/sw/pkgs/toolchains/gcc-glibc/7/base/lib/liblua.a)
-target_link_libraries(SUPG /u/sw/pkgs/toolchains/gcc-glibc/7/prefix/lib/libdl.so)
+# target_link_libraries(SUPG /u/sw/pkgs/toolchains/gcc-glibc/7/prefix/lib/libdl.so)
 
+target_link_libraries(SUPG /u/sw/pkgs/toolchains/gcc-glibc/7/base/lib/libmpi.so)
 target_link_libraries(SUPG /vagrant/isoglib/BuildRelease/libisoglib_epetra.a)
-
+target_link_libraries(SUPG /u/sw/pkgs/toolchains/gcc-glibc/7/base/lib/libopen-rte.so)
+target_link_libraries(SUPG /u/sw/pkgs/toolchains/gcc-glibc/7/base/lib/libopen-pal.so)
 target_link_libraries(SUPG /u/sw/pkgs/toolchains/gcc-glibc/7/pkgs/trilinos/12.6.3/lib/libepetra.so)
+target_link_libraries(SUPG /u/sw/pkgs/toolchains/gcc-glibc/7/base/lib/libhwloc.so)
+target_link_libraries(SUPG /u/sw/pkgs/toolchains/gcc-glibc/7/base/lib/libicui18n.so)
+target_link_libraries(SUPG /u/sw/pkgs/toolchains/gcc-glibc/7/base/lib/libicuuc.so)
+target_link_libraries(SUPG /u/sw/pkgs/toolchains/gcc-glibc/7/base/lib/libicudata.so)
+target_link_libraries(SUPG /u/sw/pkgs/toolchains/gcc-glibc/7/base/lib/libmpi_usempif08.so)
+target_link_libraries(SUPG /u/sw/pkgs/toolchains/gcc-glibc/7/base/lib/libmpi_usempi_ignore_tkr.so)
+target_link_libraries(SUPG /u/sw/pkgs/toolchains/gcc-glibc/7/base/lib/libmpi_mpifh.so)
+target_link_libraries(SUPG /u/sw/pkgs/toolchains/gcc-glibc/7/prefix/lib/libgfortran.so)
 
-
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 # set(CXXFLAGS "${CXXFLAGS} -fPIC")

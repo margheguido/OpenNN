@@ -16,9 +16,11 @@
 
 using namespace OpenNN;
 
-int main(void)
+int main()
 {
-    try
+  int a=1;
+  cout<<a<<endl;
+/*    try
     {
         cout << "OpenNN. New loss function for EDP solutions" << endl;
 
@@ -70,7 +72,7 @@ int main(void)
         my_out_information(0,2)="pressure";*/
 
         // Instances
-
+/*
         Instances* instances_pointer = data_set.get_instances_pointer();
 
         instances_pointer->split_random_indices();
@@ -194,6 +196,7 @@ int main(void)
 
         return(1);
     }
+    */
 }
 
 
