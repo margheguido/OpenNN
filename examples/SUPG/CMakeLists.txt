@@ -49,7 +49,7 @@ add_executable(SUPG main.cpp)
 target_link_libraries(SUPG ${PROJECT_LINK_LIBS})
 
 target_link_libraries(SUPG /vagrant/isoglib/BuildRelease/libisoglib.so)
-target_link_libraries(SUPG /vagrant/isoglib/BuildRelease/isoglib/Epetra/libisogib_epetra.so)
+target_link_libraries(SUPG /vagrant/isoglib/BuildRelease/libisoglib_epetra.so)
 
 # target_link_libraries(SUPG /u/sw/pkgs/toolchains/gcc-glibc/7/prefix/lib/libdl.so)
 
