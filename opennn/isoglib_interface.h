@@ -10,6 +10,10 @@
 #include <sstream>
 #include <cmath>
 
+// Macro definitions
+
+#define USE_MPI
+
 // OpenNN includes
 
 #include "vector.h"

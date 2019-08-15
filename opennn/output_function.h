@@ -10,6 +10,10 @@
 #include <sstream>
 #include <cmath>
 
+// Macro definitions
+
+#define USE_MPI
+
 // OpenNN includes
 
 #include "vector.h"
@@ -58,7 +62,7 @@ public:
   void set_names( const char * dir_name , string sol_name);
 
   // --------------------------------------------------------------------------
-  // Overridden methods from NormalizedquaredError
+  // Overridden methods from NormalizedSquaredError
   // --------------------------------------------------------------------------
   double calculate_training_error();
   double calculate_selection_error();

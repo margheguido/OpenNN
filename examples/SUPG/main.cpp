@@ -18,9 +18,7 @@ using namespace OpenNN;
 
 int main()
 {
-  int a=1;
-  cout<<a<<endl;
-/*    try
+  try
     {
         cout << "OpenNN. New loss function for EDP solutions" << endl;
 
@@ -31,6 +29,7 @@ int main()
 
         DataSet data_set;
 
+        data_set.set_header_line(false);
         data_set.set_data_file_name("data/SUPG.txt");
         data_set.set_file_type("txt");
         data_set.set_separator("Tab");
@@ -72,7 +71,7 @@ int main()
         my_out_information(0,2)="pressure";*/
 
         // Instances
-/*
+
         Instances* instances_pointer = data_set.get_instances_pointer();
 
         instances_pointer->split_random_indices();
@@ -165,6 +164,7 @@ int main()
 //        quasi_Newton_method_pointer->set_reserve_loss_history(true);
 
         const TrainingStrategy::Results training_strategy_results = training_strategy.perform_training();
+        std::cout << "Training completed" << '\n';
 
         Vector<double> loss_history =training_strategy_results.gradient_descent_results_pointer->loss_history;
         Vector<double> selection_history=training_strategy_results.gradient_descent_results_pointer->selection_error_history;
@@ -196,7 +196,7 @@ int main()
 
         return(1);
     }
-    */
+
 }
 
 
