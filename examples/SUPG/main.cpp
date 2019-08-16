@@ -29,7 +29,6 @@ int main()
 
         DataSet data_set;
 
-        data_set.set_header_line(false);
         data_set.set_data_file_name("data/SUPG.txt");
         data_set.set_file_type("txt");
         data_set.set_separator("Tab");
@@ -135,8 +134,12 @@ int main()
         OutputFunction * output_function_pointer = new OutputFunction();
         const char * dir_name="data";
         string sol_file="binary_solution";
+        output_function_pointer->set_names(dir_name,sol_file);
 
-        output_function_pointer->set_names( dir_name,sol_file);
+        output_function_pointer->set_data_set_pointer(&data_set);
+
+        output_function_pointer->set_neural_network_pointer(&neural_network);
+
         training_strategy.set_loss_index_pointer(output_function_pointer);
 
         if(1)
@@ -166,8 +169,8 @@ int main()
         const TrainingStrategy::Results training_strategy_results = training_strategy.perform_training();
         std::cout << "Training completed" << '\n';
 
-        Vector<double> loss_history =training_strategy_results.gradient_descent_results_pointer->loss_history;
-        Vector<double> selection_history=training_strategy_results.gradient_descent_results_pointer->selection_error_history;
+        // Vector<double> loss_history =training_strategy_results.gradient_descent_results_pointer->loss_history;
+        // Vector<double> selection_history=training_strategy_results.gradient_descent_results_pointer->selection_error_history;
 
 
         // Testing analysis
