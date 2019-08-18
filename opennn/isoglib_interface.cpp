@@ -6,6 +6,7 @@ namespace OpenNN
 
   void IsoglibInterface::set_problem_resolution()
   {
+
     // function to setup the problem
     auto setupProblem = [&]( Problem *problem ) {
         problem->getSolverParams().solverType = DIRECT;
@@ -13,7 +14,7 @@ namespace OpenNN
 
     g_meshFlags = FLAGS_DEFAULT | DO_NOT_USE_BASIS_CACHES;
 
-    setProblem( directory_name, &localMatrix, &data, setupProblem );
+    setProblem( directory_name, localMatrix_pointer, &data, setupProblem );
   }
 
 
@@ -47,7 +48,7 @@ namespace OpenNN
     if ( pde_prob.loadMesh( directory_name, directory_name, new DofMapperBase( numComps ),
                                 g_meshFlags, 0, g_numLagrangeMultipliers ) < 0 )
         exit( 1 );
-
+/*
     // set local matrix
     pde_prob.setLocalMatrix( localMatrix );
     // time advancing
@@ -56,13 +57,23 @@ namespace OpenNN
     pde_prob.setTimeAdvancingScheme( &timeAdvancing );
         // call callback
     if ( setupProblem )
-        setupProblem( &pde_prob );
+        setupProblem( &pde_prob );*/
   }
 
 
   void IsoglibInterface::solveSteady(double tau)
   {
-    localMatrix.set_tau(tau);
+    auto setupProblem = [&]( Problem *problem ) {
+        problem->getSolverParams().solverType = DIRECT;
+    };
+
+    localMatrix_pointer->set_tau(tau);
+    pde_prob.setLocalMatrix(localMatrix_pointer);
+    timeAdvancing.setup( &pde_prob, 1, 0 );
+    pde_prob.setTimeAdvancingScheme( &timeAdvancing );
+        // call callback
+  
+        setupProblem( &pde_prob );
     pde_prob.computeTimestep(false);
   }
 

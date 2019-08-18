@@ -70,6 +70,8 @@ public:
   // void print_solution() const;
   void set_file_names( string sol_name);
 
+  void set_nDof(size_t n);
+
   // --------------------------------------------------------------------------
   // Overridden methods from NormalizedSquaredError
   // --------------------------------------------------------------------------

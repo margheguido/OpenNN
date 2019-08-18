@@ -45,13 +45,20 @@ public:
   // Default constructor
   IsoglibInterface()
   {
+    localMatrix_pointer= new supg_local_matrix;
     set_problem_resolution();
+  }
+
+  ~IsoglibInterface()
+  {
+    delete localMatrix_pointer;
   }
 
   void set_file_names(string sol_name);
   void set_problem_resolution();
   Vector<double> calculate_solution(double tau);
   size_t get_nDof() const { return nDof; };
+  void set_nDof(size_t n){ nDof=n; };
 
 private:
 
@@ -72,7 +79,7 @@ private:
 
   TimeAdvancing timeAdvancing;
 
-  supg_local_matrix localMatrix;
+  supg_local_matrix  * localMatrix_pointer;
 
   //fill pde_prob and timeAdvancing with the data from the mesh
   void setProblem( const char *dirName, LocalMatrixBase *localMatrix, data_class_interface *data, TestCase::ProblemFunc setupProblem );

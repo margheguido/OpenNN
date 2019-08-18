@@ -16,7 +16,7 @@ namespace OpenNN
     for (int i=0; i< nIstances; i++)
     {
       double out_value=single_output(i,0);
-      double h=0.0001;
+      double h=100000;
       Vector<double> y = calculate_solution_outputs(out_value);
       double x_forward = out_value + h;
       Vector<double> y_forward = calculate_solution_outputs(x_forward);
@@ -61,6 +61,10 @@ namespace OpenNN
     isoglib_interface_pointer->set_file_names(sol_name);
   }
 
+  void OutputFunction::set_nDof(size_t n)
+  {
+    isoglib_interface_pointer->set_nDof(n);
+  }
   // void OutputFunction::print_solution() const
   // {
   //   solution_stab.print();

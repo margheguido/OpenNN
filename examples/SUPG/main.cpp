@@ -44,6 +44,7 @@ int main()
         unsigned number_inputs = 1; // mu
         Vector< Variables::Item > variables_items( nDof + number_inputs );
 
+
         for( unsigned i = 0; i < number_inputs; i++ )
         {
           // variables_items[i].name = "mu";
@@ -155,7 +156,10 @@ int main()
 
 
         string sol_file = "data/Data_GuidoVidulisADRExactSol_p1_ref3/solState_node000_000000.dat";
+
+
         output_function_pointer->set_file_names(sol_file);
+        output_function_pointer->set_nDof(nDof);
 
         output_function_pointer->set_data_set_pointer(&data_set);
 
