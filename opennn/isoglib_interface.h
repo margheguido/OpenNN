@@ -1,4 +1,3 @@
-
 #ifndef __ISOGLIBINTERFACE_H__
 #define __ISOGLIBINTERFACE_H__
 
@@ -10,7 +9,7 @@
 #include <sstream>
 #include <cmath>
 
-// Macro definitions
+// Macro definitions (needed by isoglib)
 
 #define USE_MPI
 
@@ -43,15 +42,21 @@ class IsoglibInterface
 
 public:
 
+  // Default constructor
+  IsoglibInterface()
+  {
+    set_problem_resolution();
+  }
 
-  void set_file_names(const char* dir_name , string sol_name);
+  void set_file_names(const char *dir_name, string sol_name);
   void set_problem_resolution();
-  Vector <double> calculate_solution(double tau);
+  Vector<double> calculate_solution(double tau);
   size_t get_nDof() const { return nDof; };
 
 private:
+
   //name of the test directories in isoglib
-   const char *directory_name="binary_solution";
+   const char *directory_name = "binary_solution";
   //Data_GuidoVidulisSUPGExactSol_p1_ref2
 
   //name of the binary file
@@ -77,13 +82,10 @@ private:
   void solveSteady(double tau);
 
   //reads from a binary file the pde solution and give it back in matrix form
-  Vector <double> load_solution_binary();
+  Vector<double> load_solution_binary();
 
-
- };
+  };
 
  }
 
- #endif
-
- // OpenNN: Open Neural Networks Library.
+ #endif // __ISOGLIBINTERFACE_H__

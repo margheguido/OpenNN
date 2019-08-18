@@ -29,6 +29,7 @@ int main()
 
         DataSet data_set;
 
+        data_set.set_header_line(true); // Our data set has a name for every column
         data_set.set_data_file_name("data/SUPG.txt");
         data_set.set_file_type("txt");
         data_set.set_separator("Tab");
@@ -39,7 +40,7 @@ int main()
         // Variables
         Variables* variables_pointer = data_set.get_variables_pointer();
 
-        unsigned nDof = 3; // number of points in which the computed solution is sampled
+        unsigned nDof = 9; // number of points in which the computed solution is sampled
         unsigned number_inputs = 1; // mu
         Vector< Variables::Item > variables_items( nDof + number_inputs );
 
@@ -58,9 +59,6 @@ int main()
 
         variables_pointer->set_items(variables_items);
 
-//==============================================================================
-// DA QUI IN POI ANCORA DA MODIFICARE (TODO)
-//==============================================================================
 
         const Matrix<string> inputs_information = variables_pointer->get_inputs_information();
         const Matrix<string> targets_information = variables_pointer->get_targets_information();
@@ -131,10 +129,33 @@ int main()
         // Training strategy object
         TrainingStrategy training_strategy(&neural_network, &data_set);
 
-        OutputFunction * output_function_pointer = new OutputFunction();
-        const char * dir_name="data";
-        string sol_file="binary_solution";
-        output_function_pointer->set_names(dir_name,sol_file);
+        if(0)
+        {
+          // QUASI_NEWTON built as default, no need of set_training_method
+          QuasiNewtonMethod* quasi_Newton_method_pointer = training_strategy.get_quasi_Newton_method_pointer();
+
+          quasi_Newton_method_pointer->set_maximum_epochs_number(5);
+          quasi_Newton_method_pointer->set_display_period(1);
+
+          quasi_Newton_method_pointer->set_minimum_loss_decrease(1.0e-6);
+        }
+
+        if(1)
+        {
+          training_strategy.set_training_method( "GRADIENT_DESCENT" ); // STOCHASTIC_GRADIENT_DESCENT, LEVENBERG_MARQUARDT_ALGORITHM, ADAPTIVE_MOMENT_ESTIMATION
+          GradientDescent* gradient_descent_method_pointer = training_strategy.get_gradient_descent_pointer();
+
+          gradient_descent_method_pointer->set_maximum_epochs_number(100);
+          gradient_descent_method_pointer->set_display_period(50);
+
+          gradient_descent_method_pointer->set_minimum_loss_decrease(1.0e-6);
+        }
+
+        OutputFunction *output_function_pointer = new OutputFunction();
+
+        const char *dir_name = "data";
+        string sol_file = "binary_solution";
+        output_function_pointer->set_file_names(dir_name, sol_file);
 
         output_function_pointer->set_data_set_pointer(&data_set);
 
@@ -142,27 +163,10 @@ int main()
 
         training_strategy.set_loss_index_pointer(output_function_pointer);
 
-        if(1)
-        {
-          // QUASI_NEWTON built as default, no need of set_training_method
-          QuasiNewtonMethod* quasi_Newton_method_pointer = training_strategy.get_quasi_Newton_method_pointer();
+        // // Senza senso: set_loss_index_pointer e get_loss_index_pointer si riferiscono a cose diverse
+        // // (OptimizationAlgorithm::loss_index_pointer e TrainingStrategy::normalized_squared_error_pointer; il secondo sembra inutile)
+        // std::cout << "loss_index_pointer: " << training_strategy.get_loss_index_pointer()  << '\n';
 
-          quasi_Newton_method_pointer->set_maximum_epochs_number(100);
-          quasi_Newton_method_pointer->set_display_period(10);
-
-          quasi_Newton_method_pointer->set_minimum_loss_decrease(1.0e-6);
-        }
-
-        if(0)
-        {
-          training_strategy.set_training_method( "GRADIENT_DESCENT" ); // STOCHASTIC_GRADIENT_DESCENT, LEVENBERG_MARQUARDT_ALGORITHM, ADAPTIVE_MOMENT_ESTIMATION
-          GradientDescent* gradient_descent_method_pointer = training_strategy.get_gradient_descent_pointer();
-
-          gradient_descent_method_pointer->set_maximum_epochs_number(100);
-          gradient_descent_method_pointer->set_display_period(10);
-
-          gradient_descent_method_pointer->set_minimum_loss_decrease(1.0e-6);
-        }
 
 //        quasi_Newton_method_pointer->set_reserve_loss_history(true);
 
@@ -179,17 +183,17 @@ int main()
         // calls Vector< Matrix<double> > TestingAnalysis::calculate_target_outputs() const
         // dim( results ) = (#output) x (#testing_instances) x (2 = output_i + target_i da confrontare)
         Vector< Matrix<double> > results = testing_analysis.calculate_target_outputs();
-        Vector<size_t> columns_to_be_scaled{ 0, 1 }; // scala sia target che output (results[0][:,0] e results[0][:,1])
-        Vector< Statistics<double> > statistics1_to_scale_target_and_output{ targets_statistics[0], targets_statistics[0] };
-        Vector< Statistics<double> > statistics2_to_scale_target_and_output{ targets_statistics[1], targets_statistics[1] };
-        results[1].unscale_columns_minimum_maximum( statistics1_to_scale_target_and_output, columns_to_be_scaled );
-        results[0].unscale_columns_minimum_maximum( statistics2_to_scale_target_and_output, columns_to_be_scaled );
-
-        std::cout << "targets, outputs (scaled):" << '\n';
-        std::cout << "first " << '\n';
-        results[0].print();
-        std::cout << "second" << '\n';
-        results[1].print();
+        // Vector<size_t> columns_to_be_scaled{ 0, 1 }; // scala sia target che output (results[0][:,0] e results[0][:,1])
+        // Vector< Statistics<double> > statistics1_to_scale_target_and_output{ targets_statistics[0], targets_statistics[0] };
+        // Vector< Statistics<double> > statistics2_to_scale_target_and_output{ targets_statistics[1], targets_statistics[1] };
+        // results[1].unscale_columns_minimum_maximum( statistics1_to_scale_target_and_output, columns_to_be_scaled );
+        // results[0].unscale_columns_minimum_maximum( statistics2_to_scale_target_and_output, columns_to_be_scaled );
+        //
+        // std::cout << "targets, outputs (scaled):" << '\n';
+        // std::cout << "first " << '\n';
+        // results[0].print();
+        // std::cout << "second" << '\n';
+        // results[1].print();
 
         return 0 ;
     }

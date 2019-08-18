@@ -24,9 +24,8 @@ namespace OpenNN
   }
 
 
-  void IsoglibInterface::setProblem( const char *dirNames, LocalMatrixBase *localMatrix, data_class_interface *data, TestCase::ProblemFunc setupProblem)
+  void IsoglibInterface::setProblem(const char *dirNames, LocalMatrixBase *localMatrix, data_class_interface *data, TestCase::ProblemFunc setupProblem)
   {
-
     // start global clock
     g_timer.reset();
 
@@ -49,7 +48,6 @@ namespace OpenNN
                                 g_meshFlags, 0, g_numLagrangeMultipliers ) < 0 )
         exit( 1 );
 
-
     // set local matrix
     pde_prob.setLocalMatrix( localMatrix );
     // time advancing
@@ -59,15 +57,14 @@ namespace OpenNN
         // call callback
     if ( setupProblem )
         setupProblem( &pde_prob );
-
   }
+
 
   void IsoglibInterface::solveSteady(double tau)
   {
     localMatrix.set_tau(tau);
-    pde_prob.computeTimestep( false );
+    pde_prob.computeTimestep(false);
   }
-
 
 
   //reads from a binary file the pde solution and give it back in matrix form
@@ -104,7 +101,8 @@ namespace OpenNN
     return solution_stab;
   }
 
-  void IsoglibInterface::set_file_names(const char* dir_name , string sol_name)
+
+  void IsoglibInterface::set_file_names(const char *dir_name, string sol_name)
   {
     directory_name = dir_name;
     solution_file_name = sol_name;

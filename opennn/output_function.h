@@ -1,4 +1,3 @@
-
 #ifndef __OUTPUTFUNCTION_H__
 #define __OUTPUTFUNCTION_H__
 
@@ -10,7 +9,7 @@
 #include <sstream>
 #include <cmath>
 
-// Macro definitions
+// Macro definitions (needed by isoglib)
 
 #define USE_MPI
 
@@ -41,41 +40,54 @@ class OutputFunction : public NormalizedSquaredError
 
 public:
 
-  // DEFAULT CONSTRUCTOR
+  // Default constructor
+  OutputFunction()
+  {
+    isoglib_interface_pointer = new IsoglibInterface();
+  }
+
+  // Destructor
+  ~OutputFunction()
+  {
+    delete isoglib_interface_pointer;
+  }
 
   //it calculates the derivative of the solution outputs wrt neural network one (tau)
   //#columns: number of instances
   //#rows: number of outputs
-  Matrix<double> gradient_outputs (const Matrix<double>& single_output,const Matrix<double>& solution_outputs);
+  Matrix<double> gradient_outputs(const Matrix<double>& single_output, const Matrix<double>& solution_outputs);
 
 
   //  this function calculate the solution outputs given the neural network one (tau)
   // #rows: number of instances (tipacally batch size)
   // #columns :number of outputs (nodes)
-  Matrix<double> calculate_solution_outputs (const Matrix<double>& single_output);
+  Matrix<double> calculate_solution_outputs(const Matrix<double>& single_output) const;
 
   //same function but for only one instance
   //size of the vector: number of outputs (nodes)
-  Vector<double> calculate_solution_outputs (double tau);
+  Vector<double> calculate_solution_outputs(double tau) const;
 
   // void print_solution() const;
-  void set_names( const char * dir_name , string sol_name);
+  void set_file_names(const char *dir_name, string sol_name);
 
   // --------------------------------------------------------------------------
   // Overridden methods from NormalizedSquaredError
   // --------------------------------------------------------------------------
-  double calculate_training_error();
-  double calculate_selection_error();
-  double calculate_training_error(const Vector<double>& parameters);
-  double calculate_batch_error(const Vector<size_t>& batch_indices);
-  Matrix<double> calculate_output_gradient(const Matrix<double>& outputs, const Matrix<double>& targets);
+
+  // OLD:
+  // double calculate_selection_error();
+  // double calculate_training_error(const Vector<double>& parameters);
+  // double calculate_batch_error(const Vector<size_t>& batch_indices);
+  // Matrix<double> calculate_output_gradient(const Matrix<double>& outputs, const Matrix<double>& targets);
+
+  double calculate_training_error() const override;
 
 private:
 
-  IsoglibInterface isoglib_interface;
+  IsoglibInterface *isoglib_interface_pointer;
 
- };
+  };
 
 }
 
- #endif
+#endif // __OUTPUTFUNCTION_H__
