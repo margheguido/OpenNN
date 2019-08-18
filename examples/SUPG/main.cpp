@@ -153,9 +153,9 @@ int main()
 
         OutputFunction *output_function_pointer = new OutputFunction();
 
-        const char *dir_name = "data";
-        string sol_file = "binary_solution";
-        output_function_pointer->set_file_names(dir_name, sol_file);
+
+        string sol_file = "data/Data_GuidoVidulisADRExactSol_p1_ref3/solState_node000_000000.dat";
+        output_function_pointer->set_file_names(sol_file);
 
         output_function_pointer->set_data_set_pointer(&data_set);
 

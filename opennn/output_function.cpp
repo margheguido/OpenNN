@@ -56,9 +56,9 @@ namespace OpenNN
     return sol_outputs;
   }
 
-  void OutputFunction::set_file_names(const char *dir_name, string sol_name)
+  void OutputFunction::set_file_names( string sol_name)
   {
-    isoglib_interface_pointer->set_file_names(dir_name, sol_name);
+    isoglib_interface_pointer->set_file_names(sol_name);
   }
 
   // void OutputFunction::print_solution() const

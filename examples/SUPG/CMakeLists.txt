@@ -10,7 +10,7 @@ if (WIN32)
     if (CMAKE_GENERATOR MATCHES "Visual Studio 15 2017")
 		set (PROJECT_LINK_LIBS ${CMAKE_SOURCE_DIR}/build/opennn/Release/opennn.lib)
 	else()
-		set (PROJECT_LINK_LIBS ${CMAKE_SOURCE_DIR}/debugBuild/opennn/libopennn.a)         # TODO: replace debugBuild with build
+		set (PROJECT_LINK_LIBS ${CMAKE_SOURCE_DIR}/build/opennn/libopennn.a)         # TODO: replace debugBuild with build
 	endif()
 endif (WIN32)
 
@@ -18,7 +18,7 @@ if (UNIX)
     if (CMAKE_GENERATOR MATCHES "Visual Studio 15 2017")
 		set (PROJECT_LINK_LIBS ${CMAKE_SOURCE_DIR}/build/opennn/Release/opennn.lib)
 	else()
-		set (PROJECT_LINK_LIBS ${CMAKE_SOURCE_DIR}/debugBuild/opennn/libopennn.a)         # TODO: replace debugBuild with build
+		set (PROJECT_LINK_LIBS ${CMAKE_SOURCE_DIR}/build/opennn/libopennn.a)         # TODO: replace debugBuild with build
 	endif()
 endif (UNIX)
 

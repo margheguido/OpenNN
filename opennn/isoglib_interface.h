@@ -48,7 +48,7 @@ public:
     set_problem_resolution();
   }
 
-  void set_file_names(const char *dir_name, string sol_name);
+  void set_file_names(string sol_name);
   void set_problem_resolution();
   Vector<double> calculate_solution(double tau);
   size_t get_nDof() const { return nDof; };
@@ -56,7 +56,7 @@ public:
 private:
 
   //name of the test directories in isoglib
-   const char *directory_name = "binary_solution";
+   const char *directory_name = "data/Data_GuidoVidulisADRExactSol_p1_ref3";
   //Data_GuidoVidulisSUPGExactSol_p1_ref2
 
   //name of the binary file

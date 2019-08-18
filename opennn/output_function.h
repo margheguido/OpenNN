@@ -68,7 +68,7 @@ public:
   Vector<double> calculate_solution_outputs(double tau) const;
 
   // void print_solution() const;
-  void set_file_names(const char *dir_name, string sol_name);
+  void set_file_names( string sol_name);
 
   // --------------------------------------------------------------------------
   // Overridden methods from NormalizedSquaredError

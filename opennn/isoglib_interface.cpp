@@ -102,9 +102,8 @@ namespace OpenNN
   }
 
 
-  void IsoglibInterface::set_file_names(const char *dir_name, string sol_name)
+  void IsoglibInterface::set_file_names( string sol_name)
   {
-    directory_name = dir_name;
     solution_file_name = sol_name;
   }
 
