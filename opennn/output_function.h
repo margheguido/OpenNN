@@ -55,7 +55,7 @@ public:
   //it calculates the derivative of the solution outputs wrt neural network one (tau)
   //#columns: number of instances
   //#rows: number of outputs
-  Matrix<double> gradient_outputs(const Matrix<double>& single_output, const Matrix<double>& solution_outputs);
+  Matrix<double> gradient_outputs(const Matrix<double>& single_output, const Matrix<double>& solution_outputs) const;
 
 
   //  this function calculate the solution outputs given the neural network one (tau)
@@ -75,12 +75,12 @@ public:
   // --------------------------------------------------------------------------
 
   // OLD:
-  // double calculate_selection_error();
   // double calculate_training_error(const Vector<double>& parameters);
   // double calculate_batch_error(const Vector<size_t>& batch_indices);
-  // Matrix<double> calculate_output_gradient(const Matrix<double>& outputs, const Matrix<double>& targets);
 
   double calculate_training_error() const override;
+  double calculate_selection_error() const override;
+  Matrix<double> calculate_output_gradient(const Matrix<double>& outputs, const Matrix<double>& targets) const override;
 
 private:
 

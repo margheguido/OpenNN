@@ -4,7 +4,7 @@
 namespace OpenNN
 {
 
-  Matrix<double> OutputFunction::gradient_outputs(const Matrix<double>& single_output, const Matrix<double>& solution_outputs)
+  Matrix<double> OutputFunction::gradient_outputs(const Matrix<double>& single_output, const Matrix<double>& solution_outputs) const
   {
     size_t nIstances = single_output.get_rows_number();
     size_t nOutputs = isoglib_interface_pointer->get_nDof();
@@ -73,12 +73,6 @@ namespace OpenNN
 
   double OutputFunction::calculate_training_error() const
   {
-  #ifdef __OPENNN_DEBUG__
-
-  check();
-
-  #endif
-
       // Multilayer perceptron
 
       const MultilayerPerceptron* multilayer_perceptron_pointer = neural_network_pointer->get_multilayer_perceptron_pointer();
@@ -109,6 +103,64 @@ namespace OpenNN
       }
 
       return training_error/normalization_coefficient;
+  }
+
+
+  double OutputFunction::calculate_selection_error() const
+  {
+      // Multilayer perceptron
+
+      const MultilayerPerceptron* multilayer_perceptron_pointer = neural_network_pointer->get_multilayer_perceptron_pointer();
+
+      // Data set
+
+      const Vector< Vector<size_t> > selection_batches = data_set_pointer->get_instances_pointer()->get_selection_batches(batch_size);
+
+      const size_t batches_number = selection_batches.size();
+
+      double selection_error = 0.0;
+
+      #pragma omp parallel for reduction(+ : selection_error)
+
+      for(int i = 0; i < static_cast<int>(batches_number); i++)
+      {
+          const Matrix<double> inputs = data_set_pointer->get_inputs(selection_batches[static_cast<unsigned>(i)]);
+          const Matrix<double> targets = data_set_pointer->get_targets(selection_batches[static_cast<unsigned>(i)]);
+
+          const Matrix<double> stabilization_parameters = multilayer_perceptron_pointer->calculate_outputs(inputs);
+
+          // IMPORTANT: here the solution of the PDE is computed using tau (the outputs of the network)
+          Matrix<double> PDE_solutions = calculate_solution_outputs(stabilization_parameters);
+
+          const double batch_error = PDE_solutions.calculate_sum_squared_error(targets);
+
+          selection_error += batch_error;
+      }
+
+      return selection_error/selection_normalization_coefficient;
+  }
+
+
+  Matrix<double> OutputFunction::calculate_output_gradient(const Matrix<double>& outputs, const Matrix<double>& targets) const
+  {
+      Matrix<double> our_outputs = calculate_solution_outputs(outputs);
+
+      Matrix<double> gradient_our_outputs = gradient_outputs(outputs,our_outputs);
+
+      Matrix<double> deriv_loss = our_outputs-targets;
+
+      Matrix<double> result;
+
+      result.set(deriv_loss.get_rows_number(),1);
+
+      for (int i=0; i< deriv_loss.get_rows_number(); i++)
+      {
+          double temp_res= deriv_loss.get_row(i).dot(gradient_our_outputs.get_column(i));
+
+          result(i,0)=temp_res;
+      }
+
+      return result;
   }
 
 }
