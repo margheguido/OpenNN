@@ -80,7 +80,8 @@ public:
   // double calculate_training_error(const Vector<double>& parameters);
   // double calculate_batch_error(const Vector<size_t>& batch_indices);
 
-  double calculate_training_error() const override;
+  double calculate_training_error() const override; // called only in epoch 0 directly in gradient descent
+  double calculate_training_error(const Vector<double>&) const override; // called from epoch 1 while calculating directional points
   double calculate_selection_error() const override;
   Matrix<double> calculate_output_gradient(const Matrix<double>& outputs, const Matrix<double>& targets) const override;
 

@@ -96,10 +96,45 @@ namespace OpenNN
           const Matrix<double> inputs = data_set_pointer->get_inputs(training_batches[static_cast<unsigned>(i)]);
           const Matrix<double> targets = data_set_pointer->get_targets(training_batches[static_cast<unsigned>(i)]);
 
-          const Matrix<double> stabilization_parameters = multilayer_perceptron_pointer->calculate_outputs(inputs);
+          const Matrix<double> outputs = multilayer_perceptron_pointer->calculate_outputs(inputs);
 
           // IMPORTANT: here the solution of the PDE is computed using tau (the outputs of the network)
-          Matrix<double> PDE_solutions = calculate_solution_outputs(stabilization_parameters);
+          Matrix<double> PDE_solutions = calculate_solution_outputs(outputs);
+
+          const double batch_error = PDE_solutions.calculate_sum_squared_error(targets);
+
+          training_error += batch_error;
+      }
+
+      return training_error/normalization_coefficient;
+  }
+
+
+  double OutputFunction::calculate_training_error(const Vector<double>& parameters) const
+  {
+      // Multilayer perceptron
+
+      const MultilayerPerceptron* multilayer_perceptron_pointer = neural_network_pointer->get_multilayer_perceptron_pointer();
+
+      // Data set
+
+      const Vector< Vector<size_t> > training_batches = data_set_pointer->get_instances_pointer()->get_training_batches(batch_size);
+
+      const size_t batches_number = training_batches.size();
+
+      double training_error = 0.0;
+
+      #pragma omp parallel for reduction(+ : training_error)
+
+      for(int i = 0; i < static_cast<int>(batches_number); i++)
+      {
+          const Matrix<double> inputs = data_set_pointer->get_inputs(training_batches[static_cast<unsigned>(i)]);
+          const Matrix<double> targets = data_set_pointer->get_targets(training_batches[static_cast<unsigned>(i)]);
+
+          const Matrix<double> outputs = multilayer_perceptron_pointer->calculate_outputs(inputs, parameters);
+
+          // IMPORTANT: here the solution of the PDE is computed using tau (the outputs of the network)
+          Matrix<double> PDE_solutions = calculate_solution_outputs(outputs);
 
           const double batch_error = PDE_solutions.calculate_sum_squared_error(targets);
 
@@ -131,10 +166,10 @@ namespace OpenNN
           const Matrix<double> inputs = data_set_pointer->get_inputs(selection_batches[static_cast<unsigned>(i)]);
           const Matrix<double> targets = data_set_pointer->get_targets(selection_batches[static_cast<unsigned>(i)]);
 
-          const Matrix<double> stabilization_parameters = multilayer_perceptron_pointer->calculate_outputs(inputs);
+          const Matrix<double> outputs = multilayer_perceptron_pointer->calculate_outputs(inputs);
 
           // IMPORTANT: here the solution of the PDE is computed using tau (the outputs of the network)
-          Matrix<double> PDE_solutions = calculate_solution_outputs(stabilization_parameters);
+          Matrix<double> PDE_solutions = calculate_solution_outputs(outputs);
 
           const double batch_error = PDE_solutions.calculate_sum_squared_error(targets);
 
