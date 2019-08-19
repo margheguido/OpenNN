@@ -19,6 +19,7 @@
 #include "matrix.h"
 #include "Problem.hpp"
 #include "TimeAdvancing.hpp"
+#include "DefSolutionState.hpp"
 #include "TestCase.hpp"
 #include "local_matrix.hpp"
 #include "SUPGLocalMatrix.hpp"
@@ -45,7 +46,7 @@ public:
   // Default constructor
   IsoglibInterface()
   {
-    localMatrix_pointer= new supg_local_matrix;
+    localMatrix_pointer = new supg_local_matrix;
     set_problem_resolution();
   }
 
@@ -58,7 +59,8 @@ public:
   void set_problem_resolution();
   Vector<double> calculate_solution(double tau);
   size_t get_nDof() const { return nDof; };
-  void set_nDof(size_t n){ nDof=n; };
+
+  void set_nDof(size_t n){ nDof = n; };
 
 private:
 
@@ -79,7 +81,7 @@ private:
 
   TimeAdvancing timeAdvancing;
 
-  supg_local_matrix  * localMatrix_pointer;
+  supg_local_matrix * localMatrix_pointer;
 
   //fill pde_prob and timeAdvancing with the data from the mesh
   void setProblem( const char *dirName, LocalMatrixBase *localMatrix, data_class_interface *data, TestCase::ProblemFunc setupProblem );
@@ -88,8 +90,8 @@ private:
   //it creates a binary file with the solution
   void solveSteady(double tau);
 
-  //reads from a binary file the pde solution and give it back in matrix form
-  Vector<double> load_solution_binary();
+  // //reads from a binary file the pde solution and give it back in matrix form
+  // Vector<double> load_solution_binary();
 
   };
 

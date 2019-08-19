@@ -28,7 +28,7 @@ public:
 
     void diff_coeff( Real *outValues, Real xx, Real yy, Real zz, Real t ) const override
     {
-        outValues[ 0 ] = 0.00001;
+        outValues[ 0 ] = 1;
     }
 
     void beta_coeff( Real *outValues, Real xx, Real yy, Real zz, Real t ) const override

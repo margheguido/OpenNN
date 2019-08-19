@@ -15,11 +15,11 @@ namespace OpenNN
 
     for (int i=0; i< nIstances; i++)
     {
-      double out_value=single_output(i,0);
-      double h=100000;
-      Vector<double> y = calculate_solution_outputs(out_value);
+      double out_value = single_output(i,0);
+      double h = 1;
+      Vector<double> y = isoglib_interface_pointer->calculate_solution(out_value);
       double x_forward = out_value + h;
-      Vector<double> y_forward = calculate_solution_outputs(x_forward);
+      Vector<double> y_forward = isoglib_interface_pointer->calculate_solution(x_forward);
       Vector<double> d = (y_forward - y)/h;
 
       grad_outputs.set_column(i,d);
@@ -30,12 +30,12 @@ namespace OpenNN
 
 
 
- Vector<double> OutputFunction::calculate_solution_outputs(double tau) const
-  {
-   Vector<double> temp_solution = isoglib_interface_pointer->calculate_solution(tau);
-
-   return temp_solution;
-  }
+ // Vector<double> OutputFunction::calculate_solution_outputs(double tau) const
+ //  {
+ //   Vector<double> temp_solution = isoglib_interface_pointer->calculate_solution(tau);
+ //
+ //   return temp_solution;
+ //  }
 
   //  this function calculate the solution outputs given the neural network one (tau)
   // #rows: number of instances (tipacally batch size)

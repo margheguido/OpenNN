@@ -40,7 +40,7 @@ int main()
         // Variables
         Variables* variables_pointer = data_set.get_variables_pointer();
 
-        unsigned nDof = 9; // number of points in which the computed solution is sampled
+        unsigned nDof = 81; // number of points in which the computed solution is sampled (TODO: make nDof read automatically from meshload)
         unsigned number_inputs = 1; // mu
         Vector< Variables::Item > variables_items( nDof + number_inputs );
 
@@ -146,10 +146,13 @@ int main()
           training_strategy.set_training_method( "GRADIENT_DESCENT" ); // STOCHASTIC_GRADIENT_DESCENT, LEVENBERG_MARQUARDT_ALGORITHM, ADAPTIVE_MOMENT_ESTIMATION
           GradientDescent* gradient_descent_method_pointer = training_strategy.get_gradient_descent_pointer();
 
-          gradient_descent_method_pointer->set_maximum_epochs_number(100);
-          gradient_descent_method_pointer->set_display_period(50);
+          gradient_descent_method_pointer->set_maximum_epochs_number(10);
+          gradient_descent_method_pointer->set_display_period(1);
 
           gradient_descent_method_pointer->set_minimum_loss_decrease(1.0e-6);
+
+          // gradient_descent_method_pointer->get_learning_rate_algorithm_pointer()->set_training_rate_method("Fixed");
+
         }
 
         OutputFunction *output_function_pointer = new OutputFunction();
@@ -160,6 +163,9 @@ int main()
 
         output_function_pointer->set_file_names(sol_file);
         output_function_pointer->set_nDof(nDof);
+
+        output_function_pointer->set_normalization_coefficient(1);
+        output_function_pointer->set_selection_normalization_coefficient(1);
 
         output_function_pointer->set_data_set_pointer(&data_set);
 

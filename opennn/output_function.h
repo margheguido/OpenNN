@@ -63,9 +63,9 @@ public:
   // #columns :number of outputs (nodes)
   Matrix<double> calculate_solution_outputs(const Matrix<double>& single_output) const;
 
-  //same function but for only one instance
-  //size of the vector: number of outputs (nodes)
-  Vector<double> calculate_solution_outputs(double tau) const;
+  // //same function but for only one instance
+  // //size of the vector: number of outputs (nodes)
+  // Vector<double> calculate_solution_outputs(double tau) const;
 
   // void print_solution() const;
   void set_file_names( string sol_name);
