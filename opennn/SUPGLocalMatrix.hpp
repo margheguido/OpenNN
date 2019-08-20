@@ -37,7 +37,7 @@ public:
     virtual void evaluate_parameters_on_gauss_point( Real x, Real y, Real z, const ShapeValues &basisValues ) override
     {
         const data_class_interface &data = this->m_solution->getData();
-        data.diff_coeff( &mu, x, y, z, 0.0 );
+        // data.diff_coeff( &mu, x, y, z, 0.0 ); // deleting this line mu is now set from outside (it's assumed constant in space)
         data.beta_coeff( beta, x, y, z, 0.0 );
         data.gamma_coeff( &gamma, x, y, z, 0.0 );
         data.source_term( &fff, x, y, z, 0.0 );
