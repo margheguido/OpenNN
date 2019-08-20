@@ -61,7 +61,7 @@ public:
   //  this function calculate the solution outputs given the neural network one (tau)
   // #rows: number of instances (tipacally batch size)
   // #columns :number of outputs (nodes)
-  Matrix<double> calculate_solution_outputs(const Matrix<double>& single_output) const;
+  Matrix<double> calculate_solution_outputs(const Matrix<double>& single_output, const Matrix<double> & inputs) const;
 
   // //same function but for only one instance
   // //size of the vector: number of outputs (nodes)

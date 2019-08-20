@@ -18,9 +18,9 @@ namespace OpenNN
   }
 
 
-  Vector <double> IsoglibInterface::calculate_solution(double tau)
+  Vector <double> IsoglibInterface::calculate_solution(double tau, double mu)
   {
-    solveSteady(tau);
+    solveSteady(tau,mu);
 
     // Load solution from isoglib
     SolutionState * solution_state_pointer = timeAdvancing.getCurState();
@@ -71,7 +71,7 @@ namespace OpenNN
   }
 
 
-  void IsoglibInterface::solveSteady(double tau)
+  void IsoglibInterface::solveSteady(double tau,double mu)
   {
     auto setupProblem = [&]( Problem *problem ) {
         problem->getSolverParams().solverType = DIRECT;
@@ -79,6 +79,7 @@ namespace OpenNN
 
     // set stabilization parameter
     localMatrix_pointer->set_tau(tau);
+    localMatrix_pointer->set_mu(mu);
     // pde_prob.setLocalMatrix(localMatrix_pointer);
     // timeAdvancing.setup( &pde_prob, 1, 0 );
     // pde_prob.setTimeAdvancingScheme( &timeAdvancing );

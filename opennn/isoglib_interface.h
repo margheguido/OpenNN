@@ -57,7 +57,7 @@ public:
 
   void set_file_names(string sol_name);
   void set_problem_resolution();
-  Vector<double> calculate_solution(double tau);
+  Vector<double> calculate_solution(double tau, double mu);
   size_t get_nDof() const { return nDof; };
 
   void set_nDof(size_t n){ nDof = n; };
@@ -88,7 +88,7 @@ private:
 
   //assembly the local matrix and
   //it creates a binary file with the solution
-  void solveSteady(double tau);
+  void solveSteady(double tau,double mu);
 
   // //reads from a binary file the pde solution and give it back in matrix form
   // Vector<double> load_solution_binary();

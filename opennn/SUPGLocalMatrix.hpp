@@ -13,14 +13,19 @@ protected:
     typedef typename LocalMatrixFast<1>::ValueMatrix ValueMatrix;
 
     // parameters
-    Real mu, beta[ 3 ], gamma, fff;
-    double tau;
+    Real  beta[ 3 ], gamma, fff;
+    double tau, mu;
 
 public:
 
     void set_tau(double t)
     {
       tau=t;
+    }
+
+    void set_mu(double m)
+    {
+      mu=m;
     }
 
     supg_local_matrix():

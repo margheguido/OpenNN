@@ -9,17 +9,22 @@ namespace OpenNN
     size_t nIstances = single_output.get_rows_number();
     size_t nOutputs = isoglib_interface_pointer->get_nDof();
 
+    Matrix<double> train_inputs = data_set_pointer->get_training_inputs();
+
+
     Matrix<double> grad_outputs(nOutputs,nIstances);
     //#columns: number of instances
     //#rows: number of outputs
 
     for (int i=0; i< nIstances; i++)
     {
+      double in_value = train_inputs(i,0);
       double out_value = single_output(i,0);
+
       double h = 1;
-      Vector<double> y = isoglib_interface_pointer->calculate_solution(out_value);
+      Vector<double> y = isoglib_interface_pointer->calculate_solution(out_value,in_value);
       double x_forward = out_value + h;
-      Vector<double> y_forward = isoglib_interface_pointer->calculate_solution(x_forward);
+      Vector<double> y_forward = isoglib_interface_pointer->calculate_solution(x_forward,in_value);
       Vector<double> d = (y_forward - y)/h;
 
       grad_outputs.set_column(i,d);
@@ -40,17 +45,21 @@ namespace OpenNN
   //  this function calculate the solution outputs given the neural network one (tau)
   // #rows: number of instances (tipacally batch size)
   // #columns :number of outputs (nodes)
-  Matrix<double> OutputFunction::calculate_solution_outputs(const Matrix<double>& single_output) const
+  Matrix<double> OutputFunction::calculate_solution_outputs(const Matrix<double>& single_output, const Matrix<double> & inputs) const
   {
     size_t nIstances = single_output.get_rows_number();
     size_t nOutputs = isoglib_interface_pointer->get_nDof();
+
+
+
     Matrix<double> sol_outputs(nIstances, nOutputs);
 
     for (size_t i=0; i < nIstances; i++)
     {
+      Real mu = inputs(i,0);
       Real tau = single_output(i,0);
-      Vector<double> temp_solution = isoglib_interface_pointer->calculate_solution(tau);
-      sol_outputs.set_row(i,temp_solution);
+      Vector<double> temp_solution = isoglib_interface_pointer->calculate_solution(tau, mu);
+      sol_outputs.set_row(i, temp_solution);
     }
 
     return sol_outputs;
@@ -99,7 +108,7 @@ namespace OpenNN
           const Matrix<double> outputs = multilayer_perceptron_pointer->calculate_outputs(inputs);
 
           // IMPORTANT: here the solution of the PDE is computed using tau (the outputs of the network)
-          Matrix<double> PDE_solutions = calculate_solution_outputs(outputs);
+          Matrix<double> PDE_solutions = calculate_solution_outputs(outputs,inputs);
 
           const double batch_error = PDE_solutions.calculate_sum_squared_error(targets);
 
@@ -134,7 +143,7 @@ namespace OpenNN
           const Matrix<double> outputs = multilayer_perceptron_pointer->calculate_outputs(inputs, parameters);
 
           // IMPORTANT: here the solution of the PDE is computed using tau (the outputs of the network)
-          Matrix<double> PDE_solutions = calculate_solution_outputs(outputs);
+          Matrix<double> PDE_solutions = calculate_solution_outputs(outputs,inputs);
 
           const double batch_error = PDE_solutions.calculate_sum_squared_error(targets);
 
@@ -169,7 +178,7 @@ namespace OpenNN
           const Matrix<double> outputs = multilayer_perceptron_pointer->calculate_outputs(inputs);
 
           // IMPORTANT: here the solution of the PDE is computed using tau (the outputs of the network)
-          Matrix<double> PDE_solutions = calculate_solution_outputs(outputs);
+          Matrix<double> PDE_solutions = calculate_solution_outputs(outputs,inputs);
 
           const double batch_error = PDE_solutions.calculate_sum_squared_error(targets);
 
@@ -182,7 +191,8 @@ namespace OpenNN
 
   Matrix<double> OutputFunction::calculate_output_gradient(const Matrix<double>& outputs, const Matrix<double>& targets) const
   {
-      Matrix<double> our_outputs = calculate_solution_outputs(outputs);
+      const Matrix<double> train_inputs = data_set_pointer->get_training_inputs();
+      Matrix<double> our_outputs = calculate_solution_outputs(outputs,train_inputs);
 
       Matrix<double> gradient_our_outputs = gradient_outputs(outputs,our_outputs);
 
