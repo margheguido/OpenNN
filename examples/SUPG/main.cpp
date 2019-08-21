@@ -80,17 +80,6 @@ int main()
         //   std::cout << testing_indices[i] << " " << std::endl;
 
 
-        // calls Vector< Statistics<double> > DataSet::scale_inputs_minimum_maximum()
-        // dim(inputs_statistics) = #inputs, la funzione scala tutte le colonne del DataSet
-        // che corrispondono ad input e per farlo ne calcola le statistiche (min, max, mean...)
-        // che poi restituisce in modo da averle a disposizione senza ricalcolarle
-        const Vector< Statistics<double> > inputs_statistics = data_set.scale_inputs_minimum_maximum();
-        // const Vector< Statistics<double> > targets_statistics = data_set.scale_targets_minimum_maximum();
-        // Matrix<double> targ=data_set.get_targets();
-        // cout <<"scaled targets"<<endl;
-        // targ.print();
-        
-
         // Neural network
 
         const size_t inputs_number = variables_pointer->get_inputs_number();
@@ -165,14 +154,8 @@ int main()
 
         output_function_pointer->get_isoglib_interface_pointer()->set_nDof(nDof);
 
-        // Load the data set again and save the original inputs inside OutputFunction
-        DataSet data_set_with_unscaled_inputs;
-        data_set_with_unscaled_inputs.set_header_line(true); // Our data set has a name for every column
-        data_set_with_unscaled_inputs.set_data_file_name("data/SUPG.txt");
-        data_set_with_unscaled_inputs.set_file_type("txt");
-        data_set_with_unscaled_inputs.set_separator("Tab");
-        data_set_with_unscaled_inputs.load_data();
-        output_function_pointer->set_unscaled_inputs(data_set_with_unscaled_inputs.get_inputs());
+        // Save the original inputs inside OutputFunction before scaling them for the neural network
+        output_function_pointer->set_unscaled_inputs(data_set.get_inputs());
 
         output_function_pointer->set_normalization_coefficient(1);
         output_function_pointer->set_selection_normalization_coefficient(1);
@@ -182,6 +165,16 @@ int main()
         output_function_pointer->set_neural_network_pointer(&neural_network);
 
         training_strategy.set_loss_index_pointer(output_function_pointer);
+
+        // calls Vector< Statistics<double> > DataSet::scale_inputs_minimum_maximum()
+        // dim(inputs_statistics) = #inputs, la funzione scala tutte le colonne del DataSet
+        // che corrispondono ad input e per farlo ne calcola le statistiche (min, max, mean...)
+        // che poi restituisce in modo da averle a disposizione senza ricalcolarle
+        const Vector< Statistics<double> > inputs_statistics = data_set.scale_inputs_minimum_maximum();
+        // const Vector< Statistics<double> > targets_statistics = data_set.scale_targets_minimum_maximum();
+        // Matrix<double> targ=data_set.get_targets();
+        // cout <<"scaled targets"<<endl;
+        // targ.print();
 
         // // Senza senso: set_loss_index_pointer e get_loss_index_pointer si riferiscono a cose diverse
         // // (OptimizationAlgorithm::loss_index_pointer e TrainingStrategy::normalized_squared_error_pointer; il secondo sembra inutile)
