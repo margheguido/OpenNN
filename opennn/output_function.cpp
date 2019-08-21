@@ -4,81 +4,54 @@
 namespace OpenNN
 {
 
-  Matrix<double> OutputFunction::gradient_outputs(const Matrix<double>& single_output, const Matrix<double>& solution_outputs) const
+  /// \param      tau_values          Stabilization parameters [batch_size x 1]
+  /// \return                         Derivative of the PDE solution wrt the stabilization parameter [batch_size x n_Dof]
+  Matrix<double> OutputFunction::calculate_PDE_solutions_derivative(const Matrix<double>& tau_values) const
   {
-    size_t nIstances = single_output.get_rows_number();
-    size_t nOutputs = isoglib_interface_pointer->get_nDof();
-
-    Matrix<double> train_inputs = data_set_pointer->get_training_inputs();
-
-
-    Matrix<double> grad_outputs(nOutputs,nIstances);
-    //#columns: number of instances
-    //#rows: number of outputs
-
-    for (int i=0; i< nIstances; i++)
-    {
-      double in_value = train_inputs(i,0);
-      double out_value = single_output(i,0);
-
-      double h = 1;
-      Vector<double> y = isoglib_interface_pointer->calculate_solution(out_value,in_value);
-      double x_forward = out_value + h;
-      Vector<double> y_forward = isoglib_interface_pointer->calculate_solution(x_forward,in_value);
-      Vector<double> d = (y_forward - y)/h;
-
-      grad_outputs.set_column(i,d);
-    }
-
-    return grad_outputs;
+    // size_t nOutputs = isoglib_interface_pointer->get_nDof();
+    //
+    // const Matrix<double> unscaled_inputs = compute_unscaled_inputs();
+    //
+    // Matrix<double> grad_outputs(nOutputs, batch_size);
+    // //#columns: number of instances
+    // //#rows: number of outputs
+    //
+    // for (int i=0; i< batch_size; i++)
+    // {
+    //   double in_value = unscaled_train_inputs(i,0);
+    //   double out_value = tau_values(i,0);
+    //
+    //   double h = 1;
+    //   Vector<double> y = isoglib_interface_pointer->calculate_solution(out_value,in_value);
+    //   double x_forward = out_value + h;
+    //   Vector<double> y_forward = isoglib_interface_pointer->calculate_solution(x_forward,in_value);
+    //   Vector<double> d = (y_forward - y)/h;
+    //
+    //   grad_outputs.set_column(i,d);
+    // }
+    //
+    // return grad_outputs;
  }
 
 
-
- // Vector<double> OutputFunction::calculate_solution_outputs(double tau) const
- //  {
- //   Vector<double> temp_solution = isoglib_interface_pointer->calculate_solution(tau);
- //
- //   return temp_solution;
- //  }
-
-  //  this function calculate the solution outputs given the neural network one (tau)
-  // #rows: number of instances (tipacally batch size)
-  // #columns :number of outputs (nodes)
-  Matrix<double> OutputFunction::calculate_solution_outputs(const Matrix<double>& single_output, const Matrix<double> & inputs) const
+  /// \param      tau_values        Stabilization parameters [batch_size x 1]
+  /// \param      batch_indices     Indeces of the current batch, used to select the inputs [batch_size]
+  /// \return                       PDE solutions [batch_size x n_Dof]
+  Matrix<double> OutputFunction::calculate_PDE_solutions(const Matrix<double>& tau_values, const Vector<size_t> & batch_indices) const
   {
-    size_t nIstances = single_output.get_rows_number();
-    size_t nOutputs = isoglib_interface_pointer->get_nDof();
+    size_t dofs_number = isoglib_interface_pointer->get_nDof();
+    Matrix<double> solutions(batch_size, dofs_number);
 
-
-
-    Matrix<double> sol_outputs(nIstances, nOutputs);
-
-    for (size_t i=0; i < nIstances; i++)
+    for (size_t i = 0; i < batch_size; i++)
     {
-      Real mu = inputs(i,0);
-      Real tau = single_output(i,0);
+      Real mu = unscaled_inputs(batch_indices[i], 0);
+      Real tau = tau_values(batch_indices[i], 0);
       Vector<double> temp_solution = isoglib_interface_pointer->calculate_solution(tau, mu);
-      sol_outputs.set_row(i, temp_solution);
+      solutions.set_row(i, temp_solution);
     }
 
-    return sol_outputs;
+    return solutions;
   }
-
-  void OutputFunction::set_file_names( string sol_name)
-  {
-    isoglib_interface_pointer->set_file_names(sol_name);
-  }
-
-  void OutputFunction::set_nDof(size_t n)
-  {
-    isoglib_interface_pointer->set_nDof(n);
-  }
-  // void OutputFunction::print_solution() const
-  // {
-  //   solution_stab.print();
-  // }
-
 
 // --------------------------------------------------------------------------
 // Overridden methods from NormalizedquaredError
@@ -108,7 +81,7 @@ namespace OpenNN
           const Matrix<double> outputs = multilayer_perceptron_pointer->calculate_outputs(inputs);
 
           // IMPORTANT: here the solution of the PDE is computed using tau (the outputs of the network)
-          Matrix<double> PDE_solutions = calculate_solution_outputs(outputs,inputs);
+          Matrix<double> PDE_solutions = calculate_PDE_solutions(outputs, training_batches[static_cast<unsigned>(i)]);
 
           const double batch_error = PDE_solutions.calculate_sum_squared_error(targets);
 
@@ -143,7 +116,7 @@ namespace OpenNN
           const Matrix<double> outputs = multilayer_perceptron_pointer->calculate_outputs(inputs, parameters);
 
           // IMPORTANT: here the solution of the PDE is computed using tau (the outputs of the network)
-          Matrix<double> PDE_solutions = calculate_solution_outputs(outputs,inputs);
+          Matrix<double> PDE_solutions = calculate_PDE_solutions(outputs, training_batches[static_cast<unsigned>(i)]);
 
           const double batch_error = PDE_solutions.calculate_sum_squared_error(targets);
 
@@ -178,7 +151,7 @@ namespace OpenNN
           const Matrix<double> outputs = multilayer_perceptron_pointer->calculate_outputs(inputs);
 
           // IMPORTANT: here the solution of the PDE is computed using tau (the outputs of the network)
-          Matrix<double> PDE_solutions = calculate_solution_outputs(outputs,inputs);
+          Matrix<double> PDE_solutions = calculate_PDE_solutions(outputs, selection_batches[static_cast<unsigned>(i)]);
 
           const double batch_error = PDE_solutions.calculate_sum_squared_error(targets);
 
@@ -191,25 +164,25 @@ namespace OpenNN
 
   Matrix<double> OutputFunction::calculate_output_gradient(const Matrix<double>& outputs, const Matrix<double>& targets) const
   {
-      const Matrix<double> train_inputs = data_set_pointer->get_training_inputs();
-      Matrix<double> our_outputs = calculate_solution_outputs(outputs,train_inputs);
-
-      Matrix<double> gradient_our_outputs = gradient_outputs(outputs,our_outputs);
-
-      Matrix<double> deriv_loss = our_outputs-targets;
-
-      Matrix<double> result;
-
-      result.set(deriv_loss.get_rows_number(),1);
-
-      for (int i=0; i< deriv_loss.get_rows_number(); i++)
-      {
-          double temp_res= deriv_loss.get_row(i).dot(gradient_our_outputs.get_column(i));
-
-          result(i,0)=temp_res;
-      }
-
-      return result;
+      // const Matrix<double> train_inputs = data_set_pointer->get_training_inputs();
+      // // Matrix<double> our_outputs = calculate_PDE_solutions(outputs,train_inputs);
+      //
+      // Matrix<double> gradient_our_outputs = calculate_PDE_solutions_derivative(outputs);
+      //
+      // Matrix<double> deriv_loss = our_outputs-targets;
+      //
+      // Matrix<double> result;
+      //
+      // result.set(deriv_loss.get_rows_number(),1);
+      //
+      // for (int i=0; i< deriv_loss.get_rows_number(); i++)
+      // {
+      //     double temp_res= deriv_loss.get_row(i).dot(gradient_our_outputs.get_column(i));
+      //
+      //     result(i,0)=temp_res;
+      // }
+      //
+      // return result;
   }
 
 }

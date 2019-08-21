@@ -52,25 +52,15 @@ public:
     delete isoglib_interface_pointer;
   }
 
-  //it calculates the derivative of the solution outputs wrt neural network one (tau)
-  //#columns: number of instances
-  //#rows: number of outputs
-  Matrix<double> gradient_outputs(const Matrix<double>& single_output, const Matrix<double>& solution_outputs) const;
+  /// Calculates the derivative of the PDE solution wrt the stabilization parameter
+  Matrix<double> calculate_PDE_solutions_derivative(const Matrix<double>& tau_values) const;
 
+  /// Calculates the solution of the PDE given the stabilization parameter predicted by the neural network
+  Matrix<double> calculate_PDE_solutions(const Matrix<double>& tau_values, const Vector<size_t> & batch_indices) const;
 
-  //  this function calculate the solution outputs given the neural network one (tau)
-  // #rows: number of instances (tipacally batch size)
-  // #columns :number of outputs (nodes)
-  Matrix<double> calculate_solution_outputs(const Matrix<double>& single_output, const Matrix<double> & inputs) const;
+  IsoglibInterface * get_isoglib_interface_pointer() { return isoglib_interface_pointer; };
 
-  // //same function but for only one instance
-  // //size of the vector: number of outputs (nodes)
-  // Vector<double> calculate_solution_outputs(double tau) const;
-
-  // void print_solution() const;
-  void set_file_names( string sol_name);
-
-  void set_nDof(size_t n);
+  void set_unscaled_inputs(const Matrix<double>& values) { unscaled_inputs = values; };
 
   // --------------------------------------------------------------------------
   // Overridden methods from NormalizedSquaredError
@@ -81,13 +71,15 @@ public:
   // double calculate_batch_error(const Vector<size_t>& batch_indices);
 
   double calculate_training_error() const override; // called only in epoch 0 directly in gradient descent
-  double calculate_training_error(const Vector<double>&) const override; // called from epoch 1 while calculating directional points
+  double calculate_training_error(const Vector<double>& parameters) const override; // called from epoch 1 while calculating directional points
   double calculate_selection_error() const override;
   Matrix<double> calculate_output_gradient(const Matrix<double>& outputs, const Matrix<double>& targets) const override;
 
 private:
 
   IsoglibInterface *isoglib_interface_pointer;
+
+  Matrix<double> unscaled_inputs;
 
   };
 

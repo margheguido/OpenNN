@@ -85,11 +85,11 @@ int main()
         // che corrispondono ad input e per farlo ne calcola le statistiche (min, max, mean...)
         // che poi restituisce in modo da averle a disposizione senza ricalcolarle
         const Vector< Statistics<double> > inputs_statistics = data_set.scale_inputs_minimum_maximum();
-        const Vector< Statistics<double> > targets_statistics = data_set.scale_targets_minimum_maximum();
+        // const Vector< Statistics<double> > targets_statistics = data_set.scale_targets_minimum_maximum();
         // Matrix<double> targ=data_set.get_targets();
         // cout <<"scaled targets"<<endl;
         // targ.print();
-
+        
 
         // Neural network
 
@@ -109,21 +109,24 @@ int main()
 
         outputs->set_information(targets_information);
 
-        neural_network.construct_scaling_layer();
+        // // Updates OutputFunction::inputs_statistics_for_unscaling
+        // neural_network.get_loss_index_pointer->set_inputs_statistics_for_unscaling( inputs_statistics );
 
-        ScalingLayer* scaling_layer_pointer = neural_network.get_scaling_layer_pointer();
-        // std::cout << "Number of inputs in scaling: " << scaling_layer_pointer->get_scaling_neurons_number() << std::endl;
-        scaling_layer_pointer->set_statistics(inputs_statistics);
+        // neural_network.construct_scaling_layer();
+        //
+        // ScalingLayer* scaling_layer_pointer = neural_network.get_scaling_layer_pointer();
+        // // std::cout << "Number of inputs in scaling: " << scaling_layer_pointer->get_scaling_neurons_number() << std::endl;
+        // scaling_layer_pointer->set_statistics(inputs_statistics);
+        //
+        // // scaling_layer_pointer->set_scaling_methods(ScalingLayer::NoScaling);
+        // // scaling_layer_pointer->set_scaling_methods(ScalingLayer::MeanStandardDeviation);
+        // neural_network.construct_unscaling_layer();
+        //
+        // UnscalingLayer* unscaling_layer_pointer = neural_network.get_unscaling_layer_pointer();
+        //
+        // unscaling_layer_pointer->set_statistics(targets_statistics);
 
-        scaling_layer_pointer->set_scaling_methods(ScalingLayer::NoScaling);
-        // scaling_layer_pointer->set_scaling_methods(ScalingLayer::MeanStandardDeviation);
-        neural_network.construct_unscaling_layer();
-
-        UnscalingLayer* unscaling_layer_pointer = neural_network.get_unscaling_layer_pointer();
-
-        unscaling_layer_pointer->set_statistics(targets_statistics);
-
-        unscaling_layer_pointer->set_unscaling_method(UnscalingLayer::NoUnscaling);
+        // unscaling_layer_pointer->set_unscaling_method(UnscalingLayer::NoUnscaling);
         // unscaling_layer_pointer->set_unscaling_method(UnscalingLayer::MeanStandardDeviation);
 
 
@@ -160,9 +163,16 @@ int main()
 
         string sol_file = "data/Data_GuidoVidulisADRExactSol_p1_ref3/solState_node000_000000.dat";
 
+        output_function_pointer->get_isoglib_interface_pointer()->set_nDof(nDof);
 
-        output_function_pointer->set_file_names(sol_file);
-        output_function_pointer->set_nDof(nDof);
+        // Load the data set again and save the original inputs inside OutputFunction
+        DataSet data_set_with_unscaled_inputs;
+        data_set_with_unscaled_inputs.set_header_line(true); // Our data set has a name for every column
+        data_set_with_unscaled_inputs.set_data_file_name("data/SUPG.txt");
+        data_set_with_unscaled_inputs.set_file_type("txt");
+        data_set_with_unscaled_inputs.set_separator("Tab");
+        data_set_with_unscaled_inputs.load_data();
+        output_function_pointer->set_unscaled_inputs(data_set_with_unscaled_inputs.get_inputs());
 
         output_function_pointer->set_normalization_coefficient(1);
         output_function_pointer->set_selection_normalization_coefficient(1);

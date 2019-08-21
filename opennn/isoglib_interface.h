@@ -55,7 +55,6 @@ public:
     delete localMatrix_pointer;
   }
 
-  void set_file_names(string sol_name);
   void set_problem_resolution();
   Vector<double> calculate_solution(double tau, double mu);
   size_t get_nDof() const { return nDof; };
@@ -67,9 +66,6 @@ private:
   //name of the test directories in isoglib
    const char *directory_name = "data/Data_GuidoVidulisADRExactSol_p1_ref3";
   //Data_GuidoVidulisSUPGExactSol_p1_ref2
-
-  //name of the binary file
-  string solution_file_name;
 
   //number of points in which isoglib calculate the solution
   size_t nDof; //ref3 81, ref2 25
@@ -90,8 +86,6 @@ private:
   //it creates a binary file with the solution
   void solveSteady(double tau,double mu);
 
-  // //reads from a binary file the pde solution and give it back in matrix form
-  // Vector<double> load_solution_binary();
 
   };
 

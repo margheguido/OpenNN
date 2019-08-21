@@ -20,7 +20,8 @@ namespace OpenNN
 
   Vector <double> IsoglibInterface::calculate_solution(double tau, double mu)
   {
-    solveSteady(tau,mu);
+    solveSteady(tau, mu);
+    // solveSteady(0.005,0.0005);
 
     // Load solution from isoglib
     SolutionState * solution_state_pointer = timeAdvancing.getCurState();
@@ -31,6 +32,20 @@ namespace OpenNN
     {
       solution[i] = current_solution_pointer->getData()[i];
     }
+
+    std::cout << '\n' << '\n';
+    std::cout << "tau: " << tau << '\n';
+    std::cout << "solution:" << '\n';
+    unsigned sqrt_n_Dof = 9;
+    for( size_t i = sqrt_n_Dof-1; i >= 0 && i < sqrt_n_Dof; i-- )
+    {
+      for( unsigned j = 0; j < sqrt_n_Dof; j++ )
+      {
+        std::cout << std::setw(10) << solution[i*sqrt_n_Dof+j] << "  ";
+      }
+      std::cout << '\n';
+    }
+
     return solution;
   }
 
@@ -71,9 +86,10 @@ namespace OpenNN
   }
 
 
-  void IsoglibInterface::solveSteady(double tau,double mu)
+  void IsoglibInterface::solveSteady(double tau, double mu)
   {
-    auto setupProblem = [&]( Problem *problem ) {
+    auto setupProblem = [&]( Problem *problem )
+    {
         problem->getSolverParams().solverType = DIRECT;
     };
 
@@ -84,50 +100,8 @@ namespace OpenNN
     // timeAdvancing.setup( &pde_prob, 1, 0 );
     // pde_prob.setTimeAdvancingScheme( &timeAdvancing );
 
-        setupProblem( &pde_prob );
+    setupProblem( &pde_prob );
     pde_prob.computeTimestep(false);
   }
-
-
-  void IsoglibInterface::set_file_names( string sol_name)
-  {
-    solution_file_name = sol_name;
-  }
-
-
-  // //reads from a binary file the pde solution and give it back in matrix form
-  // Vector<double> IsoglibInterface::load_solution_binary()
-  // {
-  //   ifstream file;
-  //   file.open(solution_file_name.c_str(), ios::binary);
-  //
-  //   if(!file.is_open())
-  //   {
-  //       ostringstream buffer;
-  //
-  //       buffer << "OpenNN Exception: IsoglibInterface class.\n"
-  //              << "void load_solution_binary() method.\n"
-  //              << "Cannot open data file: " << solution_file_name << "\n";
-  //
-  //       throw logic_error(buffer.str());
-  //   }
-  //
-  //   streamsize size = sizeof(size_t);
-  //   size = sizeof(double);
-  //   double value;
-  //   Vector<double> solution_stab;
-  //   solution_stab.set(nDof); //vector of the solution
-  //
-  //   for(size_t i = 0; i < nDof; i++)
-  //   {
-  //       file.read(reinterpret_cast<char*>(&value), size);
-  //
-  //       solution_stab[i] = value;
-  //   }
-  //
-  //   file.close();
-  //   return solution_stab;
-  // }
-
 
 }
