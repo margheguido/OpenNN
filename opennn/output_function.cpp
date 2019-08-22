@@ -4,6 +4,28 @@
 namespace OpenNN
 {
 
+  /// \param      tau_values        Stabilization parameters [current_batch_size x 1]
+  /// \param      batch_indices     Indeces of the current batch, used to select the inputs [current_batch_size]
+  /// \return                       PDE solutions [current_batch_size x n_Dof]
+  Matrix<double> OutputFunction::calculate_PDE_solution(const Matrix<double>& tau_values, const Vector<size_t> & batch_indices) const
+  {
+      size_t n_Dof = isoglib_interface_pointer->get_nDof();
+      unsigned current_batch_size = batch_indices.size();
+      Matrix<double> solutions(current_batch_size, n_Dof);
+
+      for (size_t i = 0; i < current_batch_size; i++)
+      {
+          Real mu = unscaled_inputs(batch_indices[i], 0);
+          Real tau = tau_values(i, 0);
+
+          Vector<double> temp_solution = isoglib_interface_pointer->calculate_solution(tau, mu);
+
+          solutions.set_row(i, temp_solution);
+      }
+
+      return solutions;
+  }
+
   /// \param      tau_values          Stabilization parameters [current_batch_size x 1]
   /// \return                         Derivative of the PDE solution wrt the stabilization parameter [current_batch_size x n_Dof]
   Matrix<double> OutputFunction::calculate_PDE_solution_derivative(const Matrix<double>& tau_values, const Vector<size_t> & batch_indices) const
@@ -27,30 +49,6 @@ namespace OpenNN
 
       return solutions_derivatives;
   }
-
-
-  /// \param      tau_values        Stabilization parameters [current_batch_size x 1]
-  /// \param      batch_indices     Indeces of the current batch, used to select the inputs [current_batch_size]
-  /// \return                       PDE solutions [current_batch_size x n_Dof]
-  Matrix<double> OutputFunction::calculate_PDE_solution(const Matrix<double>& tau_values, const Vector<size_t> & batch_indices) const
-  {
-      size_t n_Dof = isoglib_interface_pointer->get_nDof();
-      unsigned current_batch_size = batch_indices.size();
-      Matrix<double> solutions(current_batch_size, n_Dof);
-
-      for (size_t i = 0; i < current_batch_size; i++)
-      {
-          Real mu = unscaled_inputs(batch_indices[i], 0);
-          Real tau = tau_values(i, 0);
-
-          Vector<double> temp_solution = isoglib_interface_pointer->calculate_solution(tau, mu);
-
-          solutions.set_row(i, temp_solution);
-      }
-
-      return solutions;
-  }
-
 
   /// \param      tau_values        Stabilization parameters [current_batch_size x 1]
   /// \param      batch_indices     Indeces of the current batch, used to select the inputs [current_batch_size]
