@@ -60,8 +60,8 @@ namespace OpenNN
 
 // DEFAULT CONSTRUCTOR
 
-/// Default constructor. 
-/// It creates a normalized squared error term object not associated to any 
+/// Default constructor.
+/// It creates a normalized squared error term object not associated to any
 /// neural network and not measured on any data set.
 /// It also initializes all the rest of class members to their default values.
 
@@ -73,7 +73,7 @@ NormalizedSquaredError::NormalizedSquaredError() : LossIndex()
 
 // NEURAL NETWORK CONSTRUCTOR
 
-/// Neural network constructor. 
+/// Neural network constructor.
 /// It creates a normalized squared error term associated to a neural network object but not measured on any data set.
 /// It also initializes all the rest of class members to their default values.
 /// @param new_neural_network_pointer Pointer to a neural network object.
@@ -87,13 +87,13 @@ NormalizedSquaredError::NormalizedSquaredError(NeuralNetwork* new_neural_network
 
 // DATA SET CONSTRUCTOR
 
-/// Data set constructor. 
-/// It creates a normalized squared error term not associated to any 
+/// Data set constructor.
+/// It creates a normalized squared error term not associated to any
 /// neural network but to be measured on a data set object.
 /// It also initializes all the rest of class members to their default values.
 /// @param new_data_set_pointer Pointer to a data set object.
 
-NormalizedSquaredError::NormalizedSquaredError(DataSet* new_data_set_pointer) 
+NormalizedSquaredError::NormalizedSquaredError(DataSet* new_data_set_pointer)
 : LossIndex(new_data_set_pointer)
 {
     set_default();
@@ -102,7 +102,7 @@ NormalizedSquaredError::NormalizedSquaredError(DataSet* new_data_set_pointer)
 
 // NEURAL NETWORK AND DATA SET CONSTRUCTOR
 
-/// Neural network and data set constructor. 
+/// Neural network and data set constructor.
 /// It creates a normalized squared error term associated to a neural network and measured on a data set.
 /// It also initializes all the rest of class members to their default values.
 /// @param new_neural_network_pointer Pointer to a neural network object.
@@ -117,10 +117,10 @@ NormalizedSquaredError::NormalizedSquaredError(NeuralNetwork* new_neural_network
 
 // XML CONSTRUCTOR
 
-/// XML constructor. 
+/// XML constructor.
 /// It creates a normalized squared error not associated to any neural network and not measured on any data set.
 /// It also sets all the rest of class members from a TinyXML document->
-/// @param normalized_squared_error_document XML document with the class members. 
+/// @param normalized_squared_error_document XML document with the class members.
 
 NormalizedSquaredError::NormalizedSquaredError(const tinyxml2::XMLDocument& normalized_squared_error_document)
  : LossIndex(normalized_squared_error_document)
@@ -272,8 +272,8 @@ void NormalizedSquaredError::set_default()
 }
 
 
-/// Returns the normalization coefficient to be used for the loss of the error. 
-/// This is measured on the training instances of the data set. 
+/// Returns the normalization coefficient to be used for the loss of the error.
+/// This is measured on the training instances of the data set.
 
 double NormalizedSquaredError::calculate_normalization_coefficient(const Matrix<double>& targets, const Vector<double>& targets_mean) const
 {
@@ -915,7 +915,7 @@ check();
 
 
 /// Returns which would be the loss of a multilayer perceptron for an hypothetical vector of parameters.
-/// It does not set that vector of parameters to the multilayer perceptron. 
+/// It does not set that vector of parameters to the multilayer perceptron.
 /// @param parameters Vector of potential parameters for the multilayer perceptron associated to the loss index.
 
 double NormalizedSquaredError::calculate_error(const Vector<size_t>& instances_indices, const Vector<double>& parameters) const
@@ -928,13 +928,13 @@ check();
 
    // Control sentence(if debug)
 
-   #ifdef __OPENNN_DEBUG__ 
+   #ifdef __OPENNN_DEBUG__
 
    check();
 
    #endif
 
-   #ifdef __OPENNN_DEBUG__ 
+   #ifdef __OPENNN_DEBUG__
 
    ostringstream buffer;
 
@@ -1230,13 +1230,13 @@ check();
     return outputs.calculate_error_rows(targets)/normalization_coefficient;
 }
 
-/// Returns the squared errors of the training instances. 
+/// Returns the squared errors of the training instances.
 
 Vector<double> NormalizedSquaredError::calculate_squared_errors() const
 {
    // Control sentence(if debug)
 
-   #ifdef __OPENNN_DEBUG__ 
+   #ifdef __OPENNN_DEBUG__
 
    check();
 
@@ -1420,8 +1420,8 @@ string NormalizedSquaredError::get_error_type_text() const
 }
 
 
-/// Serializes the normalized squared error object into a XML document of the TinyXML library. 
-/// See the OpenNN manual for more information about the format of this element. 
+/// Serializes the normalized squared error object into a XML document of the TinyXML library.
+/// See the OpenNN manual for more information about the format of this element.
 
 tinyxml2::XMLDocument* NormalizedSquaredError::to_XML() const
 {
@@ -1467,7 +1467,7 @@ void NormalizedSquaredError::write_XML(tinyxml2::XMLPrinter& file_stream) const
 }
 
 
-/// Loads a root mean squared error object from a XML document. 
+/// Loads a root mean squared error object from a XML document.
 /// @param document Pointer to a TinyXML document with the object data.
 
 void NormalizedSquaredError::from_XML(const tinyxml2::XMLDocument& document)

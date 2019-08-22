@@ -118,6 +118,14 @@ int main()
         // unscaling_layer_pointer->set_unscaling_method(UnscalingLayer::NoUnscaling);
         // unscaling_layer_pointer->set_unscaling_method(UnscalingLayer::MeanStandardDeviation);
 
+       neural_network.construct_bounding_layer();
+        BoundingLayer* bounding_layer_pointer= neural_network.get_bounding_layer_pointer();
+        const Vector<double> lb{0};
+        bounding_layer_pointer->set_lower_bounds(lb);
+
+        const Vector<double> ub{10};
+        bounding_layer_pointer->set_upper_bounds(ub);
+
 
         // Training strategy object
         TrainingStrategy training_strategy(&neural_network, &data_set);

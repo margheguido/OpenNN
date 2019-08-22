@@ -78,8 +78,8 @@ namespace OpenNN
           const Matrix<double> inputs = data_set_pointer->get_inputs(training_batches[static_cast<unsigned>(i)]);
           const Matrix<double> targets = data_set_pointer->get_targets(training_batches[static_cast<unsigned>(i)]);
 
-          const Matrix<double> outputs = multilayer_perceptron_pointer->calculate_outputs(inputs);
-
+         const Matrix<double> outputs_nobound = multilayer_perceptron_pointer->calculate_outputs(inputs);
+          const Matrix<double> outputs = neural_network_pointer->calculate_outputs(outputs_nobound);
           // IMPORTANT: here the solution of the PDE is computed using tau (the outputs of the network)
           Matrix<double> PDE_solutions = calculate_PDE_solutions(outputs, training_batches[static_cast<unsigned>(i)]);
 
@@ -113,8 +113,8 @@ namespace OpenNN
           const Matrix<double> inputs = data_set_pointer->get_inputs(training_batches[static_cast<unsigned>(i)]);
           const Matrix<double> targets = data_set_pointer->get_targets(training_batches[static_cast<unsigned>(i)]);
 
-          const Matrix<double> outputs = multilayer_perceptron_pointer->calculate_outputs(inputs, parameters);
-
+        const Matrix<double> outputs_nobound = multilayer_perceptron_pointer->calculate_outputs(inputs, parameters);
+        const Matrix<double> outputs = neural_network_pointer->calculate_outputs(outputs_nobound);
           // IMPORTANT: here the solution of the PDE is computed using tau (the outputs of the network)
           Matrix<double> PDE_solutions = calculate_PDE_solutions(outputs, training_batches[static_cast<unsigned>(i)]);
 
@@ -148,8 +148,8 @@ namespace OpenNN
           const Matrix<double> inputs = data_set_pointer->get_inputs(selection_batches[static_cast<unsigned>(i)]);
           const Matrix<double> targets = data_set_pointer->get_targets(selection_batches[static_cast<unsigned>(i)]);
 
-          const Matrix<double> outputs = multilayer_perceptron_pointer->calculate_outputs(inputs);
-
+          const Matrix<double> outputs_nobound = multilayer_perceptron_pointer->calculate_outputs(inputs);
+          const Matrix<double> outputs = neural_network_pointer->calculate_outputs(outputs_nobound);
           // IMPORTANT: here the solution of the PDE is computed using tau (the outputs of the network)
           Matrix<double> PDE_solutions = calculate_PDE_solutions(outputs, selection_batches[static_cast<unsigned>(i)]);
 

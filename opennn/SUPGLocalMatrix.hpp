@@ -38,15 +38,21 @@ public:
     {
         const data_class_interface &data = this->m_solution->getData();
         // data.diff_coeff( &mu, x, y, z, 0.0 ); // deleting this line mu is now set from outside (it's assumed constant in space)
+
         data.beta_coeff( beta, x, y, z, 0.0 );
         data.gamma_coeff( &gamma, x, y, z, 0.0 );
-        data.source_term( &fff, x, y, z, 0.0 );
+        source_term_mu( &fff, x, y, z, 0.0,mu);
+    }
+
+    void source_term_mu( Real *outValues, Real xx, Real yy, Real zz, Real t,double mu) const
+    {
+        outValues[ 0 ] = mu* sin(2.0 * mPi * xx) * (2.0 + 4.0 * mPi * mPi * (yy - square(yy))) + 2.0 * mPi * cos(2.0 * mPi * xx) * (yy - square(yy)) + sin(2.0 * mPi * xx) * (1.0 - 2.0 * yy);
     }
 
     virtual void integrate_on_gauss_point( ValueMatrix &outValues, Real x, Real y, Real z, int k, int m, const ShapeValues &basisValues ) const override
     {
       //  Real tau = 0.5 * 0.25 * 1.4; // delta * h_K / norm(b)
-
+    
         Real ret = ( mu * ( basisValues.Rgrad[ 0 ][ k ] * basisValues.Rgrad[ 0 ][ m ]
                             + basisValues.Rgrad[ 1 ][ k ] * basisValues.Rgrad[ 1 ][ m ]
                             + basisValues.Rgrad[ 2 ][ k ] * basisValues.Rgrad[ 2 ][ m ] ) // on surface
