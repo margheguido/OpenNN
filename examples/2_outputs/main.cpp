@@ -45,7 +45,7 @@ int main(void)
         data_set.set_separator("Tab");
 
         data_set.load_data();
-        data_set.print_data();
+        // data_set.print_data();
 /*
         DataSet data_set_out;
         data_set_out.set_file_type("csv");
@@ -120,18 +120,18 @@ int main(void)
         // che poi restituisce in modo da averle a disposizione senza ricalcolarle
         const Vector< Statistics<double> > inputs_statistics = data_set.scale_inputs_minimum_maximum();
         const Vector< Statistics<double> > targets_statistics = data_set.scale_targets_minimum_maximum();
-        Matrix<double> targ=data_set.get_targets();
-        cout <<"scaled targets"<<endl;
-        targ.print();
+        // Matrix<double> targ=data_set.get_targets();
+        // cout <<"scaled targets"<<endl;
+        // targ.print();
 
 
         // Neural network
 
         const size_t inputs_number = variables_pointer->get_inputs_number();
         const size_t hidden_perceptrons_number = 12;
-        const size_t outputs_number = 1;
+        const size_t outputs_number = 2;
 
-        NeuralNetwork neural_network(inputs_number, hidden_perceptrons_number,1);
+        NeuralNetwork neural_network(inputs_number, hidden_perceptrons_number, outputs_number);
 
       //  neural_network.set_folder_file_names("name of the mesh directory", "name of the binary file ");
 
@@ -150,6 +150,7 @@ int main(void)
        scaling_layer_pointer->set_statistics(inputs_statistics);
 
         scaling_layer_pointer->set_scaling_methods(ScalingLayer::NoScaling);
+        // scaling_layer_pointer->set_scaling_methods(ScalingLayer::MinimumMaximum);
         // scaling_layer_pointer->set_scaling_methods(ScalingLayer::MeanStandardDeviation);
         neural_network.construct_unscaling_layer();
 
@@ -158,6 +159,7 @@ int main(void)
        unscaling_layer_pointer->set_statistics(targets_statistics);
 
        unscaling_layer_pointer->set_unscaling_method(UnscalingLayer::NoUnscaling);
+       // unscaling_layer_pointer->set_unscaling_method(UnscalingLayer::MinimumMaximum);
        // unscaling_layer_pointer->set_unscaling_method(UnscalingLayer::MeanStandardDeviation);
 
 
@@ -170,7 +172,7 @@ int main(void)
           QuasiNewtonMethod* quasi_Newton_method_pointer = training_strategy.get_quasi_Newton_method_pointer();
 
           quasi_Newton_method_pointer->set_maximum_epochs_number(100);
-          quasi_Newton_method_pointer->set_display_period(10);
+          quasi_Newton_method_pointer->set_display_period(50);
 
           quasi_Newton_method_pointer->set_minimum_loss_decrease(1.0e-6);
         }
@@ -181,7 +183,7 @@ int main(void)
           GradientDescent* gradient_descent_method_pointer = training_strategy.get_gradient_descent_pointer();
 
           gradient_descent_method_pointer->set_maximum_epochs_number(100);
-          gradient_descent_method_pointer->set_display_period(10);
+          gradient_descent_method_pointer->set_display_period(50);
 
           gradient_descent_method_pointer->set_minimum_loss_decrease(1.0e-6);
         }
@@ -219,8 +221,8 @@ int main(void)
 
         const TrainingStrategy::Results training_strategy_results = training_strategy.perform_training();
 
-        Vector<double> loss_history =training_strategy_results.gradient_descent_results_pointer->loss_history;
-        Vector<double> selection_history=training_strategy_results.gradient_descent_results_pointer->selection_error_history;
+        // Vector<double> loss_history =training_strategy_results.gradient_descent_results_pointer->loss_history;
+        // Vector<double> selection_history=training_strategy_results.gradient_descent_results_pointer->selection_error_history;
 
     /*    cout<<"training loss history"<<endl;
         for (auto &i:loss_history)

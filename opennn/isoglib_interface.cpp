@@ -21,27 +21,25 @@ namespace OpenNN
   Vector <double> IsoglibInterface::calculate_solution(double tau, double mu)
   {
     solveSteady(tau, mu);
-    // solveSteady(0,0.0005);
+    // solveSteady(0.005,0.0005);
 
     // Load solution from isoglib
-    SolutionState * solution_state_pointer = timeAdvancing.getCurState();
-    matr_Real * current_solution_pointer = solution_state_pointer->getSolArray(0);
-    unsigned n_Dof = current_solution_pointer->getNumColumns();
-    Vector<double> solution( n_Dof );
-    for( unsigned i = 0; i < n_Dof; i++ )
+    vector<double> isoglib_solution = pde_prob.getSubProblem()->getSolution()->sol_r;
+    Vector<double> solution( nDof );
+    for( unsigned i = 0; i < nDof; i++ )
     {
-      solution[i] = current_solution_pointer->getData()[i];
+      solution[i] = isoglib_solution[i];
     }
 
     std::cout << '\n' << '\n';
     std::cout << "tau: " << tau << '\n';
     std::cout << "solution:" << '\n';
-    unsigned sqrt_n_Dof = 9;
-    for( size_t i = sqrt_n_Dof-1; i >= 0 && i < sqrt_n_Dof; i-- )
+    unsigned sqrt_nDof = sqrt(nDof);
+    for( size_t i = sqrt_nDof-1; i >= 0 && i < sqrt_nDof; i-- )
     {
-      for( unsigned j = 0; j < sqrt_n_Dof; j++ )
+      for( unsigned j = 0; j < sqrt_nDof; j++ )
       {
-        std::cout << std::setw(10) << solution[i*sqrt_n_Dof+j] << "  ";
+        std::cout << std::setw(10) << solution[i*sqrt_nDof+j] << "  ";
       }
       std::cout << '\n';
     }

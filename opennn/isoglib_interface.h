@@ -50,6 +50,13 @@ public:
     set_problem_resolution();
   }
 
+  IsoglibInterface(string meshload_directory_name)
+  {
+    localMatrix_pointer = new supg_local_matrix;
+    directory_name = meshload_directory_name.c_str();
+    set_problem_resolution();
+  }
+
   ~IsoglibInterface()
   {
     delete localMatrix_pointer;
@@ -64,8 +71,7 @@ public:
 private:
 
   //name of the test directories in isoglib
-   const char *directory_name = "data/Data_GuidoVidulisADRExactSol_p1_ref3";
-  //Data_GuidoVidulisSUPGExactSol_p1_ref2
+   const char *directory_name;
 
   //number of points in which isoglib calculate the solution
   size_t nDof; //ref3 81, ref2 25

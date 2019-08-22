@@ -46,6 +46,11 @@ public:
     isoglib_interface_pointer = new IsoglibInterface();
   }
 
+  OutputFunction(string meshload_directory_name)
+  {
+    isoglib_interface_pointer = new IsoglibInterface(meshload_directory_name);
+  }
+
   // Destructor
   ~OutputFunction()
   {
@@ -53,10 +58,14 @@ public:
   }
 
   /// Calculates the derivative of the PDE solution wrt the stabilization parameter
-  Matrix<double> calculate_PDE_solutions_derivative(const Matrix<double>& tau_values) const;
+  Matrix<double> calculate_PDE_solution_derivative(const Matrix<double>& tau_values, const Vector<size_t> & batch_indices) const;
 
   /// Calculates the solution of the PDE given the stabilization parameter predicted by the neural network
-  Matrix<double> calculate_PDE_solutions(const Matrix<double>& tau_values, const Vector<size_t> & batch_indices) const;
+  Matrix<double> calculate_PDE_solution(const Matrix<double>& tau_values, const Vector<size_t> & batch_indices) const;
+
+  /// Calculates the derivative of the loss function wrt the stabilization parameter
+  /// (does the same job as NormalizedSquaredError::calculate_output_gradient)
+  Matrix<double> calculate_loss_derivative(const Matrix<double>& tau_values, const Vector<size_t> & batch_indices) const;
 
   IsoglibInterface * get_isoglib_interface_pointer() { return isoglib_interface_pointer; };
 
@@ -73,7 +82,7 @@ public:
   double calculate_training_error() const override; // called only in epoch 0 directly in gradient descent
   double calculate_training_error(const Vector<double>& parameters) const override; // called from epoch 1 while calculating directional points
   double calculate_selection_error() const override;
-  Matrix<double> calculate_output_gradient(const Matrix<double>& outputs, const Matrix<double>& targets) const override;
+  Vector<double> calculate_training_error_gradient() const override;
 
 private:
 
