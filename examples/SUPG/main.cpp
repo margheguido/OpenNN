@@ -88,6 +88,8 @@ int main()
 
         NeuralNetwork neural_network(inputs_number, hidden_perceptrons_number, outputs_number);
 
+        MultilayerPerceptron* multilayer_perceptron_pointer = neural_network.get_multilayer_perceptron_pointer();
+         multilayer_perceptron_pointer->set_layer_activation_function(1, PerceptronLayer::SoftPlus);
         // neural_network.set_folder_file_names("name of the mesh directory", "name of the binary file ");
 
         Inputs* inputs = neural_network.get_inputs_pointer();
