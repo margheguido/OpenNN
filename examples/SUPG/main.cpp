@@ -194,8 +194,8 @@ int main()
         const TrainingStrategy::Results training_strategy_results = training_strategy.perform_training();
         std::cout << "Training completed" << '\n';
 
-        // Vector<double> loss_history =training_strategy_results.gradient_descent_results_pointer->loss_history;
-        // Vector<double> selection_history=training_strategy_results.gradient_descent_results_pointer->selection_error_history;
+  //    Vector<double> loss_history =training_strategy_results.gradient_descent_results_pointer->loss_history;
+  //    Vector<double> selection_history=training_strategy_results.gradient_descent_results_pointer->selection_error_history;
 
 
         // Testing analysis
