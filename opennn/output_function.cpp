@@ -16,8 +16,7 @@ namespace OpenNN
       for (size_t i = 0; i < current_batch_size; i++)
       {
           Real mu = unscaled_inputs(batch_indices[i], 0);
-          Real tau_scaled = tau_values(i, 0);
-          Real tau = tau_scaled *0.009;
+          Real tau = tau_values(i, 0);
           Vector<double> temp_solution = isoglib_interface_pointer->calculate_solution(tau, mu);
 
           solutions.set_row(i, temp_solution);
@@ -39,7 +38,7 @@ namespace OpenNN
           double mu = unscaled_inputs(batch_indices[i], 0);
           double tau = tau_values(i, 0);
 
-          double h = 0.001;
+          double h = 0.1;
           Vector<double> y = isoglib_interface_pointer->calculate_solution(tau, mu);
           Vector<double> y_forward = isoglib_interface_pointer->calculate_solution(tau + h, mu);
           Vector<double> derivative = ( y_forward - y ) / h;

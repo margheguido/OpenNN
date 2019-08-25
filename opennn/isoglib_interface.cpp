@@ -20,7 +20,8 @@ namespace OpenNN
 
   Vector <double> IsoglibInterface::calculate_solution(double tau, double mu)
   {
-    solveSteady(tau, mu);
+    double tau_for_EDP = tau * 0.009;
+    solveSteady(tau_for_EDP, mu);
     // solveSteady(0.005,0.0005);
 
     // Load solution from isoglib
@@ -32,7 +33,7 @@ namespace OpenNN
     }
 
     std::cout << '\n' << '\n';
-    std::cout << "tau: " << tau << '\n';
+    std::cout << "tau: " << tau << '\t' << "tau_for_EDP: " << tau_for_EDP << '\n';
     std::cout << "solution:" << '\n';
     unsigned sqrt_nDof = sqrt(nDof);
     for( size_t i = sqrt_nDof-1; i >= 0 && i < sqrt_nDof; i-- )
