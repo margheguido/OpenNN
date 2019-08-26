@@ -23,28 +23,29 @@ namespace OpenNN
       double tau_for_EDP = tau * 0.009;
       solveSteady(tau_for_EDP, mu);
 
-      // // Load solution from isoglib
-      // vector<double> isoglib_solution = pde_prob.getSubProblem()->getSolution()->sol_r;
-      // Vector<double> solution( nDof );
-      // for( unsigned i = 0; i < nDof; i++ )
-      // {
-      //   solution[i] = isoglib_solution[i];
-      // }
-      //
-      // std::cout << '\n' << '\n';
-      // std::cout << "tau: " << tau << '\n';
-      // std::cout << "tau_for_EDP: " << tau_for_EDP << '\n';
-      // // std::cout << "mu: " << mu << '\n';
-      // std::cout << "solution:" << '\n';
-      // unsigned sqrt_nDof = sqrt(nDof);
-      // for( size_t i = sqrt_nDof-1; i >= 0 && i < sqrt_nDof; i-- )
-      // {
-      //   for( unsigned j = 0; j < sqrt_nDof; j++ )
-      //   {
-      //     std::cout << std::setw(10) << solution[i*sqrt_nDof+j] << "  ";
-      //   }
-      //   std::cout << '\n';
-      // }
+      // PRINT SOLUTION (TODO: eliminare)
+      // Load solution from isoglib
+      vector<double> isoglib_solution = pde_prob.getSubProblem()->getSolution()->sol_r;
+      Vector<double> solution( nDof );
+      for( unsigned i = 0; i < nDof; i++ )
+      {
+        solution[i] = isoglib_solution[i];
+      }
+
+      std::cout << '\n' << '\n';
+      std::cout << "tau: " << tau << '\n';
+      std::cout << "tau_for_EDP: " << tau_for_EDP << '\n';
+      // std::cout << "mu: " << mu << '\n';
+      std::cout << "solution:" << '\n';
+      unsigned sqrt_nDof = sqrt(nDof);
+      for( size_t i = sqrt_nDof-1; i >= 0 && i < sqrt_nDof; i-- )
+      {
+        for( unsigned j = 0; j < sqrt_nDof; j++ )
+        {
+          std::cout << std::setw(10) << solution[i*sqrt_nDof+j] << "  ";
+        }
+        std::cout << '\n';
+      }
 
       // used to acces sol_r
       solution_class * solution_pointer = pde_prob.getSubProblem()->getSolution();

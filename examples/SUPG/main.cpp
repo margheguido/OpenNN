@@ -40,20 +40,25 @@ int main()
         // Variables
         Variables* variables_pointer = data_set.get_variables_pointer();
 
-        unsigned nDof = 81;
-        unsigned nElems = 64; // number of points in which the computed solution is sampled (TODO: make nElems read automatically from meshload)
-        unsigned nGaussPoints = 4;
-        unsigned number_inputs = 1; // mu
-        Vector< Variables::Item > variables_items( nElems*nGaussPoints + number_inputs );
+        // Number of inputs of the ANN (only mu in this case)
+        unsigned inputs_number = 1;
+        // Number of gauss points for every element (it's an internal parameter of isoglib, by default set to 4)
+        unsigned gauss_points_number = 4;
+        // Number of elements
+        unsigned elements_number = ( variables_pointer->get_variables_number() - inputs_number ) / gauss_points_number; // nRef3 -> 64
+        // Number of degrees of freedom
+        unsigned dofs_number = square( sqrt( elements_number ) + 1 ); // nRef -> 81
+
+        Vector< Variables::Item > variables_items( inputs_number + elements_number*gauss_points_number );
 
 
-        for( unsigned i = 0; i < number_inputs; i++ )
+        for( unsigned i = 0; i < inputs_number; i++ )
         {
           // variables_items[i].name = "mu";
           // variables_items[i].units = "";
           variables_items[i].use = Variables::Input;
         }
-        for( unsigned i = number_inputs; i < number_inputs + nElems*nGaussPoints; i++ )
+        for( unsigned i = inputs_number; i < inputs_number + elements_number*gauss_points_number; i++ )
         {
           // variables_items[i].name = "dof_" + i;
           // variables_items[i].units = "";
@@ -84,7 +89,7 @@ int main()
 
         // Neural network
 
-        const size_t inputs_number = variables_pointer->get_inputs_number();
+        // const size_t inputs_number = variables_pointer->get_inputs_number(); // already set al line 42
         const size_t hidden_perceptrons_number = 12;
         const size_t outputs_number = variables_pointer->get_inputs_number();
 
@@ -157,16 +162,18 @@ int main()
           gradient_descent_method_pointer->set_minimum_loss_decrease(1.0e-6);
 
           // TODO: eliminare se possibile
-          gradient_descent_method_pointer->get_learning_rate_algorithm_pointer()->set_training_rate_method("Fixed");
+          // gradient_descent_method_pointer->get_learning_rate_algorithm_pointer()->set_training_rate_method("Fixed");
 
           // TODO: eliminare
-          gradient_descent_method_pointer->set_training_batch_size(1);
+          // gradient_descent_method_pointer->set_training_batch_size(1);
 
         }
 
         OutputFunction *output_function_pointer = new OutputFunction("data/Data_GuidoVidulisADRExactSol_p1_ref3");
 
-        output_function_pointer->get_isoglib_interface_pointer()->set_nDof(nDof);
+        output_function_pointer->get_isoglib_interface_pointer()->set_nDof(dofs_number);
+        output_function_pointer->get_isoglib_interface_pointer()->set_nElems(elements_number);
+        output_function_pointer->get_isoglib_interface_pointer()->set_nGaussPoints(gauss_points_number);
 
         // Save the original inputs inside OutputFunction before scaling them for the neural network
         output_function_pointer->set_unscaled_inputs(data_set.get_inputs());

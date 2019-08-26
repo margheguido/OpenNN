@@ -66,11 +66,13 @@ public:
 
   Vector<double> calculate_solution(double tau, double mu);
 
-  size_t get_nDof() const { return nDof; };
-  size_t get_nElems() const { return nElems; };
-  size_t get_nGaussPoints() const { return nGaussPoints; };
+  unsigned get_nDof() const { return nDof; };
+  unsigned get_nElems() const { return nElems; };
+  unsigned get_nGaussPoints() const { return nGaussPoints; };
 
-  void set_nDof(size_t n){ nDof = n; };
+  void set_nDof(unsigned n){ nDof = n; };
+  void set_nElems(unsigned n){ nElems = n; };
+  void set_nGaussPoints(unsigned n){ nGaussPoints = n; };
 
 private:
 
@@ -78,13 +80,13 @@ private:
    const char *directory_name;
 
   //number of points in which isoglib calculate the solution
-  unsigned nDof; //ref3 81, ref2 25
+  unsigned nDof; // ref3 -> 81
 
   //number of elements
-  unsigned nElems = 64;
+  unsigned nElems; // ref3 -> 64
 
-  //number of elements
-  unsigned nGaussPoints = 4;
+  //number of gauss points per element
+  unsigned nGaussPoints; // 4 by default in isoglib, set from main
 
   // data
   GuidoVidulisTest data;
