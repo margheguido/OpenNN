@@ -63,8 +63,12 @@ public:
   }
 
   void set_problem_resolution();
+
   Vector<double> calculate_solution(double tau, double mu);
+
   size_t get_nDof() const { return nDof; };
+  size_t get_nElems() const { return nElems; };
+  size_t get_nGaussPoints() const { return nGaussPoints; };
 
   void set_nDof(size_t n){ nDof = n; };
 
@@ -74,7 +78,13 @@ private:
    const char *directory_name;
 
   //number of points in which isoglib calculate the solution
-  size_t nDof; //ref3 81, ref2 25
+  unsigned nDof; //ref3 81, ref2 25
+
+  //number of elements
+  unsigned nElems = 64;
+
+  //number of elements
+  unsigned nGaussPoints = 4;
 
   // data
   GuidoVidulisTest data;

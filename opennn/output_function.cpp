@@ -9,9 +9,10 @@ namespace OpenNN
   /// \return                       PDE solutions [current_batch_size x n_Dof]
   Matrix<double> OutputFunction::calculate_PDE_solution(const Matrix<double>& tau_values, const Vector<size_t> & batch_indices) const
   {
-      size_t n_Dof = isoglib_interface_pointer->get_nDof();
+      unsigned elements_number = isoglib_interface_pointer->get_nElems();
+      unsigned gauss_points_number = isoglib_interface_pointer->get_nGaussPoints();
       unsigned current_batch_size = batch_indices.size();
-      Matrix<double> solutions(current_batch_size, n_Dof);
+      Matrix<double> solutions(current_batch_size, elements_number*gauss_points_number);
 
       for (size_t i = 0; i < current_batch_size; i++)
       {
@@ -29,9 +30,10 @@ namespace OpenNN
   /// \return                         Derivative of the PDE solution wrt the stabilization parameter [current_batch_size x n_Dof]
   Matrix<double> OutputFunction::calculate_PDE_solution_derivative(const Matrix<double>& tau_values, const Vector<size_t> & batch_indices) const
   {
-      unsigned n_Dof = isoglib_interface_pointer->get_nDof();
+      unsigned elements_number = isoglib_interface_pointer->get_nElems();
+      unsigned gauss_points_number = isoglib_interface_pointer->get_nGaussPoints();
       unsigned current_batch_size = batch_indices.size();
-      Matrix<double> solutions_derivatives(current_batch_size, n_Dof);
+      Matrix<double> solutions_derivatives(current_batch_size, elements_number*gauss_points_number);
 
       for (int i = 0; i < current_batch_size; i++)
       {
@@ -85,6 +87,7 @@ namespace OpenNN
       // Data set
 
       const Vector< Vector<size_t> > training_batches = data_set_pointer->get_instances_pointer()->get_training_batches(batch_size);
+      // const Vector< Vector<size_t> > training_batches = data_set_pointer->get_instances_pointer()->get_training_batches(1);
 
       const size_t batches_number = training_batches.size();
 
@@ -123,6 +126,7 @@ namespace OpenNN
       // Data set
 
       const Vector< Vector<size_t> > training_batches = data_set_pointer->get_instances_pointer()->get_training_batches(batch_size);
+      // const Vector< Vector<size_t> > training_batches = data_set_pointer->get_instances_pointer()->get_training_batches(1);
 
       const size_t batches_number = training_batches.size();
 
@@ -161,6 +165,7 @@ namespace OpenNN
       // Data set
 
       const Vector< Vector<size_t> > selection_batches = data_set_pointer->get_instances_pointer()->get_selection_batches(batch_size);
+      // const Vector< Vector<size_t> > selection_batches = data_set_pointer->get_instances_pointer()->get_selection_batches(1);
 
       const size_t batches_number = selection_batches.size();
 
@@ -204,6 +209,7 @@ namespace OpenNN
       // Data set
 
       const Vector< Vector<size_t> > training_batches = data_set_pointer->get_instances_pointer()->get_training_batches(batch_size);
+      // const Vector< Vector<size_t> > training_batches = data_set_pointer->get_instances_pointer()->get_training_batches(1);
 
       const size_t batches_number = training_batches.size();
 

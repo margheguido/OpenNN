@@ -20,32 +20,76 @@ namespace OpenNN
 
   Vector <double> IsoglibInterface::calculate_solution(double tau, double mu)
   {
-    double tau_for_EDP = tau * 0.009;
-    solveSteady(tau_for_EDP, mu);
-    // solveSteady(0.005,0.0005);
+      double tau_for_EDP = tau * 0.009;
+      solveSteady(tau_for_EDP, mu);
 
-    // Load solution from isoglib
-    vector<double> isoglib_solution = pde_prob.getSubProblem()->getSolution()->sol_r;
-    Vector<double> solution( nDof );
-    for( unsigned i = 0; i < nDof; i++ )
-    {
-      solution[i] = isoglib_solution[i];
-    }
+      // // Load solution from isoglib
+      // vector<double> isoglib_solution = pde_prob.getSubProblem()->getSolution()->sol_r;
+      // Vector<double> solution( nDof );
+      // for( unsigned i = 0; i < nDof; i++ )
+      // {
+      //   solution[i] = isoglib_solution[i];
+      // }
+      //
+      // std::cout << '\n' << '\n';
+      // std::cout << "tau: " << tau << '\n';
+      // std::cout << "tau_for_EDP: " << tau_for_EDP << '\n';
+      // // std::cout << "mu: " << mu << '\n';
+      // std::cout << "solution:" << '\n';
+      // unsigned sqrt_nDof = sqrt(nDof);
+      // for( size_t i = sqrt_nDof-1; i >= 0 && i < sqrt_nDof; i-- )
+      // {
+      //   for( unsigned j = 0; j < sqrt_nDof; j++ )
+      //   {
+      //     std::cout << std::setw(10) << solution[i*sqrt_nDof+j] << "  ";
+      //   }
+      //   std::cout << '\n';
+      // }
 
-    std::cout << '\n' << '\n';
-    std::cout << "tau: " << tau << '\t' << "tau_for_EDP: " << tau_for_EDP << '\n';
-    std::cout << "solution:" << '\n';
-    unsigned sqrt_nDof = sqrt(nDof);
-    for( size_t i = sqrt_nDof-1; i >= 0 && i < sqrt_nDof; i-- )
-    {
-      for( unsigned j = 0; j < sqrt_nDof; j++ )
+      // used to acces sol_r
+      solution_class * solution_pointer = pde_prob.getSubProblem()->getSolution();
+
+      // get elements of this process
+      const int numMyElements = pde_prob.getSubProblem()->getMesh()->getNumMyElements();
+
+      // solution
+      unsigned nGaussPoints = 4; // number of gauss points per element
+      Vector<double> solution_on_gauss_points( numMyElements * nGaussPoints, 0 );
+
+      // compute error for each element
+      for ( int locE = 0; locE < numMyElements; locE++ )
       {
-        std::cout << std::setw(10) << solution[i*sqrt_nDof+j] << "  ";
-      }
-      std::cout << '\n';
-    }
+          // element
+          const Element &element = pde_prob.getSubProblem()->getMesh()->getGeometryMapParam().getLocalElement( locE );
+          const vect_int &funcs = element.functions;
 
-    return solution;
+          // for each Gauss points
+          int numGauss = pde_prob.getSubProblem()->getMesh()->getGeometryMapParam().getNumGaussPoints( locE );
+          for ( int locG = 0; locG < numGauss; ++locG )
+          {
+              // pointer to basis function values
+              const GaussPoint *point;
+              const ShapeValues *basisValues;
+              pde_prob.getSubProblem()->getMesh()->getGeometryMap().getBasisValues( locE, locG, &point, nullptr, &basisValues, nullptr );
+
+              // Gauss point
+              const Real xx_gp = point->physCoords[ 0 ];
+              const Real yy_gp = point->physCoords[ 1 ];
+              const Real zz_gp = point->physCoords[ 2 ];
+
+              const Real gWt = point->physWeight;
+
+              const int lfuncs = (int) funcs.size();
+              for ( int k = 0; k < lfuncs; k++ )
+              {
+                  const int dof = pde_prob.getSubProblem()->getDofManager()->getDofMapper().getDof2( funcs[ k ], 0 );
+                  const Real sol = solution_pointer->sol_r[ dof ];
+                  solution_on_gauss_points[ nGaussPoints * locE + locG ] += basisValues->R[ k ] * sol;
+              }
+          }  // end iterate gauss point
+      } // end iterate elements
+
+      return solution_on_gauss_points;
   }
 
 

@@ -40,9 +40,11 @@ int main()
         // Variables
         Variables* variables_pointer = data_set.get_variables_pointer();
 
-        unsigned nDof = 81; // number of points in which the computed solution is sampled (TODO: make nDof read automatically from meshload)
+        unsigned nDof = 81;
+        unsigned nElems = 64; // number of points in which the computed solution is sampled (TODO: make nElems read automatically from meshload)
+        unsigned nGaussPoints = 4;
         unsigned number_inputs = 1; // mu
-        Vector< Variables::Item > variables_items( nDof + number_inputs );
+        Vector< Variables::Item > variables_items( nElems*nGaussPoints + number_inputs );
 
 
         for( unsigned i = 0; i < number_inputs; i++ )
@@ -51,7 +53,7 @@ int main()
           // variables_items[i].units = "";
           variables_items[i].use = Variables::Input;
         }
-        for( unsigned i = number_inputs; i < number_inputs + nDof; i++ )
+        for( unsigned i = number_inputs; i < number_inputs + nElems*nGaussPoints; i++ )
         {
           // variables_items[i].name = "dof_" + i;
           // variables_items[i].units = "";
@@ -149,12 +151,16 @@ int main()
           training_strategy.set_training_method( "GRADIENT_DESCENT" ); // STOCHASTIC_GRADIENT_DESCENT, LEVENBERG_MARQUARDT_ALGORITHM, ADAPTIVE_MOMENT_ESTIMATION
           GradientDescent* gradient_descent_method_pointer = training_strategy.get_gradient_descent_pointer();
 
-          gradient_descent_method_pointer->set_maximum_epochs_number(10);
-          gradient_descent_method_pointer->set_display_period(1);
+          gradient_descent_method_pointer->set_maximum_epochs_number(1000);
+          gradient_descent_method_pointer->set_display_period(5);
 
           gradient_descent_method_pointer->set_minimum_loss_decrease(1.0e-6);
 
-          // gradient_descent_method_pointer->get_learning_rate_algorithm_pointer()->set_training_rate_method("Fixed");
+          // TODO: eliminare se possibile
+          gradient_descent_method_pointer->get_learning_rate_algorithm_pointer()->set_training_rate_method("Fixed");
+
+          // TODO: eliminare
+          gradient_descent_method_pointer->set_training_batch_size(1);
 
         }
 
