@@ -400,7 +400,7 @@ bool NeuralNetwork::has_probabilistic_layer() const
 /// Returns a pointer to the multilayer perceptron composing this neural network.
 
 MultilayerPerceptron* NeuralNetwork::get_multilayer_perceptron_pointer() const
-{   
+{
 #ifdef __OPENNN_DEBUG__
 
     if(!multilayer_perceptron_pointer)
@@ -637,7 +637,7 @@ const bool& NeuralNetwork::get_display() const
 
 
 /// This method deletes all the pointers in the neural network.
-/// It also sets the rest of members to their default values. 
+/// It also sets the rest of members to their default values.
 
 void NeuralNetwork::set()
 {
@@ -648,8 +648,8 @@ void NeuralNetwork::set()
 
 
 /// This method deletes all the pointers in the neural network and then constructs a copy of an exisiting multilayer perceptron.
-/// It also sets the rest of members to their default values. 
-/// @param new_multilayer_perceptron Multilayer perceptron object to be copied. 
+/// It also sets the rest of members to their default values.
+/// @param new_multilayer_perceptron Multilayer perceptron object to be copied.
 
 void NeuralNetwork::set(const MultilayerPerceptron& new_multilayer_perceptron)
 {
@@ -670,8 +670,8 @@ void NeuralNetwork::set(const MultilayerPerceptron& new_multilayer_perceptron)
 
 
 /// Sets a new neural network with a given multilayer perceptron architecture.
-/// It also sets the rest of members to their default values. 
-/// @param new_multilayer_perceptron_architecture Architecture of the multilayer perceptron. 
+/// It also sets the rest of members to their default values.
+/// @param new_multilayer_perceptron_architecture Architecture of the multilayer perceptron.
 
 void NeuralNetwork::set(const Vector<size_t>& new_multilayer_perceptron_architecture)
 {
@@ -692,7 +692,7 @@ void NeuralNetwork::set(const Vector<size_t>& new_multilayer_perceptron_architec
 
 
 /// Sets a new multilayer_perceptron_pointer architecture with one layer and zero independent parameters.
-/// It also sets the rest of members to their default values. 
+/// It also sets the rest of members to their default values.
 /// @param new_inputs_number Number of inputs.
 /// @param new_outputs_number Number of outputs.
 
@@ -711,9 +711,9 @@ void NeuralNetwork::set(const size_t& new_inputs_number, const size_t& new_outpu
 
 
 /// Sets a new multilayer_perceptron_pointer architecture with one hidden layer and zero independent parameters.
-/// It also sets the rest of members to their default values. 
+/// It also sets the rest of members to their default values.
 /// @param new_inputs_number Number of inputs.
-/// @param new_hidden_neurons_number Number of neurons in the hidden layer. 
+/// @param new_hidden_neurons_number Number of neurons in the hidden layer.
 /// @param new_outputs_number Number of outputs.
 
 void NeuralNetwork::set(const size_t& new_inputs_number, const size_t& new_hidden_neurons_number, const size_t& new_outputs_number)
@@ -742,7 +742,7 @@ void NeuralNetwork::set(const string& file_name)
 
 
 /// Sets the members of this neural network object with those from other neural network object.
-/// @param other_neural_network Neural network object to be copied. 
+/// @param other_neural_network Neural network object to be copied.
 
 void NeuralNetwork::set(const NeuralNetwork& other_neural_network)
 {
@@ -970,8 +970,8 @@ void NeuralNetwork::set_MPI(const NeuralNetwork* neural_network)
 
 
 /// Sets a new multilayer perceptron within the neural network.
-/// @param new_multilayer_perceptron_pointer Pointer to a multilayer perceptron object. 
-/// Note that the neural network destructror will delete this pointer. 
+/// @param new_multilayer_perceptron_pointer Pointer to a multilayer perceptron object.
+/// Note that the neural network destructror will delete this pointer.
 
 void NeuralNetwork::set_multilayer_perceptron_pointer(MultilayerPerceptron* new_multilayer_perceptron_pointer)
 {
@@ -1000,8 +1000,8 @@ void NeuralNetwork::set_inputs_trending_layer_pointer(InputsTrendingLayer* new_i
 
 
 /// Sets a new scaling layer within the neural network.
-/// @param new_scaling_layer_pointer Pointer to a scaling layer object. 
-/// Note that the neural network destructror will delete this pointer. 
+/// @param new_scaling_layer_pointer Pointer to a scaling layer object.
+/// Note that the neural network destructror will delete this pointer.
 
 void NeuralNetwork::set_scaling_layer_pointer(ScalingLayer* new_scaling_layer_pointer)
 {
@@ -1030,8 +1030,8 @@ void NeuralNetwork::set_principal_components_layer_pointer(PrincipalComponentsLa
 
 
 /// Sets a new unscaling layer within the neural network.
-/// @param new_unscaling_layer_pointer Pointer to an unscaling layer object. 
-/// Note that the neural network destructror will delete this pointer. 
+/// @param new_unscaling_layer_pointer Pointer to an unscaling layer object.
+/// Note that the neural network destructror will delete this pointer.
 
 void NeuralNetwork::set_unscaling_layer_pointer(UnscalingLayer* new_unscaling_layer_pointer)
 {
@@ -1060,8 +1060,8 @@ void NeuralNetwork::set_outputs_trending_layer_pointer(OutputsTrendingLayer* new
 
 
 /// Sets a new bounding layer within the neural network.
-/// @param new_bounding_layer_pointer Pointer to a bounding layer object. 
-/// Note that the neural network destructror will delete this pointer. 
+/// @param new_bounding_layer_pointer Pointer to a bounding layer object.
+/// Note that the neural network destructror will delete this pointer.
 
 void NeuralNetwork::set_bounding_layer_pointer(BoundingLayer* new_bounding_layer_pointer)
 {
@@ -1075,8 +1075,8 @@ void NeuralNetwork::set_bounding_layer_pointer(BoundingLayer* new_bounding_layer
 
 
 /// Sets a new probabilistic layer within the neural network.
-/// @param new_probabilistic_layer_pointer Pointer to a probabilistic layer object. 
-/// Note that the neural network destructror will delete this pointer. 
+/// @param new_probabilistic_layer_pointer Pointer to a probabilistic layer object.
+/// Note that the neural network destructror will delete this pointer.
 
 void NeuralNetwork::set_probabilistic_layer_pointer(ProbabilisticLayer* new_probabilistic_layer_pointer)
 {
@@ -1091,7 +1091,7 @@ void NeuralNetwork::set_probabilistic_layer_pointer(ProbabilisticLayer* new_prob
 
 /// Sets a new inputs object within the neural network.
 /// @param new_inputs_pointer Pointer to an inputs object.
-/// Note that the neural network destructror will delete this pointer. 
+/// Note that the neural network destructror will delete this pointer.
 
 void NeuralNetwork::set_inputs_pointer(Inputs* new_inputs_pointer)
 {
@@ -1338,7 +1338,7 @@ Vector<double> NeuralNetwork::get_parameters() const
 
 
 /// Sets all the parameters(multilayer_perceptron_pointer parameters and independent parameters) from a single vector.
-/// @param new_parameters New set of parameter values. 
+/// @param new_parameters New set of parameter values.
 
 void NeuralNetwork::set_parameters(const Vector<double>& new_parameters)
 {
@@ -1386,9 +1386,9 @@ void NeuralNetwork::set_parameters(const Vector<double>& new_parameters)
 /// <li> Unscaling layer.
 /// <li> Outputs trending layer.
 /// <li> Bounding layer.
-/// <li> Probabilistic layer. 
-/// <li> Conditions layer. 
-/// <li> Independent parameters. 
+/// <li> Probabilistic layer.
+/// <li> Conditions layer.
+/// <li> Independent parameters.
 /// </ul>
 
 void NeuralNetwork::delete_pointers()
@@ -1417,7 +1417,7 @@ void NeuralNetwork::delete_pointers()
 }
 
 
-/// This method constructs an empty multilayer perceptron within the neural network. 
+/// This method constructs an empty multilayer perceptron within the neural network.
 
 void NeuralNetwork::construct_multilayer_perceptron()
 {
@@ -1447,8 +1447,8 @@ void NeuralNetwork::construct_inputs_trending_layer()
 }
 
 
-/// This method constructs a scaling layer within the neural network. 
-/// The size of the scaling layer is the number of inputs in the multilayer perceptron. 
+/// This method constructs a scaling layer within the neural network.
+/// The size of the scaling layer is the number of inputs in the multilayer perceptron.
 
 void NeuralNetwork::construct_scaling_layer()
 {
@@ -1515,8 +1515,8 @@ void NeuralNetwork::construct_principal_components_layer()
 }
 
 
-/// This method constructs an unscaling layer within the neural network. 
-/// The size of the unscaling layer is the number of outputs in the multilayer perceptron. 
+/// This method constructs an unscaling layer within the neural network.
+/// The size of the unscaling layer is the number of outputs in the multilayer perceptron.
 
 void NeuralNetwork::construct_unscaling_layer()
 {
@@ -1584,8 +1584,8 @@ void NeuralNetwork::construct_outputs_trending_layer()
 }
 
 
-/// This method constructs a bounding layer within the neural network. 
-/// The size of the bounding layer is the number of outputs in the multilayer perceptron. 
+/// This method constructs a bounding layer within the neural network.
+/// The size of the bounding layer is the number of outputs in the multilayer perceptron.
 
 void NeuralNetwork::construct_bounding_layer()
 {
@@ -1603,8 +1603,8 @@ void NeuralNetwork::construct_bounding_layer()
 }
 
 
-/// This method constructs a probabilistic layer within the neural network. 
-/// The size of the probabilistic layer is the number of outputs in the multilayer perceptron. 
+/// This method constructs a probabilistic layer within the neural network.
+/// The size of the probabilistic layer is the number of outputs in the multilayer perceptron.
 
 void NeuralNetwork::construct_probabilistic_layer()
 {
@@ -1623,7 +1623,7 @@ void NeuralNetwork::construct_probabilistic_layer()
 
 
 /// This method constructs an inputs object within the neural network.
-/// The number of inputs is the number of inputs in the multilayer perceptron. 
+/// The number of inputs is the number of inputs in the multilayer perceptron.
 
 void NeuralNetwork::construct_inputs()
 {
@@ -1660,7 +1660,7 @@ void NeuralNetwork::construct_outputs()
 }
 
 
-/// This method deletes the multilayer perceptron within the neural network. 
+/// This method deletes the multilayer perceptron within the neural network.
 
 void NeuralNetwork::destruct_multilayer_perceptron()
 {
@@ -1680,7 +1680,7 @@ void NeuralNetwork::destruct_inputs_trending_layer()
 }
 
 
-/// This method deletes the scaling layer within the neural network. 
+/// This method deletes the scaling layer within the neural network.
 
 void NeuralNetwork::destruct_scaling_layer()
 {
@@ -1690,7 +1690,7 @@ void NeuralNetwork::destruct_scaling_layer()
 }
 
 
-/// This method deletes the unscaling layer within the neural network. 
+/// This method deletes the unscaling layer within the neural network.
 
 void NeuralNetwork::destruct_unscaling_layer()
 {
@@ -1710,7 +1710,7 @@ void NeuralNetwork::destruct_outputs_trending_layer()
 }
 
 
-/// This method deletes the bounding layer within the neural network. 
+/// This method deletes the bounding layer within the neural network.
 
 void NeuralNetwork::destruct_bounding_layer()
 {
@@ -1720,7 +1720,7 @@ void NeuralNetwork::destruct_bounding_layer()
 }
 
 
-/// This method deletes the probabilistic layer within the neural network. 
+/// This method deletes the probabilistic layer within the neural network.
 
 void NeuralNetwork::destruct_probabilistic_layer()
 {
@@ -1751,7 +1751,7 @@ void NeuralNetwork::destruct_outputs()
 
 
 /// Initializes the neural network at random.
-/// This is useful for testing purposes. 
+/// This is useful for testing purposes.
 
 void NeuralNetwork::initialize_random()
 {
@@ -1931,7 +1931,7 @@ void NeuralNetwork::prune_input(const size_t& index)
         throw logic_error(buffer.str());
     }
 
-    multilayer_perceptron_pointer->prune_input(index);  
+    multilayer_perceptron_pointer->prune_input(index);
 
     if(inputs_trending_layer_pointer)
     {
@@ -2102,7 +2102,7 @@ void NeuralNetwork::randomize_parameters_uniform(const double& minimum, const do
 
 
 /// Initializes all the parameters in the newtork(biases and synaptic weiths + independent
-/// parameters) at random with values comprised between a different minimum and maximum numbers for each free 
+/// parameters) at random with values comprised between a different minimum and maximum numbers for each free
 /// parameter.
 /// @param minimum Vector of minimum initialization values.
 /// @param maximum Vector of maximum initialization values.
@@ -2146,7 +2146,7 @@ void NeuralNetwork::randomize_parameters_normal()
 
 
 /// Initializes all the parameters in the newtork(biases and synaptic weiths + independent
-/// parameters) at random with values chosen from a normal distribution with a given mean and a given standard 
+/// parameters) at random with values chosen from a normal distribution with a given mean and a given standard
 /// deviation.
 /// @param mean Mean of normal distribution.
 /// @param standard_deviation Standard deviation of normal distribution.
@@ -2161,7 +2161,7 @@ void NeuralNetwork::randomize_parameters_normal(const double& mean, const double
 
 
 /// Initializes all the parameters in the neural newtork(biases and synaptic weiths +
-/// independent parameters) at random with values chosen from normal distributions with a given mean and a given 
+/// independent parameters) at random with values chosen from normal distributions with a given mean and a given
 /// standard deviation for each parameter.
 /// @param mean Vector of minimum initialization values.
 /// @param standard_deviation Vector of maximum initialization values.
@@ -2176,7 +2176,7 @@ void NeuralNetwork::randomize_parameters_normal(const Vector<double>& mean, cons
 
 
 /// Initializes all the parameters in the newtork(biases and synaptic weiths + independent
-/// parameters) at random with values chosen from normal distributions with a given mean and a given standard 
+/// parameters) at random with values chosen from normal distributions with a given mean and a given standard
 /// deviation for each parameter.
 /// All mean and standard deviation values are given from a vector of two real vectors.
 /// The first element must contain the mean value for each parameter.
@@ -2407,7 +2407,7 @@ Vector<double> NeuralNetwork::calculate_inputs_importance_parameters(const size_
 /// <li> Calculate forward propagation.
 /// <li> Calculate unscaled outputs.
 /// <li> Apply boundary condtions.
-/// <li> Calculate bounded outputs. 
+/// <li> Calculate bounded outputs.
 /// </ul>
 /// @param inputs Set of inputs to the neural network.
 
@@ -2459,7 +2459,7 @@ Matrix<double> NeuralNetwork::calculate_outputs(const Matrix<double>& inputs) co
 
     if(multilayer_perceptron_pointer)
     {
-        outputs = multilayer_perceptron_pointer->calculate_outputs(outputs);
+        outputs = multilayer_perceptron_pointer->calculate_outputs(inputs);
     }
 
     // Unscaling layer
@@ -4305,7 +4305,7 @@ void NeuralNetwork::from_PMML(const tinyxml2::XMLDocument& document)
 
 
 /// Serializes the neural network object into a XML document of the TinyXML library.
-/// See the OpenNN manual for more information about the format of this element. 
+/// See the OpenNN manual for more information about the format of this element.
 
 tinyxml2::XMLDocument* NeuralNetwork::to_XML() const
 {
@@ -4320,7 +4320,7 @@ tinyxml2::XMLDocument* NeuralNetwork::to_XML() const
     // Inputs
 
     if(inputs_pointer)
-    {        
+    {
         tinyxml2::XMLDocument* inputs_document = inputs_pointer->to_XML();
 
         const tinyxml2::XMLElement* inputs_element = inputs_document->FirstChildElement("Inputs");
@@ -4878,7 +4878,7 @@ void NeuralNetwork::save_parameters(const string& file_name) const
 
 
 /// Loads from a XML file the members for this neural network object.
-/// Please mind about the file format, which is specified in the User's Guide. 
+/// Please mind about the file format, which is specified in the User's Guide.
 /// @param file_name Name of neural network XML file.
 
 void NeuralNetwork::load(const string& file_name)
@@ -4903,8 +4903,8 @@ void NeuralNetwork::load(const string& file_name)
 
 
 /// Loads the multilayer perceptron parameters from a data file.
-/// The format of this file is just a sequence of numbers. 
-/// @param file_name Name of parameters data file. 
+/// The format of this file is just a sequence of numbers.
+/// @param file_name Name of parameters data file.
 
 void NeuralNetwork::load_parameters(const string& file_name)
 {
@@ -7047,7 +7047,7 @@ void NeuralNetwork::save_expression_R(const string& file_name)
 
 
 /// Saves a set of input-output values from the neural network to a data file.
-/// @param file_name Name of data file. 
+/// @param file_name Name of data file.
 
 void NeuralNetwork::save_data(const string& file_name) const
 {
