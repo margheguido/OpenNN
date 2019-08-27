@@ -23,9 +23,9 @@ int main()
         cout << "OpenNN. New loss function for EDP solutions" << endl;
 
       //   srand(static_cast<unsigned>(time(nullptr)));
-        unsigned seed = 100;
-        std::cout << "Enter seed for parameter initialization: ";
-        std::cin >> seed;
+        unsigned seed = 1;
+    //    std::cout << "Enter seed for parameter initialization: ";
+      //  std::cin >> seed;
         srand(seed);
 
         // Data set
@@ -159,9 +159,9 @@ int main()
           training_strategy.set_training_method( "GRADIENT_DESCENT" ); // STOCHASTIC_GRADIENT_DESCENT, LEVENBERG_MARQUARDT_ALGORITHM, ADAPTIVE_MOMENT_ESTIMATION
           GradientDescent* gradient_descent_method_pointer = training_strategy.get_gradient_descent_pointer();
 
-          unsigned epochs_number = 0;
-          std::cout << "Set max number of epochs: ";
-          std::cin >> epochs_number;
+          unsigned epochs_number = 5;
+      //    std::cout << "Set max number of epochs: ";
+      //    std::cin >> epochs_number;
           gradient_descent_method_pointer->set_maximum_epochs_number(epochs_number);
           gradient_descent_method_pointer->set_display_period(1);
 
