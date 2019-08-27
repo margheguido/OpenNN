@@ -23,7 +23,10 @@ int main()
         cout << "OpenNN. New loss function for EDP solutions" << endl;
 
       //   srand(static_cast<unsigned>(time(nullptr)));
-        srand(100);
+        unsigned seed = 100;
+        std::cout << "Enter seed for parameter initialization: ";
+        std::cin >> seed;
+        srand(seed);
 
         // Data set
 
@@ -156,8 +159,11 @@ int main()
           training_strategy.set_training_method( "GRADIENT_DESCENT" ); // STOCHASTIC_GRADIENT_DESCENT, LEVENBERG_MARQUARDT_ALGORITHM, ADAPTIVE_MOMENT_ESTIMATION
           GradientDescent* gradient_descent_method_pointer = training_strategy.get_gradient_descent_pointer();
 
-          gradient_descent_method_pointer->set_maximum_epochs_number(1000);
-          gradient_descent_method_pointer->set_display_period(5);
+          unsigned epochs_number = 0;
+          std::cout << "Set max number of epochs: ";
+          std::cin >> epochs_number;
+          gradient_descent_method_pointer->set_maximum_epochs_number(epochs_number);
+          gradient_descent_method_pointer->set_display_period(1);
 
           gradient_descent_method_pointer->set_minimum_loss_decrease(1.0e-6);
 
@@ -215,7 +221,7 @@ int main()
 
         TestingAnalysis testing_analysis(&neural_network, &data_set);
         // calls Vector< Matrix<double> > TestingAnalysis::calculate_target_outputs() const
-        // dim( results ) = (#output) x (#testing_instances) x (2 = output_i + target_i da confrontare)
+        // dim( results ) = (#output) x (#testing_instances) x (2 = target_i + output_i da confrontare)
         Vector< Matrix<double> > results = testing_analysis.calculate_target_outputs();
         // Vector<size_t> columns_to_be_scaled{ 0, 1 }; // scala sia target che output (results[0][:,0] e results[0][:,1])
         // Vector< Statistics<double> > statistics1_to_scale_target_and_output{ targets_statistics[0], targets_statistics[0] };
@@ -223,11 +229,18 @@ int main()
         // results[1].unscale_columns_minimum_maximum( statistics1_to_scale_target_and_output, columns_to_be_scaled );
         // results[0].unscale_columns_minimum_maximum( statistics2_to_scale_target_and_output, columns_to_be_scaled );
         //
-        // std::cout << "targets, outputs (scaled):" << '\n';
-        // std::cout << "first " << '\n';
+        //
+        // Vector<size_t> testing_indices = instances_pointer->get_testing_indices();
+        Matrix<double> testing_inputs = data_set.get_testing_inputs();
+        unsigned testing_instances_number = testing_inputs.get_rows_number();
+        testing_inputs.unscale_columns_minimum_maximum( inputs_statistics, {0} );
+        for( unsigned i = 0; i < testing_instances_number; i++ )
+        {
+            std::cout << "mu: " << testing_inputs(i,0) << '\n';
+            std::cout << "Predicted tau: " << results[0](i,1) << '\n';
+            std::cout << "Predicted tau_for_EDP: " << results[0](i,1) * 0.009 << '\n';
+        }
         // results[0].print();
-        // std::cout << "second" << '\n';
-        // results[1].print();
 
         return 0 ;
     }
