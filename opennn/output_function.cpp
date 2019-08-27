@@ -26,6 +26,10 @@ namespace OpenNN
       return solutions;
   }
 
+
+
+
+
   /// \param      tau_values          Stabilization parameters [current_batch_size x 1]
   /// \return                         Derivative of the PDE solution wrt the stabilization parameter [current_batch_size x n_Dof]
   Matrix<double> OutputFunction::calculate_PDE_solution_derivative(const Matrix<double>& tau_values, const Vector<size_t> & batch_indices) const
@@ -43,6 +47,7 @@ namespace OpenNN
           double h = 0.1;
           Vector<double> y = isoglib_interface_pointer->calculate_solution(tau, mu);
           Vector<double> y_forward = isoglib_interface_pointer->calculate_solution(tau + h, mu);
+          //calcolare soluzione nei nodi di gauss
           Vector<double> derivative = ( y_forward - y ) / h;
 
           solutions_derivatives.set_row(i, derivative);
@@ -60,8 +65,8 @@ namespace OpenNN
 
       Matrix<double> PDE_solutions = calculate_PDE_solution(tau_values, batch_indices);
       const Matrix<double> targets = data_set_pointer->get_targets(batch_indices);
-      Matrix<double> simple_loss_derivatives = PDE_solutions - targets;
 
+      Matrix<double> simple_loss_derivatives = PDE_solutions - targets;
       Matrix<double> PDE_solutions_derivatives = calculate_PDE_solution_derivative(tau_values, batch_indices);
 
       Matrix<double> composed_loss_derivatives(current_batch_size, 1);
@@ -105,8 +110,9 @@ namespace OpenNN
 
           const Matrix<double> outputs = multilayer_perceptron_pointer->calculate_outputs(inputs);
 
+        //  double batch_error = calculate_PDE_batch_error(outputs, training_batches[static_cast<unsigned>(i)]);
           // IMPORTANT: here the solution of the PDE is computed using tau (the outputs of the network)
-          Matrix<double> PDE_solutions = calculate_PDE_solution(outputs, training_batches[static_cast<unsigned>(i)]);
+        Matrix<double> PDE_solutions = calculate_PDE_solution(outputs, training_batches[static_cast<unsigned>(i)]);
 
           const double batch_error = PDE_solutions.calculate_sum_squared_error(targets);
 
@@ -147,7 +153,7 @@ namespace OpenNN
           // IMPORTANT: here the solution of the PDE is computed using tau (the outputs of the network)
           Matrix<double> PDE_solutions = calculate_PDE_solution(outputs, training_batches[static_cast<unsigned>(i)]);
 
-          const double batch_error = PDE_solutions.calculate_sum_squared_error(targets);
+         const double batch_error = PDE_solutions.calculate_sum_squared_error(targets);
 
           training_error += batch_error;
       }
