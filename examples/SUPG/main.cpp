@@ -166,7 +166,10 @@ int main()
           gradient_descent_method_pointer->set_display_period(1);
 
           gradient_descent_method_pointer->set_minimum_loss_decrease(1.0e-6);
+          gradient_descent_method_pointer->set_maximum_time(2000);
 
+          gradient_descent_method_pointer->set_reserve_error_history(true);
+          gradient_descent_method_pointer->set_reserve_selection_error_history(true);
           // TODO: eliminare se possibile
           // gradient_descent_method_pointer->get_learning_rate_algorithm_pointer()->set_training_rate_method("Fixed");
 
@@ -213,8 +216,26 @@ int main()
         const TrainingStrategy::Results training_strategy_results = training_strategy.perform_training();
         std::cout << "Training completed" << '\n';
 
-  //    Vector<double> loss_history =training_strategy_results.gradient_descent_results_pointer->loss_history;
-  //    Vector<double> selection_history=training_strategy_results.gradient_descent_results_pointer->selection_error_history;
+     Vector<double> loss_history =training_strategy_results.gradient_descent_results_pointer->loss_history;
+    Vector<double> selection_history=training_strategy_results.gradient_descent_results_pointer->selection_error_history;
+    size_t loss_size= loss_history.size();
+    size_t selection_size= selection_history.size();
+
+    std::cout << "Loss: " << '\n';
+    for( unsigned i = 0; i < loss_size; i++ )
+    {
+
+        std::cout << loss_history[i] << '\n';
+
+    }
+
+    std::cout << "selection error: " << '\n';
+    for( unsigned i = 0; i < selection_size; i++ )
+    {
+
+        std::cout << selection_history[i] << '\n';
+
+    }
 
 
         // Testing analysis
@@ -234,11 +255,23 @@ int main()
         Matrix<double> testing_inputs = data_set.get_testing_inputs();
         unsigned testing_instances_number = testing_inputs.get_rows_number();
         testing_inputs.unscale_columns_minimum_maximum( inputs_statistics, {0} );
+        std::cout << "mu: " << '\n';
         for( unsigned i = 0; i < testing_instances_number; i++ )
         {
-            std::cout << "mu: " << testing_inputs(i,0) << '\n';
-            std::cout << "Predicted tau: " << results[0](i,1) << '\n';
-            std::cout << "Predicted tau_for_EDP: " << results[0](i,1) * 0.009 << '\n';
+            std::cout << testing_inputs(i,0) << '\n';
+
+        }
+std::cout << "Predicted tau: "<< '\n';
+        for( unsigned i = 0; i < testing_instances_number; i++ )
+        {
+
+            std::cout << results[0](i,1) << '\n';
+
+        }
+std::cout << "Predicted tau_for_EDP: "<< '\n';
+        for( unsigned i = 0; i < testing_instances_number; i++ )
+        {
+            std::cout << results[0](i,1) * 0.009 << '\n';
         }
         // results[0].print();
 
