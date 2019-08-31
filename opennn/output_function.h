@@ -23,6 +23,7 @@
 #include "perceptron_layer.h"
 #include "multilayer_perceptron.h"
 #include "normalized_squared_error.h"
+#include "SUPGdataBase.h"
 
 
 namespace OpenNN
@@ -46,7 +47,7 @@ public:
   //   isoglib_interface_pointer = new IsoglibInterface();
   // }
 
-  OutputFunction(string meshload_directory_name, data_class_interface* data_ptr)
+  OutputFunction(string meshload_directory_name, SUPGdataBase* data_ptr)
   {
     isoglib_interface_pointer = new IsoglibInterface(meshload_directory_name, data_ptr);
   }

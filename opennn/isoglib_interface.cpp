@@ -130,16 +130,15 @@ namespace OpenNN
 
   void IsoglibInterface::solveSteady(double tau, double mu)
   {
+      // setup
+      localMatrix_pointer->set_tau(tau);
+      data_pointer->set_diffusion_coefficient(mu);
+      pde_prob.setLocalMatrix(localMatrix_pointer);
+      timeAdvancing.setup( &pde_prob, 1, 0 );
+      pde_prob.setTimeAdvancingScheme( &timeAdvancing );
 
-
-    // set stabilization parameter
-    localMatrix_pointer->set_tau(tau);
-    localMatrix_pointer->set_mu(mu);
-     pde_prob.setLocalMatrix(localMatrix_pointer);
-     timeAdvancing.setup( &pde_prob, 1, 0 );
-  pde_prob.setTimeAdvancingScheme( &timeAdvancing );
-
-    pde_prob.computeTimestep(false);
+      // solve
+      pde_prob.computeTimestep(false);
   }
 
 

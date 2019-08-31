@@ -12,6 +12,7 @@
 #include "opennn.h"
 #include "isoglib_interface.h"
 #include "output_function.h"
+#include "SUPGdataBase.h"
 #include "data/Test1/SUPGdata1.h"
 #include "data/Test2/SUPGdata2.h"
 
@@ -30,7 +31,7 @@ int main()
         //======================================================================
         // EXTERNAL FILES (meshload.dat and dataset.txt)
         //======================================================================
-        unsigned test_number = 2;
+        unsigned test_number = 1;
         unsigned ref_number = 3;
         string dataset_name = "data/Test" + to_string(test_number) + "/ref" + to_string(ref_number)+ "/SUPG.txt";
         string meshload_folder = "data/Test" + to_string(test_number) + "/ref" + to_string(ref_number);
@@ -126,7 +127,7 @@ int main()
         // TODO: migliorare
         SUPGdata1 data1;
         SUPGdata2 data2;
-        data_class_interface* data_pointer;
+        SUPGdataBase* data_pointer;
         if( test_number == 1 )
           data_pointer = &data1;
         else if( test_number == 2 )

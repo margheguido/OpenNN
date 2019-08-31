@@ -1,35 +1,21 @@
 #ifndef __SUPGDATA2_H__
 #define __SUPGDATA2_H__
 
-// System includes
-
-#include <iostream>
-#include <fstream>
-#include <string>
-#include <sstream>
-#include <cmath>
-
-#include <math.h>
-
 // OpenNN includes
-
-#include "vector.h"
-#include "matrix.h"
-#include "data.hpp"
-
+#include "SUPGdataBase.h"
 
 // data for an advection diffusion reaction problem with known exact solution
-class SUPGdata2: public data_class_interface
+class SUPGdata2: public SUPGdataBase
 {
 protected:
 public:
-    SUPGdata2(): data_class_interface( 1 ) { }
+    SUPGdata2(): SUPGdataBase() { }
 
     int updateData( meshload_class &mesh ) override { m_isUpdated = true; return 0; }
 
     void diff_coeff( Real *outValues, Real xx, Real yy, Real zz, Real t ) const override
     {
-        outValues[ 0 ] = 0.0005;
+        outValues[ 0 ] = current_diffusion_coefficient;
     }
 
     void beta_coeff( Real *outValues, Real xx, Real yy, Real zz, Real t ) const override

@@ -25,6 +25,7 @@
 #include "SUPGLocalMatrix.hpp"
 #include "epetra_communicator.hpp"
 #include "data.hpp"
+#include "SUPGdataBase.h"
 
 namespace OpenNN
 {
@@ -50,7 +51,7 @@ public:
   //   set_problem_resolution();
   // }
 
-  IsoglibInterface(string meshload_directory_name, data_class_interface* data_ptr):
+  IsoglibInterface(string meshload_directory_name, SUPGdataBase* data_ptr):
   data_pointer(data_ptr)
   {
     localMatrix_pointer = new supg_local_matrix;
@@ -90,7 +91,7 @@ private:
   unsigned nGaussPoints; // 4 by default in isoglib, set from main
 
   // data
-  data_class_interface* data_pointer;
+  SUPGdataBase* data_pointer;
 
   Problem pde_prob;
 

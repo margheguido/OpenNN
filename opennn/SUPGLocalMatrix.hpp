@@ -14,19 +14,14 @@ protected:
     typedef typename LocalMatrixFast<1>::ValueMatrix ValueMatrix;
 
     // parameters
-    Real  beta[ 3 ], gamma, fff;
-    double tau, mu;
+    Real  mu, beta[ 3 ], gamma, fff;
+    double tau;
 
 public:
 
     void set_tau(double t)
     {
-      tau=t;
-    }
-
-    void set_mu(double m)
-    {
-      mu=m;
+        tau = t;
     }
 
     supg_local_matrix():
@@ -38,28 +33,27 @@ public:
     virtual void evaluate_parameters_on_gauss_point( Real x, Real y, Real z, const ShapeValues &basisValues ) override
     {
         const data_class_interface &data = this->m_solution->getData();
-        // data.diff_coeff( &mu, x, y, z, 0.0 ); // deleting this line mu is now set from outside (it's assumed constant in space)
-
+        data.diff_coeff( &mu, x, y, z, 0.0 );
         data.beta_coeff( beta, x, y, z, 0.0 );
         data.gamma_coeff( &gamma, x, y, z, 0.0 );
-        source_term_mu( &fff, x, y, z, 0.0,mu);
+        data.source_term( &fff, x, y, z, 0.0 );
     }
 
-    void source_term_mu( Real *outValues, Real xx, Real yy, Real zz, Real t,double mu) const
-    {
-    /*  outValues[ 0 ] = mu*((2*square(2*xx - 1)*(square(xx - 1/2) + square(yy - 1/2) - 1/16))/
-      (mu*sqrt(mu)*square(square(square(xx - 1/2)+ square(yy - 1/2)- 1/16)/mu + 1))
-    - 4/(sqrt(mu)*(square(square(xx - 1/2) + square(yy - 1/2)- 1/16)/mu + 1)) +
-    (2*square(2*yy- 1)*(square(xx - 1/2) +square(yy - 1/2) - 1/16)) /
-    (mu*sqrt(mu)*square(square(square(xx - 1/2) +
-  square(yy - 1/2) - 1/16)/mu + 1))) +
-  (-(2*xx - 1)/(sqrt(mu)*(square(square(xx - 1/2) +
-   square(yy - 1/2) - 1/16)/mu + 1)))
-   + (-(2*yy - 1)/(sqrt(mu)*(square(square(xx - 1/2) +
-    square(yy - 1/2) - 1/16)/mu + 1)));*/
-
-       outValues[ 0 ] = mu* sin(2.0 * mPi * xx) * (2.0 + 4.0 * mPi * mPi * (yy - square(yy))) + 2.0 * mPi * cos(2.0 * mPi * xx) * (yy - square(yy)) + sin(2.0 * mPi * xx) * (1.0 - 2.0 * yy);
-    }
+    // void source_term_mu( Real *outValues, Real xx, Real yy, Real zz, Real t,double mu) const
+    // {
+  //   /*  outValues[ 0 ] = mu*((2*square(2*xx - 1)*(square(xx - 1/2) + square(yy - 1/2) - 1/16))/
+  //     (mu*sqrt(mu)*square(square(square(xx - 1/2)+ square(yy - 1/2)- 1/16)/mu + 1))
+  //   - 4/(sqrt(mu)*(square(square(xx - 1/2) + square(yy - 1/2)- 1/16)/mu + 1)) +
+  //   (2*square(2*yy- 1)*(square(xx - 1/2) +square(yy - 1/2) - 1/16)) /
+  //   (mu*sqrt(mu)*square(square(square(xx - 1/2) +
+  // square(yy - 1/2) - 1/16)/mu + 1))) +
+  // (-(2*xx - 1)/(sqrt(mu)*(square(square(xx - 1/2) +
+  //  square(yy - 1/2) - 1/16)/mu + 1)))
+  //  + (-(2*yy - 1)/(sqrt(mu)*(square(square(xx - 1/2) +
+  //   square(yy - 1/2) - 1/16)/mu + 1)));*/
+  //   outValues[ 0 ] = exp(-yy) * ( -mu *( -square(xx)+  xx -2) + square(xx) - 3*xx +1);
+  //      // outValues[ 0 ] = mu* sin(2.0 * mPi * xx) * (2.0 + 4.0 * mPi * mPi * (yy - square(yy))) + 2.0 * mPi * cos(2.0 * mPi * xx) * (yy - square(yy)) + sin(2.0 * mPi * xx) * (1.0 - 2.0 * yy);
+  //   }
 
     virtual void integrate_on_gauss_point( ValueMatrix &outValues, Real x, Real y, Real z, int k, int m, const ShapeValues &basisValues ) const override
     {
