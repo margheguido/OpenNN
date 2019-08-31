@@ -25,16 +25,20 @@ int main()
         cout << "OpenNN. New loss function for EDP solutions" << endl;
 
       //   srand(static_cast<unsigned>(time(nullptr)));
-        srand(1);
+        srand(1); // TODO: set to random
 
         //======================================================================
-        // SETUP
+        // EXTERNAL FILES (meshload.dat and dataset.txt)
         //======================================================================
+
         unsigned test_number = 1;
         string dataset_name = "data/Test" + to_string(test_number) + "/SUPG.txt";
         string meshload_folder = "data/Test" + to_string(test_number);
 
-        // Data set
+        //======================================================================
+        // DATASET
+        //======================================================================
+
         DataSet data_set;
         data_set.set_header_line(true); // Our data set has a name for every column
         data_set.set_data_file_name(dataset_name);
@@ -43,7 +47,10 @@ int main()
         data_set.load_data();
         data_set.print_data();
 
-        // Variables
+        //======================================================================
+        // VARIABLES (COLUMNS OF THE DATASET)
+        //======================================================================
+
         Variables* variables_pointer = data_set.get_variables_pointer();
 
         // Number of inputs of the ANN (only mu in this case)
@@ -55,132 +62,67 @@ int main()
         // Number of degrees of freedom
         unsigned dofs_number = square( sqrt( elements_number ) + 1 ); // nRef -> 81
 
+        // Vector of items, each one corresponding to the columns of the dataset
         Vector< Variables::Item > variables_items( inputs_number + elements_number*gauss_points_number );
-
-
+        // Set type of item (input or target)
         for( unsigned i = 0; i < inputs_number; i++ )
         {
-          // variables_items[i].name = "mu";
-          // variables_items[i].units = "";
           variables_items[i].use = Variables::Input;
         }
         for( unsigned i = inputs_number; i < inputs_number + elements_number*gauss_points_number; i++ )
         {
-          // variables_items[i].name = "dof_" + i;
-          // variables_items[i].units = "";
           variables_items[i].use = Variables::Target;
         }
-
         variables_pointer->set_items(variables_items);
 
-
+        // TODO: ??
         const Matrix<string> inputs_information = variables_pointer->get_inputs_information();
         const Matrix<string> targets_information = variables_pointer->get_targets_information();
-        /* Matrix<string> my_out_information(1,3);
-        my_out_information(0,0)= "scaled_sound_pressure_level";
-        my_out_information(0,1)="decibels";
-        my_out_information(0,2)="pressure";*/
 
-        // Instances
+        //======================================================================
+        // INSTANCES (ROWS OF THE DATASET)
+        //======================================================================
 
         Instances* instances_pointer = data_set.get_instances_pointer();
-
+        // Assign every row to a task: training, validation or testing (respectively: 60%, 20%, 20%)
         instances_pointer->split_random_indices();
-        // // See which indexes have been selected for testing (random selection)
-        // Vector<size_t> testing_indices = instances_pointer->get_testing_indices();
-        // std::cout << "testing_indeces: " << std::endl;
-        // for( size_t i = 0; i < testing_indices.size(); i++ )
-        //   std::cout << testing_indices[i] << " " << std::endl;
 
+        //======================================================================
+        // NEURAL NETWORK
+        //======================================================================
 
-        // Neural network
-
-        // const size_t inputs_number = variables_pointer->get_inputs_number(); // already set al line 42
+        // const size_t inputs_number = ... [see above, already chosen]
         const size_t hidden_perceptrons_number = 12;
-        const size_t outputs_number = variables_pointer->get_inputs_number();
-
+        const size_t outputs_number = 1;
         NeuralNetwork neural_network(inputs_number, hidden_perceptrons_number, outputs_number);
 
+        // Set activation funcion of the last layer so that output is always positive
         MultilayerPerceptron* multilayer_perceptron_pointer = neural_network.get_multilayer_perceptron_pointer();
-         multilayer_perceptron_pointer->set_layer_activation_function(1, PerceptronLayer::SoftPlus);
-        // neural_network.set_folder_file_names("name of the mesh directory", "name of the binary file ");
+        multilayer_perceptron_pointer->set_layer_activation_function(1, PerceptronLayer::SoftPlus);
 
+        // TODO: ??
         Inputs* inputs = neural_network.get_inputs_pointer();
-
         inputs->set_information(inputs_information);
-
         Outputs* outputs = neural_network.get_outputs_pointer();
-
         outputs->set_information(targets_information);
 
-        // // Updates OutputFunction::inputs_statistics_for_unscaling
-        // neural_network.get_loss_index_pointer->set_inputs_statistics_for_unscaling( inputs_statistics );
+        //======================================================================
+        // TRAINING
+        //======================================================================
 
-        // neural_network.construct_scaling_layer();
-        //
-        // ScalingLayer* scaling_layer_pointer = neural_network.get_scaling_layer_pointer();
-        // // std::cout << "Number of inputs in scaling: " << scaling_layer_pointer->get_scaling_neurons_number() << std::endl;
-        // scaling_layer_pointer->set_statistics(inputs_statistics);
-        //
-        // // scaling_layer_pointer->set_scaling_methods(ScalingLayer::NoScaling);
-        // // scaling_layer_pointer->set_scaling_methods(ScalingLayer::MeanStandardDeviation);
-        // neural_network.construct_unscaling_layer();
-        //
-        // UnscalingLayer* unscaling_layer_pointer = neural_network.get_unscaling_layer_pointer();
-        //
-        // unscaling_layer_pointer->set_statistics(targets_statistics);
-
-        // unscaling_layer_pointer->set_unscaling_method(UnscalingLayer::NoUnscaling);
-        // unscaling_layer_pointer->set_unscaling_method(UnscalingLayer::MeanStandardDeviation);
-
-        // BOUNDING_LAYER
-        // neural_network.construct_bounding_layer();
-        // BoundingLayer* bounding_layer_pointer= neural_network.get_bounding_layer_pointer();
-        // const Vector<double> lb{0};
-        // bounding_layer_pointer->set_lower_bounds(lb);
-        //
-        // const Vector<double> ub{10};
-        // bounding_layer_pointer->set_upper_bounds(ub);
-
-
-        // Training strategy object
         TrainingStrategy training_strategy(&neural_network, &data_set);
 
-        if(0)
-        {
-          // QUASI_NEWTON built as default, no need of set_training_method
-          QuasiNewtonMethod* quasi_Newton_method_pointer = training_strategy.get_quasi_Newton_method_pointer();
+        // Choice of the optimization algorithm and setup
+        training_strategy.set_training_method( "GRADIENT_DESCENT" );
+        GradientDescent* gradient_descent_method_pointer = training_strategy.get_gradient_descent_pointer();
+        gradient_descent_method_pointer->set_maximum_epochs_number(5);
+        gradient_descent_method_pointer->set_display_period(1);
+        gradient_descent_method_pointer->set_minimum_loss_decrease(1.0e-6);
+        gradient_descent_method_pointer->set_maximum_time(2000);
+        gradient_descent_method_pointer->set_reserve_error_history(true);
+        gradient_descent_method_pointer->set_reserve_selection_error_history(true);
 
-          quasi_Newton_method_pointer->set_maximum_epochs_number(5);
-          quasi_Newton_method_pointer->set_display_period(1);
-
-          quasi_Newton_method_pointer->set_minimum_loss_decrease(1.0e-6);
-        }
-
-        if(1)
-        {
-          training_strategy.set_training_method( "GRADIENT_DESCENT" ); // STOCHASTIC_GRADIENT_DESCENT, LEVENBERG_MARQUARDT_ALGORITHM, ADAPTIVE_MOMENT_ESTIMATION
-          GradientDescent* gradient_descent_method_pointer = training_strategy.get_gradient_descent_pointer();
-
-          unsigned epochs_number = 5;
-      //    std::cout << "Set max number of epochs: ";
-      //    std::cin >> epochs_number;
-          gradient_descent_method_pointer->set_maximum_epochs_number(epochs_number);
-          gradient_descent_method_pointer->set_display_period(1);
-
-          gradient_descent_method_pointer->set_minimum_loss_decrease(1.0e-6);
-          gradient_descent_method_pointer->set_maximum_time(2000);
-
-          gradient_descent_method_pointer->set_reserve_error_history(true);
-          gradient_descent_method_pointer->set_reserve_selection_error_history(true);
-          // TODO: eliminare se possibile
-          // gradient_descent_method_pointer->get_learning_rate_algorithm_pointer()->set_training_rate_method("Fixed");
-
-          // TODO: eliminare
-          // gradient_descent_method_pointer->set_training_batch_size(1);
-
-        }
-
+        // Definition of the PDE: diffusion and advection coefficients, forcing term
         // TODO: migliorare
         SUPGdata1 data1;
         SUPGdata2 data2;
@@ -190,42 +132,35 @@ int main()
         else if( test_number == 2 )
           data_pointer = &data2;
 
+        // Iniziatialization of the new loss function depending on the PDE chosen
         OutputFunction *output_function_pointer = new OutputFunction(meshload_folder, data_pointer);
-
-        output_function_pointer->get_isoglib_interface_pointer()->set_nDof(dofs_number);
-        output_function_pointer->get_isoglib_interface_pointer()->set_nElems(elements_number);
-        output_function_pointer->get_isoglib_interface_pointer()->set_nGaussPoints(gauss_points_number);
-
+        IsoglibInterface* isoglibinterface_pointer = output_function_pointer->get_isoglib_interface_pointer();
+        isoglibinterface_pointer->set_nDof(dofs_number);
+        isoglibinterface_pointer->set_nElems(elements_number);
+        isoglibinterface_pointer->set_nGaussPoints(gauss_points_number);
         // Save the original inputs inside OutputFunction before scaling them for the neural network
         output_function_pointer->set_unscaled_inputs(data_set.get_inputs());
-
-        output_function_pointer->set_normalization_coefficient(1);
-        output_function_pointer->set_selection_normalization_coefficient(1);
-
+        // Normalize the value of training and selection error so that they are comparable (its absolute value is meaningless)
+        unsigned training_instances_number = instances_pointer->get_training_instances_number();
+        unsigned selection_instances_number = instances_pointer->get_selection_instances_number();
+        output_function_pointer->set_normalization_coefficient(training_instances_number);
+        output_function_pointer->set_selection_normalization_coefficient(selection_instances_number);
+        // Link the loss to data and ANN
         output_function_pointer->set_data_set_pointer(&data_set);
         output_function_pointer->set_neural_network_pointer(&neural_network);
 
+        // Set the new loss inside the training object
         training_strategy.set_loss_index_pointer(output_function_pointer);
 
-        // calls Vector< Statistics<double> > DataSet::scale_inputs_minimum_maximum()
-        // dim(inputs_statistics) = #inputs, la funzione scala tutte le colonne del DataSet
-        // che corrispondono ad input e per farlo ne calcola le statistiche (min, max, mean...)
-        // che poi restituisce in modo da averle a disposizione senza ricalcolarle
+        // The ANN works well between with inputs of order zero: scale the inputs (targets are not scaled since represent the exact solution)
         const Vector< Statistics<double> > inputs_statistics = data_set.scale_inputs_minimum_maximum();
-        // const Vector< Statistics<double> > targets_statistics = data_set.scale_targets_minimum_maximum();
-        // Matrix<double> targ=data_set.get_targets();
-        // cout <<"scaled targets"<<endl;
-        // targ.print();
 
-        // // Senza senso: set_loss_index_pointer e get_loss_index_pointer si riferiscono a cose diverse
-        // // (OptimizationAlgorithm::loss_index_pointer e TrainingStrategy::normalized_squared_error_pointer; il secondo sembra inutile)
-        // std::cout << "loss_index_pointer: " << training_strategy.get_loss_index_pointer()  << '\n';
-
-
-//        quasi_Newton_method_pointer->set_reserve_loss_history(true);
-
+        // Start training
         const TrainingStrategy::Results training_strategy_results = training_strategy.perform_training();
-        std::cout << "Training completed" << '\n';
+
+        //======================================================================
+        // TODO: da qua in poi ancora da formattare e commentare
+        //======================================================================
 
      Vector<double> loss_history =training_strategy_results.gradient_descent_results_pointer->loss_history;
     Vector<double> selection_history=training_strategy_results.gradient_descent_results_pointer->selection_error_history;
