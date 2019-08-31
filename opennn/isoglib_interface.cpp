@@ -14,7 +14,7 @@ namespace OpenNN
 
     g_meshFlags = FLAGS_DEFAULT | DO_NOT_USE_BASIS_CACHES;
 
-    setProblem( &data, setupProblem );
+    setProblem( data_pointer, setupProblem );
   }
 
 

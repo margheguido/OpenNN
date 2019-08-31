@@ -41,14 +41,14 @@ class OutputFunction : public NormalizedSquaredError
 public:
 
   // Default constructor
-  OutputFunction()
-  {
-    isoglib_interface_pointer = new IsoglibInterface();
-  }
+  OutputFunction() = delete;
+  // {
+  //   isoglib_interface_pointer = new IsoglibInterface();
+  // }
 
-  OutputFunction(string meshload_directory_name)
+  OutputFunction(string meshload_directory_name, data_class_interface* data_ptr)
   {
-    isoglib_interface_pointer = new IsoglibInterface(meshload_directory_name);
+    isoglib_interface_pointer = new IsoglibInterface(meshload_directory_name, data_ptr);
   }
 
   // Destructor

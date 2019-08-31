@@ -24,7 +24,7 @@
 #include "local_matrix.hpp"
 #include "SUPGLocalMatrix.hpp"
 #include "epetra_communicator.hpp"
-#include "GuidoVidulisTest.h"
+#include "data.hpp"
 
 namespace OpenNN
 {
@@ -43,14 +43,15 @@ class IsoglibInterface
 
 public:
 
-  // Default constructor
-  IsoglibInterface()
-  {
-    localMatrix_pointer = new supg_local_matrix;
-    set_problem_resolution();
-  }
+  // Default constructor (TODO: remove)
+  IsoglibInterface() = delete;
+  // {
+  //   localMatrix_pointer = new supg_local_matrix;
+  //   set_problem_resolution();
+  // }
 
-  IsoglibInterface(string meshload_directory_name)
+  IsoglibInterface(string meshload_directory_name, data_class_interface* data_ptr):
+  data_pointer(data_ptr)
   {
     localMatrix_pointer = new supg_local_matrix;
     directory_name = meshload_directory_name.c_str();
@@ -89,7 +90,7 @@ private:
   unsigned nGaussPoints; // 4 by default in isoglib, set from main
 
   // data
-  GuidoVidulisTest data;
+  data_class_interface* data_pointer;
 
   Problem pde_prob;
 

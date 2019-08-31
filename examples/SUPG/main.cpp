@@ -12,6 +12,8 @@
 #include "opennn.h"
 #include "isoglib_interface.h"
 #include "output_function.h"
+#include "data/Test1/SUPGdata1.h"
+#include "data/Test2/SUPGdata2.h"
 
 
 using namespace OpenNN;
@@ -31,7 +33,7 @@ int main()
         unsigned test_number = 1;
         string dataset_name = "data/Test" + to_string(test_number) + "/SUPG.txt";
         string meshload_folder = "data/Test" + to_string(test_number);
-        
+
         // Data set
         DataSet data_set;
         data_set.set_header_line(true); // Our data set has a name for every column
@@ -179,7 +181,16 @@ int main()
 
         }
 
-        OutputFunction *output_function_pointer = new OutputFunction(meshload_folder);
+        // TODO: migliorare
+        SUPGdata1 data1;
+        SUPGdata2 data2;
+        data_class_interface* data_pointer;
+        if( test_number == 1 )
+          data_pointer = &data1;
+        else if( test_number == 2 )
+          data_pointer = &data2;
+
+        OutputFunction *output_function_pointer = new OutputFunction(meshload_folder, data_pointer);
 
         output_function_pointer->get_isoglib_interface_pointer()->set_nDof(dofs_number);
         output_function_pointer->get_isoglib_interface_pointer()->set_nElems(elements_number);
@@ -192,7 +203,6 @@ int main()
         output_function_pointer->set_selection_normalization_coefficient(1);
 
         output_function_pointer->set_data_set_pointer(&data_set);
-
         output_function_pointer->set_neural_network_pointer(&neural_network);
 
         training_strategy.set_loss_index_pointer(output_function_pointer);
