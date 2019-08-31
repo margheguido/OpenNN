@@ -30,9 +30,10 @@ int main()
         //======================================================================
         // SETUP
         //======================================================================
-        unsigned test_number = 1;
-        string dataset_name = "data/Test" + to_string(test_number) + "/SUPG.txt";
-        string meshload_folder = "data/Test" + to_string(test_number);
+        unsigned test_number = 2;
+        unsigned ref_number = 3;
+        string dataset_name = "data/Test" + to_string(test_number) + "/ref" + to_string(ref_number)+ "/SUPG.txt";
+        string meshload_folder = "data/Test" + to_string(test_number) + "/ref" + to_string(ref_number);
 
         // Data set
         DataSet data_set;

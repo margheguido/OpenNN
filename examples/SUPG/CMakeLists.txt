@@ -24,13 +24,18 @@ endif (UNIX)
 
 include_directories(./data)
 
-FILE(COPY ./data/SUPG.txt DESTINATION "${PROJECT_BINARY_DIR}/data")
+
+
+FILE(COPY ./data/Test1 DESTINATION "${PROJECT_BINARY_DIR}/data")
+FILE(COPY ./data/Test2 DESTINATION "${PROJECT_BINARY_DIR}/data")
+
+
 
 link_directories(${CMAKE_SOURCE_DIR}/opennn)
 
 include_directories(${CMAKE_SOURCE_DIR}/opennn)
 include_directories(
-    /vagrant/isoglib/BuildDebug
+    /vagrant/isoglib/BuildRelease
       /vagrant/isoglib/isoglib
       /vagrant/isoglib/isoglib/Core
       /vagrant/isoglib/isoglib/Problem
@@ -48,8 +53,8 @@ add_executable(SUPG main.cpp)
 
 target_link_libraries(SUPG ${PROJECT_LINK_LIBS})
 
-target_link_libraries(SUPG /vagrant/isoglib/BuildDebug/libisoglib.so)
-target_link_libraries(SUPG /vagrant/isoglib/BuildDebug/libisoglib_epetra.so)
+target_link_libraries(SUPG /vagrant/isoglib/BuildRelease/libisoglib.so)
+target_link_libraries(SUPG /vagrant/isoglib/BuildRelease/libisoglib_epetra.so)
 
 target_link_libraries(SUPG /u/sw/pkgs/toolchains/gcc-glibc/7/base/lib/liblua.a)
 target_link_libraries(SUPG /u/sw/pkgs/toolchains/gcc-glibc/7/prefix/lib/libdl.so)

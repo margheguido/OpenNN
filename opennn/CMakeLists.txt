@@ -63,5 +63,5 @@ isoglib_interface.cpp
 )
 
 
-target_link_libraries(opennn /vagrant/isoglib/BuildDebug/isoglib.so)
-target_link_libraries(opennn -L/../../isoglib/BuildDebug)
+target_link_libraries(opennn /vagrant/isoglib/BuildRelease/isoglib.so)
+target_link_libraries(opennn -L/../../isoglib/BuildRelease)
