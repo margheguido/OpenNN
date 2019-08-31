@@ -60,9 +60,7 @@ public:
    square(yy - 1/2) - 1/16)/local_mu + 1)))
    + (-(2*yy - 1)/(sqrt(local_mu)*(square(square(xx - 1/2) +
     square(yy - 1/2) - 1/16)/local_mu + 1))); */
-
-
-
+        // outValues[ 0 ] = exp(-yy) * ( -local_mu *( -square(xx)+  xx -2) + square(xx) - 3*xx +1);
     }
 
     void sol_ex( Real *outValues, Real xx, Real yy, Real zz, Real tt ) const override

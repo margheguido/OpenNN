@@ -23,20 +23,21 @@ int main()
         cout << "OpenNN. New loss function for EDP solutions" << endl;
 
       //   srand(static_cast<unsigned>(time(nullptr)));
-        unsigned seed = 1;
-    //    std::cout << "Enter seed for parameter initialization: ";
-      //  std::cin >> seed;
-        srand(seed);
+        srand(1);
 
+        //======================================================================
+        // SETUP
+        //======================================================================
+        unsigned test_number = 1;
+        string dataset_name = "data/Test" + to_string(test_number) + "/SUPG.txt";
+        string meshload_folder = "data/Test" + to_string(test_number);
+        
         // Data set
-
         DataSet data_set;
-
         data_set.set_header_line(true); // Our data set has a name for every column
-        data_set.set_data_file_name("data/SUPG.txt");
+        data_set.set_data_file_name(dataset_name);
         data_set.set_file_type("txt");
         data_set.set_separator("Tab");
-
         data_set.load_data();
         data_set.print_data();
 
@@ -178,7 +179,7 @@ int main()
 
         }
 
-        OutputFunction *output_function_pointer = new OutputFunction("data/Data_GuidoVidulisADRExactSol_p1_ref3");
+        OutputFunction *output_function_pointer = new OutputFunction(meshload_folder);
 
         output_function_pointer->get_isoglib_interface_pointer()->set_nDof(dofs_number);
         output_function_pointer->get_isoglib_interface_pointer()->set_nElems(elements_number);
