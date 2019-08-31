@@ -2,7 +2,8 @@
 #define H_SUPGLOCALMATRIXFAST
 
 #include "local_matrix_fast.hpp"
-
+#include <cmath>
+#include <math.h>
 // generic SUPG stabilized problem
 class supg_local_matrix: public LocalMatrixFast<1>
 {
@@ -46,13 +47,24 @@ public:
 
     void source_term_mu( Real *outValues, Real xx, Real yy, Real zz, Real t,double mu) const
     {
-        outValues[ 0 ] = mu* sin(2.0 * mPi * xx) * (2.0 + 4.0 * mPi * mPi * (yy - square(yy))) + 2.0 * mPi * cos(2.0 * mPi * xx) * (yy - square(yy)) + sin(2.0 * mPi * xx) * (1.0 - 2.0 * yy);
+    /*  outValues[ 0 ] = mu*((2*square(2*xx - 1)*(square(xx - 1/2) + square(yy - 1/2) - 1/16))/
+      (mu*sqrt(mu)*square(square(square(xx - 1/2)+ square(yy - 1/2)- 1/16)/mu + 1))
+    - 4/(sqrt(mu)*(square(square(xx - 1/2) + square(yy - 1/2)- 1/16)/mu + 1)) +
+    (2*square(2*yy- 1)*(square(xx - 1/2) +square(yy - 1/2) - 1/16)) /
+    (mu*sqrt(mu)*square(square(square(xx - 1/2) +
+  square(yy - 1/2) - 1/16)/mu + 1))) +
+  (-(2*xx - 1)/(sqrt(mu)*(square(square(xx - 1/2) +
+   square(yy - 1/2) - 1/16)/mu + 1)))
+   + (-(2*yy - 1)/(sqrt(mu)*(square(square(xx - 1/2) +
+    square(yy - 1/2) - 1/16)/mu + 1)));*/
+
+       outValues[ 0 ] = mu* sin(2.0 * mPi * xx) * (2.0 + 4.0 * mPi * mPi * (yy - square(yy))) + 2.0 * mPi * cos(2.0 * mPi * xx) * (yy - square(yy)) + sin(2.0 * mPi * xx) * (1.0 - 2.0 * yy);
     }
 
     virtual void integrate_on_gauss_point( ValueMatrix &outValues, Real x, Real y, Real z, int k, int m, const ShapeValues &basisValues ) const override
     {
       //  Real tau = 0.5 * 0.25 * 1.4; // delta * h_K / norm(b)
-    
+
         Real ret = ( mu * ( basisValues.Rgrad[ 0 ][ k ] * basisValues.Rgrad[ 0 ][ m ]
                             + basisValues.Rgrad[ 1 ][ k ] * basisValues.Rgrad[ 1 ][ m ]
                             + basisValues.Rgrad[ 2 ][ k ] * basisValues.Rgrad[ 2 ][ m ] ) // on surface

@@ -10,6 +10,8 @@
 #include <sstream>
 #include <cmath>
 
+#include <math.h>
+
 // OpenNN includes
 
 #include "vector.h"
@@ -48,6 +50,19 @@ public:
         Real local_mu;
         diff_coeff( &local_mu, xx, yy, zz, t );
         outValues[ 0 ] = local_mu * sin(2.0 * mPi * xx) * (2.0 + 4.0 * mPi * mPi * (yy - square(yy))) + 2.0 * mPi * cos(2.0 * mPi * xx) * (yy - square(yy)) + sin(2.0 * mPi * xx) * (1.0 - 2.0 * yy);
+  /*    outValues[ 0 ] = local_mu*((2*square(2*xx - 1)*(square(xx - 1/2) + square(yy - 1/2) - 1/16))/
+      (local_mu*sqrt(local_mu)*square(square(square(xx - 1/2)+ square(yy - 1/2)- 1/16)/local_mu + 1))
+    - 4/(sqrt(local_mu)*(square(square(xx - 1/2) + square(yy - 1/2)- 1/16)/local_mu + 1)) +
+    (2*square(2*yy- 1)*(square(xx - 1/2) +square(yy - 1/2) - 1/16)) /
+    (local_mu*sqrt(local_mu)*square(square(square(xx - 1/2) +
+  square(yy - 1/2) - 1/16)/local_mu + 1))) +
+  (-(2*xx - 1)/(sqrt(local_mu)*(square(square(xx - 1/2) +
+   square(yy - 1/2) - 1/16)/local_mu + 1)))
+   + (-(2*yy - 1)/(sqrt(local_mu)*(square(square(xx - 1/2) +
+    square(yy - 1/2) - 1/16)/local_mu + 1))); */
+
+
+
     }
 
     void sol_ex( Real *outValues, Real xx, Real yy, Real zz, Real tt ) const override
