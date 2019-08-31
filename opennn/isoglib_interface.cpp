@@ -14,7 +14,7 @@ namespace OpenNN
 
     g_meshFlags = FLAGS_DEFAULT | DO_NOT_USE_BASIS_CACHES;
 
-    setProblem( directory_name, localMatrix_pointer, &data, setupProblem );
+    setProblem( &data, setupProblem );
   }
 
 
@@ -92,7 +92,7 @@ namespace OpenNN
   }
 
 
-  void IsoglibInterface::setProblem(const char *dirNames, LocalMatrixBase *localMatrix, data_class_interface *data, TestCase::ProblemFunc setupProblem)
+  void IsoglibInterface::setProblem(data_class_interface *data, TestCase::ProblemFunc setupProblem)
   {
     // start global clock
     g_timer.reset();

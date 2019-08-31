@@ -98,7 +98,7 @@ private:
   supg_local_matrix * localMatrix_pointer;
 
   //fill pde_prob and timeAdvancing with the data from the mesh
-  void setProblem( const char *dirName, LocalMatrixBase *localMatrix, data_class_interface *data, TestCase::ProblemFunc setupProblem );
+  void setProblem( data_class_interface *data, TestCase::ProblemFunc setupProblem );
 
   //assembly the local matrix and
   //it creates a binary file with the solution
