@@ -29,9 +29,8 @@ namespace OpenNN
       double tau_for_EDP = tau * tau_scaling;
       solveSteady(tau_for_EDP, mu);
 
-       std::cout << '\n' << '\n';
-       std::cout << "tau: " << tau << '\n';
-       std::cout << "tau_for_EDP: " << tau_for_EDP << '\n';
+      std::cout << "tau: " << tau << '\n';
+      std::cout << "tau_for_EDP: " << tau_for_EDP << '\n';
 
       // used to acces sol_r
       solution_class * solution_pointer = pde_prob.getSubProblem()->getSolution();

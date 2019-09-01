@@ -30,6 +30,7 @@ int main()
         //======================================================================
         // EXTERNAL FILES (meshload.dat and dataset.txt)
         //======================================================================
+
         unsigned test_number = 1;
         unsigned ref_number = 3;
         string dataset_name = "data/Test" + to_string(test_number) + "/ref" + to_string(ref_number)+ "/SUPG.txt";
@@ -123,7 +124,6 @@ int main()
         gradient_descent_method_pointer->set_reserve_selection_error_history(true);
 
         // Definition of the PDE: diffusion and advection coefficients, forcing term
-        // TODO: tenere entrambi?
         SUPGdata1 data1;
         SUPGdata2 data2;
         SUPGdataBase* data_pointer;
@@ -169,11 +169,17 @@ int main()
         size_t selection_size = selection_history.size();
 
         // Print training and selection errors (on screen)
+        std::cout << '\n';
+        std::cout << "================================================" << '\n';
+        std::cout << "               Learning history" << '\n';
+        std::cout << "================================================" << '\n';
+        std::cout << '\n';
         std::cout << "Training error: " << '\n';
         for( unsigned i = 0; i < loss_size; i++ )
         {
           std::cout << loss_history[i] << '\n';
         }
+        std::cout << '\n';
         std::cout << "Validation error: " << '\n';
         for( unsigned i = 0; i < selection_size; i++ )
         {
@@ -192,22 +198,30 @@ int main()
         Matrix<double> testing_inputs = data_set.get_testing_inputs();
         unsigned testing_instances_number = testing_inputs.get_rows_number();
         testing_inputs.unscale_columns_minimum_maximum( inputs_statistics, {0} );
+        std::cout << '\n';
+        std::cout << "================================================" << '\n';
+        std::cout << "               Testing analysis" << '\n';
+        std::cout << "================================================" << '\n';
+        std::cout << '\n';
         std::cout << "[Input] Mu: " << '\n';
         for( unsigned i = 0; i < testing_instances_number; i++ )
         {
-            std::cout << testing_inputs(i,0) << '\n';
+          std::cout << testing_inputs(i,0) << '\n';
         }
+        std::cout << '\n';
         std::cout << "[Output] Unscaled tau: "<< '\n';
         for( unsigned i = 0; i < testing_instances_number; i++ )
         {
-            std::cout << results[0](i,1) << '\n';
+          std::cout << results[0](i,1) << '\n';
         }
+        std::cout << '\n';
         double tau_scaling = isoglibinterface_pointer->get_tau_scaling();
         std::cout << "Predicted tau for EDP: "<< '\n';
         for( unsigned i = 0; i < testing_instances_number; i++ )
         {
-            std::cout << results[0](i,1) * tau_scaling<< '\n';
+          std::cout << results[0](i,1) * tau_scaling<< '\n';
         }
+        std::cout << '\n';
 
         return 0 ;
     }
