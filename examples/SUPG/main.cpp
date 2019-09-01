@@ -25,8 +25,7 @@ int main()
     {
         cout << "OpenNN. New loss function for EDP solutions" << endl;
 
-      //   srand(static_cast<unsigned>(time(nullptr)));
-        srand(1); // TODO: set to random
+        srand(1);
 
         //======================================================================
         // EXTERNAL FILES (meshload.dat and dataset.txt)
@@ -76,7 +75,7 @@ int main()
         }
         variables_pointer->set_items(variables_items);
 
-        // TODO: ??
+        // Get inputs and outputs informations
         const Matrix<string> inputs_information = variables_pointer->get_inputs_information();
         const Matrix<string> targets_information = variables_pointer->get_targets_information();
 
@@ -101,7 +100,7 @@ int main()
         MultilayerPerceptron* multilayer_perceptron_pointer = neural_network.get_multilayer_perceptron_pointer();
         multilayer_perceptron_pointer->set_layer_activation_function(1, PerceptronLayer::SoftPlus);
 
-        // TODO: ??
+        // Set inputs and outputs informations
         Inputs* inputs = neural_network.get_inputs_pointer();
         inputs->set_information(inputs_information);
         Outputs* outputs = neural_network.get_outputs_pointer();
@@ -124,7 +123,7 @@ int main()
         gradient_descent_method_pointer->set_reserve_selection_error_history(true);
 
         // Definition of the PDE: diffusion and advection coefficients, forcing term
-        // TODO: migliorare
+        // TODO: tenere entrambi?
         SUPGdata1 data1;
         SUPGdata2 data2;
         SUPGdataBase* data_pointer;
@@ -160,68 +159,55 @@ int main()
         const TrainingStrategy::Results training_strategy_results = training_strategy.perform_training();
 
         //======================================================================
-        // TODO: da qua in poi ancora da formattare e commentare
+        // TRAINING AND SELECTION ERRORS
         //======================================================================
 
-     Vector<double> loss_history =training_strategy_results.gradient_descent_results_pointer->loss_history;
-    Vector<double> selection_history=training_strategy_results.gradient_descent_results_pointer->selection_error_history;
-    size_t loss_size= loss_history.size();
-    size_t selection_size= selection_history.size();
+        // Get learning history
+        Vector<double> loss_history = training_strategy_results.gradient_descent_results_pointer->loss_history;
+        Vector<double> selection_history = training_strategy_results.gradient_descent_results_pointer->selection_error_history;
+        size_t loss_size = loss_history.size();
+        size_t selection_size = selection_history.size();
 
-    std::cout << "Loss: " << '\n';
-    for( unsigned i = 0; i < loss_size; i++ )
-    {
+        // Print training and selection errors (on screen)
+        std::cout << "Loss: " << '\n';
+        for( unsigned i = 0; i < loss_size; i++ )
+        {
+          std::cout << loss_history[i] << '\n';
+        }
+        std::cout << "selection error: " << '\n';
+        for( unsigned i = 0; i < selection_size; i++ )
+        {
+          std::cout << selection_history[i] << '\n';
+        }
 
-        std::cout << loss_history[i] << '\n';
-
-    }
-
-    std::cout << "selection error: " << '\n';
-    for( unsigned i = 0; i < selection_size; i++ )
-    {
-
-        std::cout << selection_history[i] << '\n';
-
-    }
-
-
-        // Testing analysis
+        //======================================================================
+        // TESTING
+        //======================================================================
 
         TestingAnalysis testing_analysis(&neural_network, &data_set);
-        // calls Vector< Matrix<double> > TestingAnalysis::calculate_target_outputs() const
-        // dim( results ) = (#output) x (#testing_instances) x (2 = target_i + output_i da confrontare)
+        // dim( results ) = (#output) x (#testing_instances) x (2 = target_i + output_i)
         Vector< Matrix<double> > results = testing_analysis.calculate_target_outputs();
-        // Vector<size_t> columns_to_be_scaled{ 0, 1 }; // scala sia target che output (results[0][:,0] e results[0][:,1])
-        // Vector< Statistics<double> > statistics1_to_scale_target_and_output{ targets_statistics[0], targets_statistics[0] };
-        // Vector< Statistics<double> > statistics2_to_scale_target_and_output{ targets_statistics[1], targets_statistics[1] };
-        // results[1].unscale_columns_minimum_maximum( statistics1_to_scale_target_and_output, columns_to_be_scaled );
-        // results[0].unscale_columns_minimum_maximum( statistics2_to_scale_target_and_output, columns_to_be_scaled );
-        //
-        //
-        // Vector<size_t> testing_indices = instances_pointer->get_testing_indices();
+
+        // Print inputs and predicted outputs (on screen)
         Matrix<double> testing_inputs = data_set.get_testing_inputs();
         unsigned testing_instances_number = testing_inputs.get_rows_number();
         testing_inputs.unscale_columns_minimum_maximum( inputs_statistics, {0} );
-        std::cout << "mu: " << '\n';
+        std::cout << "[Input] Mu: " << '\n';
         for( unsigned i = 0; i < testing_instances_number; i++ )
         {
             std::cout << testing_inputs(i,0) << '\n';
-
         }
-std::cout << "Predicted tau: "<< '\n';
+        std::cout << "[Output] Unscaled tau: "<< '\n';
         for( unsigned i = 0; i < testing_instances_number; i++ )
         {
-
             std::cout << results[0](i,1) << '\n';
-
         }
         double tau_scaling = isoglibinterface_pointer->get_tau_scaling();
-        std::cout << "Predicted tau_for_EDP: "<< '\n';
+        std::cout << "Predicted tau for EDP: "<< '\n';
         for( unsigned i = 0; i < testing_instances_number; i++ )
         {
             std::cout << results[0](i,1) * tau_scaling<< '\n';
         }
-        // results[0].print();
 
         return 0 ;
     }
