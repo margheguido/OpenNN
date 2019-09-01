@@ -116,7 +116,7 @@ int main()
         // Choice of the optimization algorithm and setup
         training_strategy.set_training_method( "GRADIENT_DESCENT" );
         GradientDescent* gradient_descent_method_pointer = training_strategy.get_gradient_descent_pointer();
-        gradient_descent_method_pointer->set_maximum_epochs_number(5);
+        gradient_descent_method_pointer->set_maximum_epochs_number(2);
         gradient_descent_method_pointer->set_display_period(1);
         gradient_descent_method_pointer->set_minimum_loss_decrease(1.0e-6);
         gradient_descent_method_pointer->set_maximum_time(2000);
@@ -215,10 +215,11 @@ std::cout << "Predicted tau: "<< '\n';
             std::cout << results[0](i,1) << '\n';
 
         }
-std::cout << "Predicted tau_for_EDP: "<< '\n';
+        double tau_scaling = isoglibinterface_pointer->get_tau_scaling();
+        std::cout << "Predicted tau_for_EDP: "<< '\n';
         for( unsigned i = 0; i < testing_instances_number; i++ )
         {
-            std::cout << results[0](i,1) * 0.009 << '\n';
+            std::cout << results[0](i,1) * tau_scaling<< '\n';
         }
         // results[0].print();
 

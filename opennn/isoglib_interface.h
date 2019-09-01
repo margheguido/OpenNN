@@ -71,8 +71,13 @@ public:
   unsigned get_nDof() const { return nDof; };
   unsigned get_nElems() const { return nElems; };
   unsigned get_nGaussPoints() const { return nGaussPoints; };
-
-  void set_nDof(unsigned n){ nDof = n; };
+  double get_tau_scaling() const { return tau_scaling; };
+  void set_nDof(unsigned n)
+  {
+    nDof = n;
+    h = 1/ (sqrt(nDof) - 1);
+    compute_tau_scaling();
+  };
   void set_nElems(unsigned n){ nElems = n; };
   void set_nGaussPoints(unsigned n){ nGaussPoints = n; };
 
@@ -90,6 +95,12 @@ private:
   //number of gauss points per element
   unsigned nGaussPoints; // 4 by default in isoglib, set from main
 
+  //scaling value for the stabilization parameter computed by the ANN
+  double tau_scaling;
+
+  //mesh refinement
+  double h;
+
   // data
   SUPGdataBase* data_pointer;
 
@@ -102,11 +113,11 @@ private:
   //fill pde_prob and timeAdvancing with the data from the mesh
   void setProblem( data_class_interface *data, TestCase::ProblemFunc setupProblem );
 
-  //assembly the local matrix and
-  //it creates a binary file with the solution
+  //assembly the local matrix and solve the pde problem, saving the solution
+  //in pde_prob
   void solveSteady(double tau,double mu);
 
-
+  void compute_tau_scaling();
   };
 
  }
