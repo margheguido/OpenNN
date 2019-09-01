@@ -7,4 +7,4 @@ cmake_minimum_required(VERSION 2.8.10)
 project(examples)
 
 add_subdirectory(SUPG)
-add_subdirectory(2_outputs)
+

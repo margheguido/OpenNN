@@ -1,9 +1,6 @@
 cmake_minimum_required(VERSION 2.6)
 project(OpenNN)
 
-# Compilation and link with debug (no optimization)
-set(CMAKE_BUILD_TYPE "Debug")   # TODO: remove for release
-
 set (CMAKE_CXX_STANDARD 11)
 SET(CPACK_GENERATOR "TGZ")
 
