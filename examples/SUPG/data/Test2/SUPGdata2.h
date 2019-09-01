@@ -34,7 +34,7 @@ public:
     {
         Real local_mu;
         diff_coeff( &local_mu, xx, yy, zz, t );
-        outValues[ 0 ] = exp(-yy) * ( -local_mu *( -square(xx)+  xx -2) + square(xx) - 3*xx +1);
+        outValues[ 0 ] = local_mu*((exp(4*yy)*(yy - 1))/5 + (2*xx*exp(4*yy)*(xx - 1))/5 + (2*xx*exp(4*yy)*(4*yy - 3)*(xx - 1))/5) + (exp(4*yy)*(2*xx - 1)*(yy - 1))/10 + (xx*exp(4*yy)*(4*yy - 3)*(xx - 1))/10;
     }
 
     void sol_ex( Real *outValues, Real xx, Real yy, Real zz, Real tt ) const override
