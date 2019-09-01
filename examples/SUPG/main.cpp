@@ -169,12 +169,12 @@ int main()
         size_t selection_size = selection_history.size();
 
         // Print training and selection errors (on screen)
-        std::cout << "Loss: " << '\n';
+        std::cout << "Training error: " << '\n';
         for( unsigned i = 0; i < loss_size; i++ )
         {
           std::cout << loss_history[i] << '\n';
         }
-        std::cout << "selection error: " << '\n';
+        std::cout << "Validation error: " << '\n';
         for( unsigned i = 0; i < selection_size; i++ )
         {
           std::cout << selection_history[i] << '\n';
