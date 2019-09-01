@@ -6,7 +6,6 @@ namespace OpenNN
 
   void IsoglibInterface::set_problem_resolution()
   {
-
     // function to setup the problem
     auto setupProblem = [&]( Problem *problem ) {
         problem->getSolverParams().solverType = DIRECT;
@@ -20,31 +19,12 @@ namespace OpenNN
 
   Vector <double> IsoglibInterface::calculate_solution(double tau, double mu)
   {
-      double tau_for_EDP = tau * 0.009;
+      double tau_for_EDP = tau * tau_scaling;
       solveSteady(tau_for_EDP, mu);
 
-      // // Load solution from isoglib
-      // vector<double> isoglib_solution = pde_prob.getSubProblem()->getSolution()->sol_r;
-      // Vector<double> solution( nDof );
-      // for( unsigned i = 0; i < nDof; i++ )
-      // {
-      //   solution[i] = isoglib_solution[i];
-      // }
-      //
        std::cout << '\n' << '\n';
        std::cout << "tau: " << tau << '\n';
        std::cout << "tau_for_EDP: " << tau_for_EDP << '\n';
-      // // std::cout << "mu: " << mu << '\n';
-      // std::cout << "solution:" << '\n';
-      // unsigned sqrt_nDof = sqrt(nDof);
-      // for( size_t i = sqrt_nDof-1; i >= 0 && i < sqrt_nDof; i-- )
-      // {
-      //   for( unsigned j = 0; j < sqrt_nDof; j++ )
-      //   {
-      //     std::cout << std::setw(10) << solution[i*sqrt_nDof+j] << "  ";
-      //   }
-      //   std::cout << '\n';
-      // }
 
       // used to acces sol_r
       solution_class * solution_pointer = pde_prob.getSubProblem()->getSolution();
@@ -119,12 +99,7 @@ namespace OpenNN
 
     // set local matrix
     pde_prob.setLocalMatrix( localMatrix_pointer );
-    // time advancing
-  /*  timeAdvancing.setup( &pde_prob, 1, 0 );
-    pde_prob.setTimeAdvancingScheme( &timeAdvancing );
-       // call callback
-    if ( setupProblem )
-        setupProblem( &pde_prob );*/
+
   }
 
 
@@ -142,8 +117,14 @@ namespace OpenNN
   }
 
 
-
-
+  void IsoglibInterface::compute_tau_scaling()
+  {
+    Real beta[3];
+    Real x = 0.0;
+    data_pointer->beta_coeff(beta,x,x,x,x);
+    double norm_b = sqrt (square(beta[0]) + square(beta[1]) + square(beta[2]));
+    tau_scaling = h/norm_b;
+  }
 
 
 
