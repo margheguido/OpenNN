@@ -2,6 +2,13 @@
 
 namespace OpenNN
 {
+  IsoglibInterface::IsoglibInterface(string meshload_directory_name, SUPGdataBase* data_ptr):
+  data_pointer(data_ptr)
+  {
+    localMatrix_pointer = new supg_local_matrix;
+    directory_name = meshload_directory_name.c_str();
+    set_problem_resolution();
+  }
 
 
   void IsoglibInterface::set_problem_resolution()

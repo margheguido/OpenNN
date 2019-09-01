@@ -33,10 +33,9 @@ namespace OpenNN
   The main member of this class take as input the stabilization parameter TAU
   computed by the Neural Network and calculate the corresponding Pde Solution
   using Isoglib code (specialized by us in SUPG stabilzation).
-  It creates the solution as a binary file in the data folder of openNN
-  Another member can read it and give back the solution in matrix form, that can
-  be used by the class output_function to calculate loss function or gradient
-  of our customized function */
+  The user obtain the solution computed in the guass nodes, in matrix form, that can
+  be used by the class output_function to calculate loss function or
+  its gradient */
 
 
 class IsoglibInterface
@@ -44,28 +43,15 @@ class IsoglibInterface
 
 public:
 
-  // Default constructor (TODO: remove)
+  //Constructors and destructor
   IsoglibInterface() = delete;
-  // {
-  //   localMatrix_pointer = new supg_local_matrix;
-  //   set_problem_resolution();
-  // }
-
-  IsoglibInterface(string meshload_directory_name, SUPGdataBase* data_ptr):
-  data_pointer(data_ptr)
-  {
-    localMatrix_pointer = new supg_local_matrix;
-    directory_name = meshload_directory_name.c_str();
-    set_problem_resolution();
-  }
-
+  IsoglibInterface(string meshload_directory_name, SUPGdataBase* data_ptr);
   ~IsoglibInterface()
   {
     delete localMatrix_pointer;
-  }
+  };
 
   void set_problem_resolution();
-
   Vector<double> calculate_solution(double tau, double mu);
 
   unsigned get_nDof() const { return nDof; };
@@ -117,6 +103,7 @@ private:
   //in pde_prob
   void solveSteady(double tau,double mu);
 
+  //compute the scaling coefficent
   void compute_tau_scaling();
   };
 

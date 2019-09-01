@@ -34,7 +34,8 @@ namespace OpenNN
 /// with multiple targets, through the loss function
 /// In particular, we will construct a neural networks that predicts
 /// the SUPG stabilzation parameter and we will use this class to calculate
-/// the pde solution and compare it with the exact one
+/// the pde solution (using IsoGlib library) and compare it with the exact one,
+/// using numerical integration to compute a L2-norm.
 
 class OutputFunction : public NormalizedSquaredError
 {
@@ -43,9 +44,6 @@ public:
 
   // Default constructor
   OutputFunction() = delete;
-  // {
-  //   isoglib_interface_pointer = new IsoglibInterface();
-  // }
 
   OutputFunction(string meshload_directory_name, SUPGdataBase* data_ptr)
   {
@@ -78,12 +76,11 @@ public:
   // Overridden methods from NormalizedSquaredError
   // --------------------------------------------------------------------------
 
-  // OLD:
-  // double calculate_training_error(const Vector<double>& parameters);
-  // double calculate_batch_error(const Vector<size_t>& batch_indices);
+  // called only in epoch 0 directly in gradient descent
+  double calculate_training_error() const override;
+  // called from epoch 1 while calculating directional points
+  double calculate_training_error(const Vector<double>& parameters) const override;
 
-  double calculate_training_error() const override; // called only in epoch 0 directly in gradient descent
-  double calculate_training_error(const Vector<double>& parameters) const override; // called from epoch 1 while calculating directional points
   double calculate_selection_error() const override;
   Vector<double> calculate_training_error_gradient() const override;
 
@@ -91,6 +88,8 @@ private:
 
   IsoglibInterface *isoglib_interface_pointer;
 
+  // original inputs of the dataset (we can't use dimensionless parameters 
+  // to solve the PDE)
   Matrix<double> unscaled_inputs;
 
   };
