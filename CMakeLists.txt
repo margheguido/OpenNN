@@ -38,6 +38,8 @@ configure_file(
     "${PROJECT_BINARY_DIR}/../../isoglib/isoglib/isoglib_config.hpp"
 )
 
+# following lines have to be changed if OpenNN is not cloned in the same
+# folder of isoglib
 set(ISOGLIB_INCLUDE_DIR ${PROJECT_BINARY_DIR}/../../isoglib/isoglib/)
 set(ISOGLIB_LIB_DIR ${PROJECT_BINARY_DIR}/../../isoglib/BuildRelease)
 
