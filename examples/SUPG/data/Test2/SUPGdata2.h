@@ -34,7 +34,7 @@ public:
     {
         Real local_mu;
         diff_coeff( &local_mu, xx, yy, zz, t );
-        outValues[ 0 ] = local_mu*((exp(4*yy)*(yy - 1))/5 + (2*xx*exp(4*yy)*(xx - 1))/5 + (2*xx*exp(4*yy)*(4*yy - 3)*(xx - 1))/5) + (exp(4*yy)*(2*xx - 1)*(yy - 1))/10 + (xx*exp(4*yy)*(4*yy - 3)*(xx - 1))/10;
+        outValues[ 0 ] = 10*xx*yy*exp(4*yy)*(xx - 1)*(xx - 0.5)*(yy - 1) - local_mu*(20*xx*yy*exp(4*yy)*(xx - 1)*(xx - 0.5) + 20*xx*yy*exp(4*yy)*(yy - 1)*(yy - 0.75) + 20*xx*exp(4*yy)*(xx - 1)*(xx - 0.5)*(yy - 1) + 20*xx*exp(4*yy)*(xx - 1)*(xx - 0.5)*(yy - 0.75) + 20*yy*exp(4*yy)*(xx - 1)*(yy - 1)*(yy - 0.75) + 20*yy*exp(4*yy)*(xx - 0.5)*(yy - 1)*(yy - 0.75) + 80*xx*yy*exp(4*yy)*(xx - 1)*(xx - 0.5)*(yy - 1) + 80*xx*yy*exp(4*yy)*(xx - 1)*(xx - 0.5)*(yy - 0.75) + 80*xx*exp(4*yy)*(xx - 1)*(xx - 0.5)*(yy - 1)*(yy - 0.75) + 160*xx*yy*exp(4*yy)*(xx - 1)*(xx - 0.5)*(yy - 1)*(yy - 0.75)) + 10*xx*yy*exp(4*yy)*(xx - 1)*(xx - 0.5)*(yy - 0.75) + 10*xx*yy*exp(4*yy)*(xx - 1)*(yy - 1)*(yy - 0.75) + 10*xx*yy*exp(4*yy)*(xx - 0.5)*(yy - 1)*(yy - 0.75) + 10*xx*exp(4*yy)*(xx - 1)*(xx - 0.5)*(yy - 1)*(yy - 0.75) + 10*yy*exp(4*yy)*(xx - 1)*(xx - 0.5)*(yy - 1)*(yy - 0.75) + 40*xx*yy*exp(4*yy)*(xx - 1)*(xx - 0.5)*(yy - 1)*(yy - 0.75);
     }
 
     void sol_ex( Real *outValues, Real xx, Real yy, Real zz, Real tt ) const override
