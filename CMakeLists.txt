@@ -38,18 +38,27 @@ endif()
     message(STATUS "${_variableName}=${${_variableName}}")
 endforeach()
 
+
+
  configure_file(
      "${PROJECT_SOURCE_DIR}/../isoglib/isoglib/isoglib_config.hpp.in"
-     "${PROJECT_BINARY_DIR}/../../isoglib/isoglib/isoglib_config.hpp"
+    "${PROJECT_BINARY_DIR}/../../isoglib/isoglib/isoglib_config.hpp"
 )
 
+set(ISOGLIB_INCLUDE_DIR ${PROJECT_BINARY_DIR}/../../isoglib/isoglib/)
+set(ISOGLIB_LIB_DIR ${PROJECT_BINARY_DIR}/../../isoglib/BuildRelease)
+
+#set( ISOGLIB_INCLUDE_DIR:PATH ${ISOGLIB_INCLUDE_DIR})
+#set( ISOGLIB_LINK_DIR:PATH ${ISOGLIB_LIB_DIR} )
+
+message(${ISOGLIB_INCLUDE_DIR}/Core)
 include_directories(
-      /vagrant/isoglib/isoglib
-      /vagrant/isoglib/isoglib/Core
-      /vagrant/isoglib/isoglib/Problem
-      /vagrant/isoglib/isoglib/TestCase
-      /vagrant/isoglib/isoglib/LocalMatrices
-      /vagrant/isoglib/isoglib/Epetra
+      ${ISOGLIB_INCLUDE_DIR}
+      ${ISOGLIB_INCLUDE_DIR}Core
+      ${ISOGLIB_INCLUDE_DIR}Problem
+      ${ISOGLIB_INCLUDE_DIR}TestCase
+      ${ISOGLIB_INCLUDE_DIR}LocalMatrices
+      ${ISOGLIB_INCLUDE_DIR}Epetra
       /u/sw/pkgs/toolchains/gcc-glibc/7/base/include/
       /u/sw/pkgs/toolchains/gcc-glibc/7/pkgs/eigen/3.3.3/include/eigen3/
       /u/sw/pkgs/toolchains/gcc-glibc/7/pkgs/trilinos/12.6.3/include

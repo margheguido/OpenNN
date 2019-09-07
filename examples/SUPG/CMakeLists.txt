@@ -35,13 +35,13 @@ link_directories(${CMAKE_SOURCE_DIR}/opennn)
 
 include_directories(${CMAKE_SOURCE_DIR}/opennn)
 include_directories(
-    /vagrant/isoglib/BuildRelease
-      /vagrant/isoglib/isoglib
-      /vagrant/isoglib/isoglib/Core
-      /vagrant/isoglib/isoglib/Problem
-      /vagrant/isoglib/isoglib/TestCase
-      /vagrant/isoglib/isoglib/LocalMatrices
-      /vagrant/isoglib/isoglib/Epetra
+      ${ISOGLIB_LINK_DIR}
+      ${ISOGLIB_INCLUDE_DIR}
+      ${ISOGLIB_INCLUDE_DIR}Core
+      ${ISOGLIB_INCLUDE_DIR}Problem
+      ${ISOGLIB_INCLUDE_DIR}TestCase
+      ${ISOGLIB_INCLUDE_DIR}LocalMatrices
+      ${ISOGLIB_INCLUDE_DIR}Epetra
       /u/sw/pkgs/toolchains/gcc-glibc/7/base/include/
       /u/sw/pkgs/toolchains/gcc-glibc/7/pkgs/eigen/3.3.3/include/eigen3/
       /u/sw/pkgs/toolchains/gcc-glibc/7/pkgs/trilinos/12.6.3/include
@@ -51,10 +51,20 @@ include_directories(
 
 add_executable(SUPG main.cpp)
 
+find_library( ISOGLIB_LIBRARY libisoglib.so HINTS ${ISOGLIB_LIB_DIR})
+if ( NOT ISOGLIB_LIBRARY )
+    message( FATAL_ERROR "Isoglib library not found" )
+endif ()
+
+find_library( ISOGLIB_EPETRA_LIBRARY libisoglib_epetra.so HINTS ${ISOGLIB_LIB_DIR})
+if ( NOT ISOGLIB_EPETRA_LIBRARY )
+    message( FATAL_ERROR "Isoglib Epetra library not found" )
+endif ()
+
 target_link_libraries(SUPG ${PROJECT_LINK_LIBS})
 
-target_link_libraries(SUPG /vagrant/isoglib/BuildRelease/libisoglib.so)
-target_link_libraries(SUPG /vagrant/isoglib/BuildRelease/libisoglib_epetra.so)
+target_link_libraries(SUPG ${ISOGLIB_LIBRARY})
+target_link_libraries(SUPG ${ISOGLIB_EPETRA_LIBRARY})
 
 target_link_libraries(SUPG /u/sw/pkgs/toolchains/gcc-glibc/7/base/lib/liblua.a)
 target_link_libraries(SUPG /u/sw/pkgs/toolchains/gcc-glibc/7/prefix/lib/libdl.so)
