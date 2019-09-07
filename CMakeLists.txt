@@ -31,25 +31,15 @@ endif()
 #######################################################################
 #######                 ISOGLIB INTERFACE                     #########
 #######################################################################
-# PRINT ALL VARIABLES
- get_cmake_property(_variableNames VARIABLES)
- list (SORT _variableNames)
- foreach (_variableName ${_variableNames})
-    message(STATUS "${_variableName}=${${_variableName}}")
-endforeach()
 
 
-
- configure_file(
-     "${PROJECT_SOURCE_DIR}/../isoglib/isoglib/isoglib_config.hpp.in"
+configure_file(
+    "${PROJECT_SOURCE_DIR}/../isoglib/isoglib/isoglib_config.hpp.in"
     "${PROJECT_BINARY_DIR}/../../isoglib/isoglib/isoglib_config.hpp"
 )
 
 set(ISOGLIB_INCLUDE_DIR ${PROJECT_BINARY_DIR}/../../isoglib/isoglib/)
 set(ISOGLIB_LIB_DIR ${PROJECT_BINARY_DIR}/../../isoglib/BuildRelease)
-
-#set( ISOGLIB_INCLUDE_DIR:PATH ${ISOGLIB_INCLUDE_DIR})
-#set( ISOGLIB_LINK_DIR:PATH ${ISOGLIB_LIB_DIR} )
 
 message(${ISOGLIB_INCLUDE_DIR}/Core)
 include_directories(

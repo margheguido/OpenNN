@@ -64,5 +64,3 @@ isoglib_interface.cpp
 
 
 target_link_libraries(opennn ${ISOGLIB_LIB_DIR}/isoglib.so)
-#target_link_libraries(opennn ${ISOGLIB_LIB_DIR}/isoglib_epetra.so)
-# target_link_libraries(opennn -L${ISOGLIB_LIB_DIR})

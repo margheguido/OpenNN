@@ -33,6 +33,7 @@ FILE(COPY ./data/Test2 DESTINATION "${PROJECT_BINARY_DIR}/data")
 
 link_directories(${CMAKE_SOURCE_DIR}/opennn)
 
+
 include_directories(${CMAKE_SOURCE_DIR}/opennn)
 include_directories(
       ${ISOGLIB_LINK_DIR}
