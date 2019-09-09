@@ -63,10 +63,11 @@ private:
   /// Calculates the solution of the PDE given the stabilization parameter predicted by the neural network
   Matrix<double> calculate_PDE_solution(const Matrix<double>& tau_values, const Vector<size_t> & batch_indices) const;
 
-public:
   /// Calculates the derivative of the loss function wrt the stabilization parameter
   /// (does the same job as NormalizedSquaredError::calculate_output_gradient)
   Matrix<double> calculate_loss_derivative(const Matrix<double>& tau_values, const Vector<size_t> & batch_indices) const;
+  
+public:
 
   IsoglibInterface * get_isoglib_interface_pointer() { return isoglib_interface_pointer; };
 
@@ -88,7 +89,7 @@ private:
 
   IsoglibInterface *isoglib_interface_pointer;
 
-  // original inputs of the dataset (we can't use dimensionless parameters 
+  // original inputs of the dataset (we can't use dimensionless parameters
   // to solve the PDE)
   Matrix<double> unscaled_inputs;
 
